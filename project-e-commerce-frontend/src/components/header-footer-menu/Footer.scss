@@ -1,0 +1,34 @@
+// src/assets/styles/styles.scss
+// Thay đổi width cho phù hợp với responsive
+.footer {
+  padding: 20px 0;
+  flex: 0 0 2vh;
+  background-color: black;
+  width: 1700px;
+  justify-content: center;
+
+  p {
+    color: white;
+    text-align: left;
+  }
+
+  .footer p:first-of-type {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .footer p:not(:first-of-type) {
+    font-size: 20px;
+
+    &:not(:nth-child(n+3)) {
+      font-size: 16px;
+    }
+  }
+
+  // Thay đổi màu cho copyright
+  .copyright {
+    color: dimgrey;
+    text-align: center;
+    font-size: 16px;
+  }
+}
