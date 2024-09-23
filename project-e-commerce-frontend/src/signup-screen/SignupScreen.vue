@@ -31,13 +31,53 @@ export default {
   },
   methods: {
     validateName(){
-
+      if(!this.name){
+        this.errorName='';
+      }else{
+        if (!/^[a-zA-Z ]+$/.test(this.name)) {
+          this.errorName = 'Name is invalid.';
+        } else {
+          this.errorName = '';
+        }
+      }
     },
     validateEmailAndPhoneNumber(){
-
+      if(!this.emailPhoneNumber){
+        this.errorEmailPhoneNumber='';
+      }else {
+        if (this.emailPhoneNumber.length > 11) {
+          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+            this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
+          } else {
+            this.errorEmailPhoneNumber = '';
+          }
+        } else {
+          if (!isNumeric(this.emailPhoneNumber.trim())) {
+            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+              this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
+            } else {
+              this.errorEmailPhoneNumber = '';
+            }
+          } else {
+            if(this.emailPhoneNumber.trim().length < 10){
+              this.errorEmailPhoneNumber = 'Please enter phone number 10 digits.';
+            }else{
+              this.errorEmailPhoneNumber = '';
+            }
+          }
+        }
+      }
     },
     validatePassword(){
-
+      if(!this.password){
+        this.errorPassword='';
+      }else{
+        if (!/^(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/.test(this.password)) {
+          this.errorPassword = 'Password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: khan123@.';
+        } else {
+          this.errorPassword = '';
+        }
+      }
     },
     validateNullAndCreateAccount(){
       if(!this.name){
@@ -49,13 +89,16 @@ export default {
       }
 
       if(!this.password){
-        this.password='Please enter password';
+        this.errorPassword='Please enter password';
       }
     },
     preventPaste(event) {
       event.preventDefault();
     },
   }
+}
+function isNumeric (str){
+  return /^\d+$/.test(str);
 }
 </script>
 
@@ -80,7 +123,7 @@ export default {
             <div class="column-2-1">
               <p style="font-size: 36px; text-align: left">Create an account</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
-              <form style="width: 100%; height: 50%; margin-top: 30px;">
+              <div style="width: 100%; height: 275px; margin-top: 30px;">
                 <input type="text" maxlength=120 v-model="name" class="form-control input" placeholder="Name" @input="validateName()">
                 <span class="span-error">{{errorName}}</span>
 
@@ -89,15 +132,15 @@ export default {
 
                 <input type="password" maxlength=20 v-model="password" class="form-control input" placeholder="Password" @input="validatePassword()" @paste="preventPaste($event)">
                 <span class="span-error">{{errorPassword}}</span>
-              </form>
-              <!--Truyen tham so props cho CustomButton-->
-              <CustomButton @click="validateNullAndCreateAccount()" style="width: 100%; height: 10%;" text-button="Create Account"/>
-              <div style="display: flex; margin-top: 10px;">
-                <p style="font-size: 16px; text-align: left; margin-top: 3px;">Already have account?</p>
-                <div style="height: 50%; border-bottom: solid 1px; width: 12.75%; padding: 0; margin-left: 15px; margin-top: 3px;">
-                  <router-link to="/login-screen" style="font-size: 16px; text-align: left;  color: black; text-decoration: none;" class="login">Log in</router-link>
+                <CustomButton @click="validateNullAndCreateAccount()" style="width: 100%; height: 20%; margin-top: 30px" text-button="Create Account"/>
+                <div style="display: flex; margin-top: 10px;">
+                  <p style="font-size: 16px; text-align: left; margin-top: 3px;">Already have account?</p>
+                  <div style="height: 50%; border-bottom: solid 1px; width: 12.75%; padding: 0; margin-left: 15px; margin-top: 3px;">
+                    <router-link to="/login-screen" style="font-size: 16px; text-align: left;  color: black; text-decoration: none;" class="login">Log in</router-link>
+                  </div>
                 </div>
               </div>
+              <!--Truyen tham so props cho CustomButton-->
             </div>
           </div>
         </div>

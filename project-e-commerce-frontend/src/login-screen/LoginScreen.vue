@@ -21,9 +21,69 @@ export default {
       errorPassword: '',
     }
   },
+  mounted(){
+    this.validateEmailAndPhoneNumber();
+    this.validatePassword();
+  },
   methods: {
+    validateEmailAndPhoneNumber(){
+      if(!this.emailPhoneNumber){
+        this.errorEmailPhoneNumber='';
+      }else {
+        if (this.emailPhoneNumber.length > 11) {
+          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+            this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
+          } else {
+            this.errorEmailPhoneNumber = '';
+          }
+        } else {
+          if (!isNumeric(this.emailPhoneNumber.trim())) {
+            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+              this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
+            } else {
+              this.errorEmailPhoneNumber = '';
+            }
+          } else {
+            if(this.emailPhoneNumber.trim().length < 10){
+              this.errorEmailPhoneNumber = 'Please enter phone number 10 digits.';
+            }else{
+              this.errorEmailPhoneNumber = '';
+            }
+          }
+        }
+      }
+    },
+    validatePassword(){
+      if(!this.password){
+        this.errorPassword='';
+      }else{
+        if (!/^(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,15}$/.test(this.password)) {
+          this.errorPassword = 'Password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: khan123@.';
+        } else {
+          this.errorPassword = '';
+        }
+      }
+    },
+    validateNullAndLogin(){
+      if(!this.name){
+        this.errorName='Please enter name.';
+      }
 
+      if(!this.emailPhoneNumber){
+        this.errorEmailPhoneNumber='Please enter email or phone number.';
+      }
+
+      if(!this.password){
+        this.errorPassword='Please enter password';
+      }
+    },
+    preventPaste(event) {
+      event.preventDefault();
+    },
   }
+}
+function isNumeric (str){
+  return /^\d+$/.test(str);
 }
 </script>
 <template>
@@ -47,17 +107,19 @@ export default {
             <div class="column-2-1">
               <p style="font-size: 36px; text-align: left">Log in to Exclusive</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
-              <form style="width: 100%; height: 50%; margin-top: 30px;">
-                <input type="text" maxlength=50 v-model="emailPhoneNumber" class="form-control input" placeholder="Email or Phone Number">
+              <div style="width: 100%; height: 275px; margin-top: 30px;">
+                <input @input="validateEmailAndPhoneNumber()" type="text" maxlength=50 v-model="emailPhoneNumber" class="form-control input" placeholder="Email or Phone Number">
                 <span class="span-error">{{errorEmailPhoneNumber}}</span>
 
-                <input type="password" maxlength=20 v-model="password" class="form-control input" placeholder="Password">
+                <input @input="validatePassword()" type="password" maxlength=20 v-model="password" class="form-control input" placeholder="Password" @paste="preventPaste($event)">
                 <span class="span-error">{{errorPassword}}</span>
-              </form>
-              <div style="display: flex; height: 10%; margin-top: -75px;">
-                <CustomButton @click="" style="width: 35%; height: 100%;" text-button="Log in"/>
-                <router-link to="" style="font-size: 16px; text-align: right; margin-left: 100px; color: #DB4444; text-decoration: none;" class="forget-password">Forget Password?</router-link>
+
+                <div style="display: flex; height: 18%; margin-top: 30px; align-items: center">
+                  <CustomButton @click="validateNullAndLogin()" style="width: 35%; height: 100%;" text-button="Log in"/>
+                  <router-link to="" style="font-size: 16px; text-align: right; margin-left: 100px; color: #DB4444; text-decoration: none;" class="forget-password">Forget Password?</router-link>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
