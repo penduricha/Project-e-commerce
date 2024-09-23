@@ -81,7 +81,7 @@ export default {
               <p style="font-size: 36px; text-align: left">Create an account</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
               <form style="width: 100%; height: 50%; margin-top: 30px;">
-                <input type="text" maxlength=50 v-model="name" class="form-control input" placeholder="Name" @input="validateName()">
+                <input type="text" maxlength=120 v-model="name" class="form-control input" placeholder="Name" @input="validateName()">
                 <span class="span-error">{{errorName}}</span>
 
                 <input type="text" maxlength=50 v-model="emailPhoneNumber" class="form-control input" placeholder="Email or Phone Number" @input="validateEmailAndPhoneNumber()">

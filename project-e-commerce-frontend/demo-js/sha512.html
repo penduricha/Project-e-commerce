@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sha 512</title>
+</head>
+<body>
+    <script type="module">
+        async function sha512(password) {
+            let buf = await crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(password));
+            return Array.prototype.map.call(new Uint8Array(buf), x => (('00' + x.toString(16)).slice(-2))).join('');
+        }
+        let result = await sha512("an123");
+        console.log(result)
+    </script>
+</body>
+</html>
