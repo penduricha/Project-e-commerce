@@ -1,4 +1,12 @@
 export default class User{
+    _email;
+    _phoneNumber;
+    _password;
+    _firstName;
+    _lastName;
+    _middleName;
+    _address;
+
     constructor(email, phoneNumber, password, firstName, lastName, middleName, address) {
         this._email = email;
         this._phoneNumber = phoneNumber;

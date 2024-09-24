@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Name Separate</title>
+</head>
+<body>
+    <script>
+        let fullName = 'Tran Nguyen Ngoc Minh An';
+        let nameParts = fullName.split(' ');
+
+        console.log(nameParts.length);
+
+        // Gán các phần tên vào các biến
+        let firstname = nameParts[nameParts.length - 1]; // "An"
+        let middlename = nameParts.length > 2 ? nameParts.slice(1, -1).join(' ') : ''; // "Van" nếu có
+        let lastname = nameParts[0]; // "Tran"
+
+
+        // In ra kết quả
+        console.log(`Firstname: ${firstname}`);
+        console.log(`Middlename: ${middlename}`);
+        console.log(`Lastname: ${lastname}`);
+        /*
+        Giải thích:
+        tách tên thành 5 từ với biến là nameParts
+        Tran 0
+        Nguyen 1
+        Ngoc 2
+        Minh 3
+        An 4
+         */
+
+    </script>
+</body>
+</html>
