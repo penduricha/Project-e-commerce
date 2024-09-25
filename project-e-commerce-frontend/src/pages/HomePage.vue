@@ -11,9 +11,11 @@ import productBestSelling from "@/assets/data-product/ProductBestSelling.js";
 import productExplore from "@/assets/data-product/ProductExplore.js";
 import MenuHomePageNoAccount from "@/components/menu/Menu.vue";
 import ExploreProduct from "@/components/home-page/ExploreProduct.vue";
+import CustomService from "@/components/base/CustomService.vue";
 export default {
   name: 'HomePage',
   components:{
+    CustomService,
     ExploreProduct,
     MenuHomePageNoAccount,
     BestSellingProduct,
@@ -141,8 +143,11 @@ export default {
       <div class="view-product-slide">
         <ExploreProduct :product="productExplore()" />
       </div>
+      <div class="view-service">
+        <CustomService/>
+      </div>
     </main>
-    <Footer style="height: 1500px;"/>
+    <Footer style="height: 1500px; margin-top: 10%"/>
   </div>
 </template>
 
@@ -231,4 +236,15 @@ export default {
   margin-left: 9%;
   margin-top: 10%;
 }
+
+.view-service{
+  width: 100%;
+  margin-top: 10%;
+  height: 140px;
+  margin-left: 9%;
+  display: flex;
+  justify-content: center;
+}
+
+
 </style>

@@ -41,7 +41,8 @@ export default {
       if(!this.name){
         this.errorName='';
       }else{
-        if (!/^[a-zA-Z ]+$/.test(this.name)) {
+        if (!isValidVietnameseName(this.name)) {
+          //!/^[a-zA-Z ]+$/.test(this.name) ||
           this.errorName = 'Name is invalid.';
         } else {
           this.errorName = '';
@@ -182,6 +183,17 @@ async function getUserByEmailOrPhoneNumber(emailPhoneNumber){
 async function sha512(password) {
   let buf = await crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(password));
   return Array.prototype.map.call(new Uint8Array(buf), x => (('00' + x.toString(16)).slice(-2))).join('');
+}
+
+function isValidVietnameseName(name) {
+  // Remove accents from Vietnamese characters
+  const removeAscent = (str) => {
+    if (str === null || str === undefined) return str;
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  };
+  // Regex pattern for Vietnamese names
+  const regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+$/;
+  return regex.test(removeAscent(name));
 }
 </script>
 
