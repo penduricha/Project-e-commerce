@@ -1,9 +1,11 @@
 import UserService from "@/services/UserService.js";
-import User from "@/models/User.js";
+
 
 export default class UserDAO{
 
-    constructor(){}
+    constructor(){
+        //cac thuoc tinh can set
+    }
 
     static async getUserByEmailOrPhoneNumber(emailOrPhoneNumber){
         let user=null;

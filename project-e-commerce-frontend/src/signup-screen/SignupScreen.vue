@@ -126,8 +126,8 @@ export default {
 
         let nameParts = name.split(' ');
 
-        // Gán các phần tên vào các biến
-        let firstName = nameParts[nameParts.length - 1]; // "An"
+        // Gán các phần tên vào các biến "An"
+        let firstName = nameParts[nameParts.length - 1]; //
         let middleName = nameParts.length > 2 ? nameParts.slice(1, -1).join(' ') : '';
         let lastName = nameParts[0];
 
