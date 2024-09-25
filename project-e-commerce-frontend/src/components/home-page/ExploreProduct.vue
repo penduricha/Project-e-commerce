@@ -5,7 +5,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/base/CustomItemProduct.vue";
 
 export default {
-  name:'FlashSales',
+  name:'ExploreProduct',
   components:{
     CustomButton,
     Title,
@@ -16,18 +16,18 @@ export default {
 
   },
   methods: {
-    getProductFlashSales(){
+    getExploreProducts(){
       return this.product;
     },
-    groupFourProductFlashSales(){
-      return chunkArray(this.getProductFlashSales(), 4);
+    groupFourExploreProducts(){
+      return chunkArray(this.getExploreProducts(), 4);
     },
     getTextTile(textTitle){
       return textTitle;
     },
   }
 }
-//khai các ham xu li khac
+
 function chunkArray(array, chunkSize) {
   const result = [];
   for (let i = 0; i < array.length; i += chunkSize) {
@@ -41,11 +41,11 @@ function chunkArray(array, chunkSize) {
 <template>
   <div style="width: 100%; height: 70%">
     <div class="view-title">
-      <Title text-time-title="Today's" :text-title="getTextTile('Flash Sales')"/>
+      <Title text-time-title="Our Products" :text-title="getTextTile('Explore Our Products')"/>
     </div>
     <!--    v-for="(row, rowIndex) in getProductRows()" :key="rowIndex"-->
     <div class="view-list-product">
-      <div v-for="(row, rowIndex) in groupFourProductFlashSales()" :key="rowIndex" class="view-list-product-row">
+      <div v-for="(row, rowIndex) in groupFourExploreProducts()" :key="rowIndex" class="view-list-product-row">
         <div v-for="(product) in row" :key="product.id" class="list-product">
           <CustomItemProduct :product="product" />
         </div>

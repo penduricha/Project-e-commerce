@@ -3,7 +3,7 @@ import LoginScreen from "@/login-screen/LoginScreen.vue";
 import HomePage from "@/pages/HomePage.vue";
 
 const routers = [
-    { path: '/', component: SignupScreen },
+    { path: '/', component: HomePage },
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },

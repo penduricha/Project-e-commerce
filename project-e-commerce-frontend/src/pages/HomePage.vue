@@ -8,10 +8,13 @@ import productFlashSale from "@/assets/data-product/ProductFlashSale.js";
 import CustomButton from "@/components/base/CustomButton.vue";
 import BestSellingProduct from "@/components/home-page/BestSellingProduct.vue";
 import productBestSelling from "@/assets/data-product/ProductBestSelling.js";
+import productExplore from "@/assets/data-product/ProductExplore.js";
 import MenuHomePageNoAccount from "@/components/menu/Menu.vue";
+import ExploreProduct from "@/components/home-page/ExploreProduct.vue";
 export default {
   name: 'HomePage',
   components:{
+    ExploreProduct,
     MenuHomePageNoAccount,
     BestSellingProduct,
     CustomButton,
@@ -33,7 +36,10 @@ export default {
     },
     productBestSelling(){
       return productBestSelling;
-    }
+    },
+    productExplore(){
+      return productExplore;
+    },
   }
 }
 </script>
@@ -128,8 +134,12 @@ export default {
       <div class="view-product-slide">
         <FlashSales :product="productFlashSale()" />
       </div>
+      <hr style="margin-left: 9%; width: 100%;">
       <div class="view-product-slide">
         <BestSellingProduct :product="productBestSelling()" />
+      </div>
+      <div class="view-product-slide">
+        <ExploreProduct :product="productExplore()" />
       </div>
     </main>
     <Footer style="height: 1500px;"/>

@@ -34,7 +34,7 @@ export default{
         </div>
         <div class="menu-navbar">
           <ul class="navbar-nav" style="justify-content: center; align-items: center; margin-top: 10px;">
-            <li class="nav-item" :style="{ borderBottom: (isActiveRoute('/home-page')) ? 'solid 2px' : 'none' }">
+            <li class="nav-item" :style="{ borderBottom: (isActiveRoute('/home-page') || isActiveRoute('/')) ? 'solid 2px' : 'none' }">
             <!-- || isActiveRoute('/')-->
               <router-link
                   class="btn btn-light nav-link nav-item-signup"
@@ -48,7 +48,7 @@ export default{
               <button class="btn btn-light nav-link" @click.prevent="">About</button>
             </li>
             <li class="nav-item"
-                :style="{ borderBottom: (isActiveRoute('/signup-screen') || isActiveRoute('/')) ? 'solid 2px' : 'none' }">
+                :style="{ borderBottom: (isActiveRoute('/signup-screen')) ? 'solid 2px' : 'none' }">
               <router-link
                   class="btn btn-light nav-link nav-item-signup"
                   to="/signup-screen"
