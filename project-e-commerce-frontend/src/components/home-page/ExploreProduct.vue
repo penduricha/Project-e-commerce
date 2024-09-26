@@ -49,7 +49,7 @@ function chunkArray(array, chunkSize) {
            :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }">
         <div v-for="(product, productIndex) in row" :key="product.id"
              class="list-product"
-             :style="{ marginRight: (row.length < 4 && productIndex !== row.length - 1) ? '95px' : '0' }">
+             :style="{ marginRight: (row.length < 4 && productIndex !== row.length - 1) ? '60px' : '0' }">
           <CustomItemProduct :product="product" />
         </div>
       </div>

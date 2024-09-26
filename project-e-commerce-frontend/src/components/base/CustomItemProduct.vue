@@ -97,12 +97,14 @@ export default {
 }
 
 .item-heart, .item-eye{
-  padding-left: 11px;
-  padding-top: 8px;
-  width: 100%;
-  height: 45%;
-  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50px;
   background-color: white;
+  margin-left: 10%;
 }
 
 .add-to-cart {
@@ -129,6 +131,7 @@ export default {
 .item-image:hover .add-to-cart {
   /* Hiện nút khi hover */
   display: block;
+  width: 17.7%;
 }
 
 .item-content{

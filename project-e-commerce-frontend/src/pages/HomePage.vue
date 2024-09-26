@@ -148,8 +148,13 @@ export default {
       <div class="view-service">
         <CustomService/>
       </div>
+      <div class="view-arrow-up">
+        <div class="view-circle-arrow-up">
+          <img src="@/assets/images/icons_arrow-up.png" alt="icon" style="width: 24px; height: 24px;">
+        </div>
+      </div>
     </main>
-    <Footer style="height: 1500px; margin-top: 10%"/>
+    <Footer style="height: 1500px; margin-top: 3%"/>
   </div>
 </template>
 
@@ -216,6 +221,8 @@ export default {
   transform: rotate(315deg); /* Quay mũi tên 315 do*/
 }
 
+/*css cho arrow menu*/
+
 .woman-fashion::after{
   /* Khoảng cách giữa văn bản và mũi tên */
   margin-left: 170px;
@@ -236,6 +243,7 @@ export default {
   width: 82%;
   margin-left: 9%;
   margin-top: 5%;
+  height: 120%;
 }
 
 .view-service{
@@ -247,5 +255,22 @@ export default {
   justify-content: center;
 }
 
+.view-arrow-up{
+  height: 50px;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 5%;
+  display: flex;
+  justify-content: right;
+}
 
+.view-circle-arrow-up{
+  height: 100%;
+  width: 50px;
+  border-radius: 50px;
+  background-color: #F5F5F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
