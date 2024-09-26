@@ -8,12 +8,15 @@ export default {
     }
   },
   methods: {
+
     openModal() {
       this.show = true;
     },
+
     closeModal() {
       this.show = false;
     },
+
     async continueProgram() {
       this.closeModal();
       this.$emit('handleContinue');
@@ -31,27 +34,6 @@ export default {
       </div>
     </div>
   </div>
-<!--  <div class="modal" v-if="show" role="dialog" aria-hidden="true">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--      <div class="modal-content">-->
-<!--        <div class="modal-header">-->
-<!--          <h5 class="modal-title">{{textSuccess}}</h5>-->
-<!--&lt;!&ndash;          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&ndash;&gt;-->
-<!--&lt;!&ndash;            <span aria-hidden="true">&times;</span>&ndash;&gt;-->
-<!--&lt;!&ndash;          </button>&ndash;&gt;-->
-<!--        </div>-->
-<!--&lt;!&ndash;        <div class="modal-body">&ndash;&gt;-->
-<!--&lt;!&ndash;          ...&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--        <div class="modal-footer">-->
-<!--&lt;!&ndash;          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>&ndash;&gt;-->
-<!--          <button type="button" class="btn btn-primary">Save changes</button>-->
-<!--          <button class="btn btn-success" @click="continueProgram()">OK</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-  <!--  @click.self="closeModal": click ngoài modal modal sẽ close-->
 </template>
 
 <style scoped>

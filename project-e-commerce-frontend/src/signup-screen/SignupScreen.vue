@@ -204,14 +204,7 @@ function isValidVietnameseName(name) {
     <Menu style="height: 200px"/>
     <main class="main">
       <div class="container-child">
-        <div style="
-                    display: flex;
-                    justify-content: center;
-                    height: 85%;
-                    width: 127%;
-                    margin-top: 70px;
-                    padding: 0;
-                    margin-left: 25px;">
+        <div class="main-content">
           <div class="column-1">
             <img src="@/assets/images/image-cart-phone.png" alt="Image Background" style="width: 100%; height: 100%"/>
           </div>
@@ -249,19 +242,8 @@ function isValidVietnameseName(name) {
 <style lang="scss" scoped>
 @import '@/assets/input-white';
 @import '@/assets/container';
+@import '@/assets/style-page-little.css';
 
-.container-child{
-  display: flex;
-  flex-direction: column;
-  height: 820px;
-  width: 1338px;
-  margin-top: -20px;
-  padding: 0;
-  margin-left: -25px;
-}
-.main{
-  display: flex;
-}
 .column-1 {
   flex: 3; /* Tỷ lệ 3 */
   padding-left: 20px;

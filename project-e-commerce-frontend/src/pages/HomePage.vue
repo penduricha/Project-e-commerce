@@ -136,7 +136,9 @@ export default {
       <div class="view-product-slide">
         <FlashSales :product="productFlashSale()" />
       </div>
-      <hr style="margin-left: 9%; width: 100%;">
+
+      <hr style="margin-left: 9%; margin-top: 8%; width: 82%;">
+
       <div class="view-product-slide">
         <BestSellingProduct :product="productBestSelling()" />
       </div>
@@ -160,26 +162,26 @@ export default {
   display: flex;
   flex-direction: column;
   height: 400px;
-  width: 100%;
+  width: 1680px;
   padding: 0;
 }
 
 .container-menu{
   height: 100%;
-  width: 25%;
+  width: 350px;
   border-right: 1px solid #bcbcbc;
-  margin-left: 9%;
+  margin-left: 7%;
   //border: solid;
   padding-top: 20px;
 }
 
 .container-image-advertise{
-  height: 46%;
-  width: 74%;
+  height: 49%;
+  width: 1176px;
   position: absolute;
-  margin-left: 26.5%;
-  padding-top: 30px;
-  padding-left: 40px;
+  margin-left: 500px;
+  padding-top: 25px;
+  padding-left: 10px;
 }
 
 .menu-item{
@@ -198,7 +200,6 @@ export default {
   height: 40px;
   background-color: transparent;
   border-radius: 0;
-  color: black;
   text-align: left;
   font-size: 16px;
   border: none;
@@ -232,14 +233,14 @@ export default {
 }
 
 .view-product-slide{
-  width: 100%;
+  width: 82%;
   margin-left: 9%;
-  margin-top: 10%;
+  margin-top: 5%;
 }
 
 .view-service{
-  width: 100%;
-  margin-top: 10%;
+  width: 80%;
+  margin-top: 5%;
   height: 140px;
   margin-left: 9%;
   display: flex;

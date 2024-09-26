@@ -68,7 +68,9 @@ export default {
     </div>
     <!-- ref="titleComponent": là dùng titleComponent gọi các data method nó ra-->
   </div>
-  <div class="view-list-product" style="display: flex; margin-bottom: 4%;">
+  <div class="view-list-product" style="display: flex; margin-bottom: 4%; justify-content: space-between">
+  <!-- :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }"-->
+  <!-- Xet dieu khien khi sp > 4 -->
     <div v-for="(product) in getProductBestSelling()" :key="product.id" class="list-product">
       <CustomItemProduct :product="product" />
     </div>

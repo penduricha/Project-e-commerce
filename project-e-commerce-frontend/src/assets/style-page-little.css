@@ -1,0 +1,23 @@
+.container-child{
+    display: flex;
+    flex-direction: column;
+    height: 820px;
+    width: 1338px;
+    margin-top: -20px;
+    padding: 0;
+    margin-left: -25px;
+}
+
+.main{
+    display: flex;
+}
+
+.main-content{
+    display: flex;
+    justify-content: center;
+    height: 85%;
+    width: 127%;
+    margin-top: 70px;
+    padding: 0;
+    margin-left: 25px;
+}

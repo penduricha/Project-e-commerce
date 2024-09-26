@@ -34,7 +34,7 @@ export default{
 .header {
   flex: 0 0 2vh;
   background-color: black;
-  width: 1700px;
+  width: 1680px;
   justify-content: center;
   display: flex;
   padding-top: 10px;

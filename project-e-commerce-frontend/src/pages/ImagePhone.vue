@@ -47,7 +47,7 @@ export default {
 
 <style>
 .background-image{
-  width: 892px;
+  width: 950px;
   height: 344px;
   display: flex;
   background-color: black;

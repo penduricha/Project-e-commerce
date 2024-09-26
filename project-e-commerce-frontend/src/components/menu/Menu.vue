@@ -61,7 +61,7 @@ export default{
       <!--      border: solid 2px;-->
       <!--:style="{ textDecoration: (isActiveRoute('/signup-screen') || isActiveRoute('/')) ? 'underline' : 'none' }"-->
       <div class="menu-search">
-        <input type="text" placeholder="What are you looking for?" v-model="searchText" maxlength=30 class="style-input-search" :style="{ marginLeft: (!isActiveRoute('/signup-screen') && !isActiveRoute('/login-screen')) ? '-105px' : '0' }">
+        <input type="text" placeholder="What are you looking for?" v-model="searchText" maxlength=30 class="style-input-search" :style="{ marginLeft: (!isActiveRoute('/signup-screen') && !isActiveRoute('/login-screen')) ? '-175px' : '0' }">
         <svg fill="currentColor" class="bi bi-heart style-icon-menu" viewBox="0 0 16 16" style="width: 24px; height: 24px; cursor: pointer;" v-if="((!isActiveRoute('/signup-screen')) && (!isActiveRoute('/login-screen')))">
           <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
         </svg>
@@ -77,7 +77,7 @@ export default{
 .menu
 {
   flex: 0 0 8vh;
-  width: 1700px;
+  width: 1680px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
@@ -98,14 +98,14 @@ export default{
   display: flex;
 }
 .menu-exclusive{
-  flex: 1;
+  flex: 0.4;
   display: flex;
   align-items: center; /* Center vertically */
   justify-content: left;
 }
 
 .menu-navbar{
-  flex: 0.75;
+  flex: 1;
 }
 
 .menu-search{
