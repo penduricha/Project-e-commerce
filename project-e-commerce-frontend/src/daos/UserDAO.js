@@ -13,6 +13,7 @@ export default class UserDAO{
             user = response.data;
         }).catch(error => {
             console.error(error);
+            alert(error);
         });
         return user;
     }

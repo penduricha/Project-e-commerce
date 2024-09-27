@@ -9,28 +9,39 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import BestSellingProduct from "@/components/home-page/BestSellingProduct.vue";
 import productBestSelling from "@/assets/data-product/ProductBestSelling.js";
 import productExplore from "@/assets/data-product/ProductExplore.js";
-import MenuHomePageNoAccount from "@/components/menu/Menu.vue";
+import Menu from "@/components/menu/Menu.vue";
 import ExploreProduct from "@/components/home-page/ExploreProduct.vue";
 import CustomService from "@/components/base/CustomService.vue";
 export default {
-  name: 'HomePage',
+  name: 'HomePageWithAccount',
+
+  props: {
+
+    emailPhoneHomePage: {
+      type: String,
+      required: true
+    }
+
+  },
+
   components:{
     CustomService,
     ExploreProduct,
-    MenuHomePageNoAccount,
+    Menu,
     BestSellingProduct,
     CustomButton,
     Header,
     Footer,
-
     ImagePhone,
     FlashSales,
   },
+
   data(){
     return{
       isActiveWomenFashion: false,
     }
   },
+
   methods: {
     //method lấy ds
     productFlashSale() {
@@ -49,7 +60,7 @@ export default {
 <template>
   <div class="container">
     <Header style="height: 50px"/>
-    <MenuHomePageNoAccount style="height: 200px"/>
+    <Menu style="height: 200px"/>
     <main class="main">
       <div class="container-child-1">
         <div class="container-menu">
@@ -238,7 +249,7 @@ export default {
 /*
 .woman-fashion.active::after {
   /* Quay mũi tên khi active */
- /* transform: rotate(45deg);*/
+/* transform: rotate(45deg);*/
 /*}*/
 /* Khoảng cách giữa văn bản và mũi tên */
 .men-fashion::after{

@@ -55,14 +55,14 @@ export default {
         this.errorEmailPhoneNumber='';
       }else {
         if (this.emailPhoneNumber.length > 11) {
-          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
             this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
           } else {
             this.errorEmailPhoneNumber = '';
           }
         } else {
           if (!isNumeric(this.emailPhoneNumber.trim())) {
-            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
               this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
             } else {
               this.errorEmailPhoneNumber = '';

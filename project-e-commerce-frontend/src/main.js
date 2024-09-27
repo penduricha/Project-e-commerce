@@ -1,6 +1,5 @@
 import './assets/main.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
 import routers from "@/listRouters.js";
 import App from './App.vue';
 import { createApp } from 'vue';
@@ -29,5 +28,10 @@ function initRouter(routers)
     //app.use(Vue3GeoLocation);
     app.mount('#app')
 }
+
+function initHomePageWithAccount(){
+
+}
+
 //chạy màn hình
 initRouter(routers);
