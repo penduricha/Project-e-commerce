@@ -64,7 +64,7 @@ export default {
     <main class="main">
       <div class="container-child-1">
         <div class="container-menu">
-          <div class="btn-group dropend">
+          <div class="btn-group">
             <button
                 type="button"
                 @click=""
@@ -172,7 +172,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/input-white';
 @import '@/assets/container';
-
 
 .container-child-1{
   display: flex;

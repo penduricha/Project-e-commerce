@@ -5,6 +5,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import Menu from "@/components/menu/Menu.vue";
 import UserDAO from "@/daos/UserDAO.js";
 import User from "@/models/User.js";
+import Router from "@/routers/Router.js";
 
 export default {
   name: 'LoginScreen',
@@ -33,14 +34,14 @@ export default {
         this.errorEmailPhoneNumber='';
       }else {
         if (this.emailPhoneNumber.length > 11) {
-          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
             this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
           } else {
             this.errorEmailPhoneNumber = '';
           }
         } else {
           if (!isNumeric(this.emailPhoneNumber.trim())) {
-            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber)) {
+            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
               this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
             } else {
               this.errorEmailPhoneNumber = '';
@@ -83,7 +84,7 @@ export default {
 
         let passwordHashed = await sha512(this.password.trim());
 
-        if((userExist.email === null && userExist.phoneNumber === null) || (userExist._password !== passwordHashed)){
+        if((userExist._email === null && userExist._phoneNumber === null) || (userExist._password !== passwordHashed)){
             //this.errorEmailPhoneNumber='';
             this.errorPassword = 'Email or phone or password is incorrect.';
         }else{
@@ -91,14 +92,33 @@ export default {
             this.errorPassword = '';
             //login page
             alert('Login successfully.');
+
+            const router = new Router (this.emailPhoneNumber.trim(), "/home-page-with-account");
+
+            saveRouterLocalStorage(router);
+
+            this.$router.replace({
+              path: '/home-page-with-account',
+              query: {
+                emailPhoneHomePage: this.emailPhoneNumber.trim(),
+              }
+            }).catch((error) => {
+              console.error('Error navigating :', error);
+              alert(error);
+            });
         }
       }
-
     },
 
     preventPaste(event) {
       event.preventDefault();
     },
+  }
+}
+
+function saveRouterLocalStorage(router){
+  if(router !== undefined){
+    localStorage.setItem('router', JSON.stringify(router));
   }
 }
 

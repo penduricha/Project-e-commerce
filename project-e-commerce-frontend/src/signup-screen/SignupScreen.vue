@@ -5,7 +5,8 @@ import UserDAO from "@/daos/UserDAO.js";
 import CustomButton from "@/components/base/CustomButton.vue";
 import Menu from "@/components/menu/Menu.vue";
 import User from "@/models/User.js";
-import ModalSuccess from "@/components/base/ModalSuccess.vue";
+import ModalSuccess from "@/components/modal/ModalSuccess.vue";
+import Router from "../../demo-js/localStorage/Router.js";
 
 export default {
 
@@ -158,6 +159,7 @@ export default {
     handleContinue(){
       this.$router.replace({ path: '/login-screen' }).catch((error) => { console.error('Error navigating :', error); });
     },
+    
 
     preventPaste(event) {
       event.preventDefault();
@@ -195,13 +197,15 @@ function isValidVietnameseName(name) {
   const regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+$/;
   return regex.test(removeAscent(name));
 }
+
+
 </script>
 
 <template>
   <div class="container">
     <ModalSuccess ref="modalSuccess" @handleContinue="handleContinue()" text-success="Register successfully"/>
     <Header style="height: 50px"/>
-    <Menu style="height: 200px"/>
+    <Menu style="height: 200px" email-phone-home-page=""/>
     <main class="main">
       <div class="container-child">
         <div class="main-content">

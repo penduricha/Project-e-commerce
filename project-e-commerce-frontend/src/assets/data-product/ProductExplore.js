@@ -4,7 +4,7 @@ const product = [
         name:'Breed Dry Dog Food',
         priceOld: null,
         priceNew: 100,
-        image: new URL('@/assets/image-explore-product/dry-dog-food.png',import.meta.url).href,
+        image: new URL('@/assets/image-explore-product/dry-dog-food-new.png',import.meta.url).href,
     },
     {
         id: 2,

@@ -9,7 +9,14 @@ export default {
   components: {
     CustomDiscount,
   },
-  props:['product'],
+
+  props:{
+    product: {
+      type: Map,
+      required: true
+    }
+  },
+
   methods: {
 
   },
@@ -79,6 +86,7 @@ export default {
   height: 100%;
   flex: 4.5;
   padding-left: 10px;
+
 }
 
 .image-content{
@@ -112,11 +120,10 @@ export default {
   display: none;
   position: absolute;
   /* Để đè lên các phần tử khác */
-  width: 267px;
   height: 6%;
   margin-top: 11.1%;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
   color: white;
   background-color: black;
   border: none;
@@ -125,13 +132,12 @@ export default {
   font-weight: 400;
   font-size: 16px;
   /* Đảm bảo nút nằm trên các phần tử khác */
-  z-index: 1;
 }
 
 .item-image:hover .add-to-cart {
   /* Hiện nút khi hover */
   display: block;
-  width: 17.7%;
+  width: 298px;
 }
 
 .item-content{

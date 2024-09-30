@@ -1,37 +1,118 @@
 <script>
 import DivHeartCart from "@/components/base/DivHeartCart.vue";
+import Router from "../../../demo-js/localStorage/Router.js";
+import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
+import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
 
 export default{
-  name:'MenuHomePageNoAccount',
+  name:'Menu',
+
   data(){
     return{
       searchText: null,
       isDropdownOpenAccount: false,
     }
   },
+
   components:{
+    ModalNotifyToLogout,
+    ModalConfirmLogout,
     DivHeartCart,
   },
   methods:{
     handleSearch(){
-      alert("Searched")
+      //alert("Searched")
     },
+
     // handleToSignup(){
     //   this.$router.push('/signup-screen');
     // }
     isActiveRoute(route) {
       return this.$route.path === route;
     },
+
     showDropdownAccount() {
       this.isDropdownOpenAccount = !this.isDropdownOpenAccount;
     },
 
-    // handleOptionClickAccount(option) {
-    //   console.log(`${option} clicked!`);
-    //   this.isDropdownOpenAccount = false; // Đóng dropdown sau khi chọn
-    // }
+    openModalLogout(){
+      this.$refs.logoutModal.openModal();
+    },
+
+    openModalNotifyLogout(){
+      this.$refs.logoutNotifyModal.openModal();
+    },
+
+    handleSignup(){
+      if(getLocalStorageRouter()!== null){
+        this.openModalNotifyLogout();
+      }else{
+        this.$router.replace({
+          path: '/signup-screen',
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
+    },
+
+    handleLogout(){
+      removeRouter();
+
+      alert("Log out successfully.");
+
+      this.$router.replace({
+        path: '/home-page',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
+    // getLocalStorageRouter(){
+    //   return getLocalStorageRouter();
+    // },
+
+    handleHomePage(){
+      if(getLocalStorageRouter() === null){
+        this.$router.replace({
+          path: '/home-page',
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }else{
+        this.$router.replace({
+          path: '/home-page-with-account',
+          query: {
+            emailPhoneHomePage: this.emailPhoneHomePage.trim(),
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
+    },
   }
 }
+
+function getLocalStorageRouter(){
+  const router = localStorage.getItem('router');
+  if(router){
+    const { _emailPhoneNumber, _routerPath } = JSON.parse(router);
+    // let router= new Router(_emailPhoneNumber, _routerPath);
+    // return router._emailPhoneNumber;
+    return new Router(_emailPhoneNumber, _routerPath);
+  }
+  else {
+    return null;
+  }
+}
+
+function removeRouter(){
+  localStorage.removeItem('router');
+}
+
 </script>
 
 <template>
@@ -43,12 +124,8 @@ export default{
         </div>
         <div class="menu-navbar">
           <ul class="navbar-nav" style="justify-content: center; align-items: center; margin-top: 10px;">
-            <li class="nav-item" :style="{ borderBottom: (isActiveRoute('/home-page') || isActiveRoute('/')) ? 'solid 2px' : 'none' }">
-            <!-- || isActiveRoute('/')-->
-              <router-link
-                  class="btn btn-light nav-link nav-item-signup"
-                  to="/home-page"
-              >Home</router-link>
+            <li class="nav-item" :style="{ borderBottom: ( (isActiveRoute('/home-page')) || (isActiveRoute('/')) || (isActiveRoute('/home-page-with-account'))) ? 'solid 2px' : 'none' }">
+              <button class="btn btn-light nav-link" @click.prevent="handleHomePage()">Home</button>
             </li>
             <li class="nav-item">
               <button class="btn btn-light nav-link" @click.prevent="">Contact</button>
@@ -58,11 +135,10 @@ export default{
             </li>
             <li class="nav-item"
                 :style="{ borderBottom: (isActiveRoute('/signup-screen')) ? 'solid 2px' : 'none' }">
-              <router-link
+              <button
                   class="btn btn-light nav-link nav-item-signup"
-                  to="/signup-screen"
-              >Sign up</router-link>
-              <!--|| isActiveRoute('/')-->
+                  @click.prevent="handleSignup()"
+              >Sign up</button>
             </li>
           </ul>
         </div>
@@ -72,7 +148,7 @@ export default{
       <div class="menu-search">
         <div class="style-input-search"  :style="{ marginLeft: (!isActiveRoute('/signup-screen') && !isActiveRoute('/login-screen')) ? '-175px' : '0' }" style="padding-right: 10px;">
           <input type="text" placeholder="What are you looking for?" v-model="searchText" maxlength=30 class="style-input-search" style="width: 90%;">
-          <svg fill="currentColor" class="bi bi-search" viewBox="0 0 20 20" style="width: 25px; height: 25px;" @click="handleSearch()">
+          <svg fill="currentColor" class="bi bi-search" viewBox="0 0 20 20" style="width: 25px; height: 25px; margin-top: 3px;" @click="handleSearch()">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
         </div>
@@ -111,6 +187,11 @@ export default{
       </div>
     </div>
   </div>
+  <!-- modal logout -->
+  <ModalConfirmLogout ref="logoutModal" @handleLogout="handleLogout()" />
+
+  <ModalNotifyToLogout ref="logoutNotifyModal" @handleLogout="handleLogout()" />
+
   <!-- div menu drop-->
   <div class="menu-account-drop" v-if="isDropdownOpenAccount">
     <div class="menu-account-drop-child">
@@ -161,7 +242,7 @@ export default{
           </svg>
         </div>
         <div class="item-menu-content">
-          <router-link to="" class="style-item-menu-account">Logout</router-link>
+          <button @click="openModalLogout()" style="margin-left: -3px;" class="style-item-menu-account">Logout</button>
         </div>
       </div>
     </div>
@@ -171,12 +252,13 @@ export default{
 <style>
 .menu
 {
-  flex: 0 0 8vh;
   width: 1680px;
+  height: 100px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   border-bottom: 1px solid #bcbcbc;
+  background-color: white;
 }
 
 .menu-child{
@@ -304,7 +386,7 @@ export default{
 }
 
 .button-icon{
-  width: 27%;
+  width: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -317,6 +399,7 @@ export default{
 
 .button-icon-account:hover{
   background-color: #DB4444;
+
 }
 
 .button-icon-account:hover svg {
@@ -324,11 +407,15 @@ export default{
 }
 
 .menu-account-drop {
-  position: fixed;
+  position: absolute;
+  left: 77.5%;
+  /* Đặt vị trí từ bên trái */
+  top: 14%;
+  /* Đặt vị trí từ trên cùng */
   display: flex;
-  margin-left: 77.5%;
-  margin-top: 8%;
   justify-content: center;
+  align-items: center;
+  /* Đảm bảo nội dung căn giữa */
   z-index: 1000;
   width: 230px;
   height: 220px;
@@ -373,5 +460,11 @@ export default{
   font-size: 14px;
   color: white;
   text-decoration: none;
+  background-color: transparent;
+  border: none;
+}
+
+.style-item-menu-account:hover{
+  background-color: transparent;
 }
 </style>
