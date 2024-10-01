@@ -1,7 +1,7 @@
 <script>
 import Header from "@/components/header-footer-menu/Header.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
-
+import './style-item-menu.css';
 import ImagePhone from "@/pages/ImagePhone.vue";
 import FlashSales from "@/components/home-page/FlashSales.vue";
 import productFlashSale from "@/assets/data-product/ProductFlashSale.js";
@@ -199,16 +199,6 @@ export default {
   padding-left: 10px;
 }
 
-.menu-item{
-  width: 325px;
-  height: 40px;
-  background-color: transparent;
-  border-radius: 0;
-  color: black;
-  text-align: left;
-  font-size: 16px;
-  border: none;
-}
 
 .menu-item-child{
   width: 305px;
@@ -219,40 +209,6 @@ export default {
   font-size: 16px;
   border: none;
   margin-left: 20px;
-}
-
-
-.dropdown-toggle::after {
-  /* Đảm bảo có mũi tên */
-  content: '';
-  /* Hiển thị như một phần tử inline */
-  display: inline-block;
-  /* Tạo mũi tên */
-  border: solid;
-  /* Định dạng mũi tên */
-  border-width: 0 2px 2px 0;
-  /* Kích thước mũi tên */
-  padding: 4px;
-  /* Quay mũi tên 315 do*/
-  transform: rotate(315deg);
-}
-
-/*css cho arrow menu*/
-
-.woman-fashion::after{
-  /* Khoảng cách giữa văn bản và mũi tên */
-  margin-left: 170px;
-  /* Quay mũi tên 315 do*/
-  transform: rotate(315deg);
-}
-/*
-.woman-fashion.active::after {
-  /* Quay mũi tên khi active */
-/* transform: rotate(45deg);*/
-/*}*/
-/* Khoảng cách giữa văn bản và mũi tên */
-.men-fashion::after{
-  margin-left: 192px;
 }
 
 .view-product-slide{

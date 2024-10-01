@@ -50,12 +50,12 @@ export default {
         }
       }
     },
-
+    //chung ta phai trim() chuoi sau do moi xet tinh valid
     validateEmailAndPhoneNumber(){
       if(!this.emailPhoneNumber){
         this.errorEmailPhoneNumber='';
       }else {
-        if (this.emailPhoneNumber.length > 11) {
+        if (this.emailPhoneNumber.trim().length > 11) {
           if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
             this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
           } else {
@@ -99,14 +99,18 @@ export default {
       if (!this.emailPhoneNumber) {
         this.errorEmailPhoneNumber = 'Please enter email or phone number.';
       }else{
+        try{
+          let userExist = await getUserByEmailOrPhoneNumber(this.emailPhoneNumber.trim());
+          console.log('User by email or phone number to check exist: ',userExist);
 
-        let userExist = await getUserByEmailOrPhoneNumber(this.emailPhoneNumber.trim());
-        console.log('User by email or phone number to check exist: ',userExist);
-
-        if(userExist.email !== null && userExist.phoneNumber !== null){
-          this.errorEmailPhoneNumber='';
-        }else{
-          this.errorEmailPhoneNumber = 'Account already exists.';
+          if(userExist._email !== null && userExist._phoneNumber !== null){
+            this.errorEmailPhoneNumber='';
+          }else{
+            this.errorEmailPhoneNumber = 'Account already exists.';
+          }
+        }catch(error){
+          console.error(error);
+          this.$router.replace({ path: '/screen-404' }).catch((error) => { console.error('Error navigating :', error); });
         }
       }
 
@@ -149,7 +153,8 @@ export default {
         if(resultCreateAccount === 1){
           this.$refs.modalSuccess.openModal();
         }else{
-          alert('Register Fail, please try again.');
+          //alert('Register Fail, please try again.');
+          this.$router.replace({ path: '/screen-404' }).catch((error) => { console.error('Error navigating :', error); });
         }
       }
       //Mo modal

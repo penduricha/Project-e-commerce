@@ -7,13 +7,13 @@ export default class UserDAO{
         //cac thuoc tinh can set
     }
 
-    static async getUserByEmailOrPhoneNumber(emailOrPhoneNumber){
-        let user=null;
-        await UserService.getUserByEmailOrPhoneNumber(emailOrPhoneNumber).then(response => {
+    static async getUserByEmailOrPhoneNumber(emailPhoneNumber){
+        let user= null;
+        await UserService.getUserByEmailOrPhoneNumber(emailPhoneNumber).then(response => {
             user = response.data;
         }).catch(error => {
             console.error(error);
-            alert(error);
+            //alert(error)
         });
         return user;
     }

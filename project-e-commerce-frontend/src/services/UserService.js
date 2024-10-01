@@ -17,5 +17,4 @@ export default class UserService{
     static createAccount(user) {
         return apiClient.post('/users',user, {});
     }
-
 }

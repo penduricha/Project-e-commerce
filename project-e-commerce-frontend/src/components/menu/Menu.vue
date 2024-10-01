@@ -1,4 +1,5 @@
 <script>
+
 import DivHeartCart from "@/components/base/DivHeartCart.vue";
 import Router from "../../../demo-js/localStorage/Router.js";
 import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
@@ -169,7 +170,7 @@ function removeRouter(){
 
           <div class="button-icon button-icon-account"
               @click="showDropdownAccount()"
-               v-if="((!isActiveRoute('/home-page')))">
+               v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404'))">
             <div style="width: 100%;
                         height: 100%;
                         display: flex;
@@ -255,8 +256,8 @@ function removeRouter(){
   width: 1680px;
   height: 100px;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
   border-bottom: 1px solid #bcbcbc;
   background-color: white;
 }
@@ -277,7 +278,7 @@ function removeRouter(){
 .menu-exclusive{
   flex: 0.4;
   display: flex;
-  align-items: center; /* Center vertically */
+  align-items: center;
   justify-content: left;
 }
 

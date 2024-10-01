@@ -22,9 +22,5 @@ export default {
 </template>
 
 <style>
-.link-item{
-  color: #DB4444;
-  font-weight: 500;
-  border-radius: 50px;
-}
+
 </style>

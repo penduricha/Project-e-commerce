@@ -5,10 +5,7 @@ import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Router from "../demo-js/localStorage/Router.js";
-import HomePage from "@/pages/HomePage.vue";
-import LoginScreen from "@/login-screen/LoginScreen.vue";
-import SignupScreen from "@/signup-screen/SignupScreen.vue";
-import HomePageWithAccount from "@/pages/HomePageAccount.vue";
+
 //vuetify
 //npm install vuetify@next @mdi/font
 // import { createVuetify } from 'vuetify';
@@ -40,7 +37,10 @@ function initRouter(routers)
     //Dat con tro khi load man hinh, man hinh tro den khi chay main.js
     //push quay ve duoc con replace ko quay ve
     //init trang tại /home-page
-    router.replace('/home-page').catch((error) => { console.error('Error navigating: ', error); });
+    router.replace('/home-page').catch((error) => {
+        console.error('Error navigating: ', error);
+        router.replace('/screen-404').catch(err => console.error(err));
+    });
     //app.unmount();
     //app.use(Vue3GeoLocation);
     app.mount('#app')
@@ -51,12 +51,7 @@ function initHomePageAccount(routerInit){
         // mode: 'history',
         history: createWebHistory(),
         //ten bien du lieu truyen qua ko duoc trung
-        routes: [
-            { path: '/login-screen', component: LoginScreen },
-            { path: '/signup-screen', component: SignupScreen },
-            { path: '/home-page', component: HomePage },
-            { path: '/home-page-with-account', component: HomePageWithAccount, props: (route) => ({ emailPhoneHomePage: routerInit._emailPhoneNumber.trim() })},
-        ],
+        routes: routers,
     });
     const app = createApp(App)
     // .use(vuetify);
@@ -64,7 +59,10 @@ function initHomePageAccount(routerInit){
     //Dat con tro khi load man hinh, man hinh tro den khi chay main.js
     //push quay ve duoc con replace ko quay ve
     //init trang tại /home-page
-    router.replace(routerInit._routerPath).catch((error) => { console.error('Error navigating: ', error); });
+    router.replace(routerInit._routerPath).catch((error) => {
+        console.error('Error navigating: ', error);
+        router.replace('/screen-404').catch(err => console.error(err));
+    });
     //app.unmount();
     //app.use(Vue3GeoLocation);
     app.mount('#app');

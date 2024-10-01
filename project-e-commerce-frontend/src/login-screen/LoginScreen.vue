@@ -33,7 +33,7 @@ export default {
       if(!this.emailPhoneNumber){
         this.errorEmailPhoneNumber='';
       }else {
-        if (this.emailPhoneNumber.length > 11) {
+        if (this.emailPhoneNumber.trim().length > 11) {
           if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
             this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
           } else {
@@ -79,15 +79,16 @@ export default {
       }
 
       if(!this.errorEmailPhoneNumber && !this.errorPassword){
-        let userExist = await getUserByEmailOrPhoneNumber(this.emailPhoneNumber.trim());
-        console.log('User by email or phone number to check exist: ', userExist);
+        try{
+          let userExist = await getUserByEmailOrPhoneNumber(this.emailPhoneNumber.trim());
+          console.log('User by email or phone number to check exist: ', userExist);
 
-        let passwordHashed = await sha512(this.password.trim());
+          let passwordHashed = await sha512(this.password.trim());
 
-        if((userExist._email === null && userExist._phoneNumber === null) || (userExist._password !== passwordHashed)){
+          if((userExist._email === null && userExist._phoneNumber === null) || (userExist._password !== passwordHashed)){
             //this.errorEmailPhoneNumber='';
             this.errorPassword = 'Email or phone or password is incorrect.';
-        }else{
+          }else{
             //this.errorEmailPhoneNumber = 'Account already exists.';
             this.errorPassword = '';
             //login page
@@ -106,6 +107,10 @@ export default {
               console.error('Error navigating :', error);
               alert(error);
             });
+          }
+        }catch(error){
+          console.error(error);
+          this.$router.replace({ path: '/screen-404' }).catch((error) => { console.error('Error navigating :', error); });
         }
       }
     },
@@ -204,14 +209,16 @@ async function sha512(password) {
 
 }
 .column-2 {
-  flex: 2; /* Tỷ lệ 2 */
+  flex: 2;
+  /* Tỷ lệ 2 */
   padding: 20px;
 
 }
 
 @media (max-width: 600px) {
   .container {
-    flex-direction: column; /* Chuyển thành cột trên màn hình hẹp */
+    flex-direction: column;
+    /* Chuyển thành cột trên màn hình hẹp */
   }
 }
 
