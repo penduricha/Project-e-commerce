@@ -38,7 +38,7 @@ export default {
 
 <style>
 .container-view-service{
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }

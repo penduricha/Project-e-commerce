@@ -1,6 +1,5 @@
 <script>
 
-import DivHeartCart from "@/components/base/DivHeartCart.vue";
 import Router from "../../../demo-js/localStorage/Router.js";
 import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
 import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
@@ -18,7 +17,6 @@ export default{
   components:{
     ModalNotifyToLogout,
     ModalConfirmLogout,
-    DivHeartCart,
   },
   methods:{
     handleSearch(){
@@ -73,6 +71,14 @@ export default{
     // getLocalStorageRouter(){
     //   return getLocalStorageRouter();
     // },
+    handleAbout(){
+      this.$router.replace({
+        path: '/about-page',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
 
     handleHomePage(){
       if(getLocalStorageRouter() === null){
@@ -131,8 +137,9 @@ function removeRouter(){
             <li class="nav-item">
               <button class="btn btn-light nav-link" @click.prevent="">Contact</button>
             </li>
-            <li class="nav-item">
-              <button class="btn btn-light nav-link" @click.prevent="">About</button>
+            <li class="nav-item"
+                :style="{ borderBottom: (isActiveRoute('/about-page')) ? 'solid 2px' : 'none' }">
+              <button class="btn btn-light nav-link" @click.prevent="handleAbout()">About</button>
             </li>
             <li class="nav-item"
                 :style="{ borderBottom: (isActiveRoute('/signup-screen')) ? 'solid 2px' : 'none' }">

@@ -50,7 +50,7 @@ export default {
     <Header style="height: 50px"/>
     <Menu style="height: 200px"/>
     <main class="main">
-      <div class="container-child-1">
+      <div class="container-menu-image">
         <div class="container-menu">
           <div class="btn-group dropend">
             <button
@@ -162,7 +162,7 @@ export default {
 @import '@/assets/container';
 
 
-.container-child-1{
+.container-menu-image{
   display: flex;
   height: 400px;
   width: 1680px;
