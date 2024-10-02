@@ -25,10 +25,10 @@ export default {
 </script>
 
 <template>
-  <div class="item-style">
+  <div class="item-style item-statistic">
     <div class="view-image-service">
       <div class="style-image-service">
-        <div class="style-circle-grey">
+        <div class="style-circle-grey style-circle">
           <div class="style-circle-black">
             <img :src="pathImage" class="style-icon-service" alt="image">
           </div>
@@ -44,8 +44,12 @@ export default {
 
 <style>
 
-.item-style:hover{
+.item-statistic:hover{
   color: white;
+}
+
+.item-statistic:hover .style-circle-grey {
+  background-color: #e47c7c;
 }
 
 </style>

@@ -5,6 +5,12 @@ import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Router from "../demo-js/localStorage/Router.js";
+import HomePage from "@/pages/HomePage.vue";
+import LoginScreen from "@/login-screen/LoginScreen.vue";
+import SignupScreen from "@/signup-screen/SignupScreen.vue";
+import Screen404 from "@/pages/Screen404.vue";
+import AboutPage from "@/pages/AboutPage.vue";
+import HomePageWithAccount from "@/pages/HomePageAccount.vue";
 
 //vuetify
 //npm install vuetify@next @mdi/font
@@ -51,7 +57,15 @@ function initHomePageAccount(routerInit){
         // mode: 'history',
         history: createWebHistory(),
         //ten bien du lieu truyen qua ko duoc trung
-        routes: routers,
+        routes: [
+            { path: '/', component:  HomePage},
+            { path: '/login-screen', component: LoginScreen },
+            { path: '/signup-screen', component: SignupScreen },
+            { path: '/home-page', component: HomePage },
+            { path: '/screen-404', component: Screen404 },
+            { path: '/about-page', component: AboutPage },
+            { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: routerInit._emailPhoneNumber })},
+        ],
     });
     const app = createApp(App)
     // .use(vuetify);
@@ -72,11 +86,14 @@ function initHomePageAccount(routerInit){
 //initRouter(routers);
 
 //run
-if(getRouter() === null){
-    initRouter(routers);
-}else{
-    initHomePageAccount(getRouter());
+function execute(){
+    if(getRouter() === null){
+        initRouter(routers);
+    }else{
+        initHomePageAccount(getRouter());
+    }
 }
+
 
 // const router = createRouter({
 //     // mode: 'history',
@@ -94,3 +111,6 @@ if(getRouter() === null){
 // //app.unmount();
 // //app.use(Vue3GeoLocation);
 // app.mount('#app')
+
+
+execute();

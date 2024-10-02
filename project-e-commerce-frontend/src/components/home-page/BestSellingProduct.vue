@@ -3,7 +3,7 @@ import './style-view-slidebar.css';
 import Title from "@/components/home-page/Title.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/base/CustomItemProduct.vue";
-import CustomPagination from "@/components/base/CustomPagination.vue";
+import CustomPagination from "@/components/paginations/CustomPagination.vue";
 
 export default {
   name:'BestSellingProduct',

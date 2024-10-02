@@ -33,24 +33,26 @@ export default {
       if(!this.emailPhoneNumber){
         this.errorEmailPhoneNumber='';
       }else {
-        if (this.emailPhoneNumber.trim().length > 11) {
-          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
-            this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
-          } else {
-            this.errorEmailPhoneNumber = '';
-          }
-        } else {
-          if (!isNumeric(this.emailPhoneNumber.trim())) {
+        if(!isFullOfSpaces(this.emailPhoneNumber)){
+          if (this.emailPhoneNumber.trim().length > 11) {
             if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
               this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
             } else {
               this.errorEmailPhoneNumber = '';
             }
           } else {
-            if(this.emailPhoneNumber.trim().length < 10){
-              this.errorEmailPhoneNumber = 'Please enter phone number 10 digits.';
-            }else{
-              this.errorEmailPhoneNumber = '';
+            if (!isNumeric(this.emailPhoneNumber.trim())) {
+              if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
+                this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
+              } else {
+                this.errorEmailPhoneNumber = '';
+              }
+            } else {
+              if(this.emailPhoneNumber.trim().length < 10){
+                this.errorEmailPhoneNumber = 'Please enter phone number 10 digits.';
+              }else{
+                this.errorEmailPhoneNumber = '';
+              }
             }
           }
         }
@@ -70,7 +72,7 @@ export default {
     },
 
     async validateNullAndHandleLogin() {
-      if (!this.emailPhoneNumber) {
+      if (!this.emailPhoneNumber || this.emailPhoneNumber.trim() ==="") {
         this.errorEmailPhoneNumber = 'Please enter email or phone number.';
       }
 
@@ -144,6 +146,15 @@ async function sha512(password) {
   let buf = await crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(password));
   return Array.prototype.map.call(new Uint8Array(buf), x => (('00' + x.toString(16)).slice(-2))).join('');
 }
+
+function isFullOfSpaces(s) {
+  for (let char of s) {
+    if (char !== ' ') {
+      return false;
+    }
+  }
+  return true;
+}
 </script>
 <template>
   <div class="container">
@@ -160,10 +171,10 @@ async function sha512(password) {
                     padding: 0;
                     margin-left: 25px;
         ">
-          <div class="column-1">
+          <div class="column-left">
             <img src="@/assets/images/image-cart-phone.png" alt="Image Background" style="width: 100%; height: 100%;"/>
           </div>
-          <div class="column-2">
+          <div class="column-right">
             <div class="column-2-1">
               <p style="font-size: 36px; text-align: left">Log in to Exclusive</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
@@ -203,12 +214,12 @@ async function sha512(password) {
   margin-left: -25px;
 }
 
-.column-1 {
+.column-left {
   flex: 3; /* Tỷ lệ 3 */
   padding-left: 20px;
 
 }
-.column-2 {
+.column-right {
   flex: 2;
   /* Tỷ lệ 2 */
   padding: 20px;

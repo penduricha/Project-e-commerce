@@ -92,7 +92,7 @@ export default{
         this.$router.replace({
           path: '/home-page-with-account',
           query: {
-            emailPhoneHomePage: this.emailPhoneHomePage.trim(),
+            emailPhoneHomePage: getLocalStorageRouter()._emailPhoneNumber,
           }
         }).catch((error) => {
           console.error('Error navigating :', error);
@@ -131,7 +131,7 @@ function removeRouter(){
         </div>
         <div class="menu-navbar">
           <ul class="navbar-nav" style="justify-content: center; align-items: center; margin-top: 10px;">
-            <li class="nav-item" :style="{ borderBottom: ( (isActiveRoute('/home-page')) || (isActiveRoute('/')) || (isActiveRoute('/home-page-with-account'))) ? 'solid 2px' : 'none' }">
+            <li class="nav-item" :style="{ borderBottom: ( (isActiveRoute('/home-page')) || (isActiveRoute('/home-page-with-account'))) ? 'solid 2px' : 'none' }">
               <button class="btn btn-light nav-link" @click.prevent="handleHomePage()">Home</button>
             </li>
             <li class="nav-item">
@@ -261,7 +261,6 @@ function removeRouter(){
 .menu
 {
   width: 1680px;
-  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;

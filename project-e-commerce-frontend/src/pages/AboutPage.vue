@@ -5,10 +5,15 @@ import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomService from "@/components/base/CustomService.vue";
 import CustomItemService from "@/components/base/CustomItemService.vue";
 import CustomItemStatistic from "@/components/base/CustomItemStatistic.vue";
-
+import CustomItemManager from "@/pages/CustomItemManager.vue";
+import CustomPaginationGrey from "@/components/paginations/CustomPaginationGrey.vue";
+//import list manager
+import managers from '@/assets/data-list-managers/Manager.js';
 export default {
   name: "AboutPage",
   components: {
+    CustomPaginationGrey,
+    CustomItemManager,
     CustomItemStatistic,
     CustomItemService,
     CustomService,
@@ -16,14 +21,21 @@ export default {
     Menu,
     Header,
   },
+
   data(){
     return {
       image_statistic: {
         seller:  new URL('@/assets/image-about-svg/icon_shop.svg',import.meta.url).href,
         monthly: new URL('@/assets/image-about-svg/icon_dollar.svg',import.meta.url).href,
         customer: new URL('@/assets/image-about-svg/customer_active.svg',import.meta.url).href,
-        annual_gross: new URL('@/assets/image-about-svg/icon_money_bag.svg',import.meta.url).href,
+        annual_gross: new URL('@/assets/image-about-svg/icon_money_bag.png',import.meta.url).href,
       },
+    }
+  },
+
+  methods:{
+    getManagers(){
+      return managers;
     }
   }
 }
@@ -33,7 +45,7 @@ export default {
   <div class="container">
     <Header style="height: 50px"/>
     <Menu style="height: 200px"/>
-    <main class="main" style="padding-left: 160px; padding-right: 160px;">
+    <main class="main" style="padding-left: 200px; padding-right: 200px;">
       <div class="description-shop">
         <div class="description-story">
           <div style="height: 55%;width: 100%; display: flex; justify-content: space-between; flex-direction: column;">
@@ -60,6 +72,19 @@ export default {
         <CustomItemStatistic class="style-custom-item-statistic" :path-image="image_statistic.monthly" number-statistic=33 content-statistic="Monthly Product Sale"/>
         <CustomItemStatistic class="style-custom-item-statistic" :path-image="image_statistic.customer" number-statistic=45.5 content-statistic="Customer active in our site"/>
         <CustomItemStatistic class="style-custom-item-statistic" :path-image="image_statistic.annual_gross" number-statistic=25 content-statistic="Annual gross sale in our site"/>
+      </div>
+      <div class="view-list-manager">
+        <CustomItemManager
+            v-for="(manager, index) in getManagers()"
+            :key="index"
+            class="style-custom-item-manager"
+            :name="manager.name"
+            :position="manager.position"
+            :image-manager="manager.imageManager"
+        />
+      </div>
+      <div class="view-list-manager-pagination">
+        <CustomPaginationGrey/>
       </div>
       <div class="view-service">
         <CustomService/>
@@ -91,7 +116,7 @@ export default {
 
 .view-service{
   width: 100%;
-  margin-top: 5%;
+  margin-top: 10%;
   height: auto;
   display: flex;
   justify-content: center;
@@ -100,9 +125,26 @@ export default {
 .view-statistic{
   width: 100%;
   height: 200px;
-  margin-top: 5%;
+  margin-top: 10%;
   display: flex;
   justify-content: space-between;
+}
+
+.view-list-manager{
+  width: 100%;
+  height: 550px;
+  margin-top: 10%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.view-list-manager-pagination{
+  width: 100%;
+  margin-top: 2%;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .style-custom-item-statistic{
@@ -113,5 +155,9 @@ export default {
 
 .style-custom-item-statistic:hover{
   background-color: #DB4444;
+}
+
+.style-custom-item-manager{
+  width: 30%;
 }
 </style>

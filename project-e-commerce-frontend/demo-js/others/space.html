@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space</title>
+</head>
+<body>
+    <script>
+        function isFullOfSpaces(s) {
+            for (let char of s) {
+                if (char !== ' ') {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Ví dụ sử dụng
+        let str = "           ";
+        console.log(isFullOfSpaces(str));
+        // Kết quả: true
+    </script>
+</body>
+</html>

@@ -55,24 +55,27 @@ export default {
       if(!this.emailPhoneNumber){
         this.errorEmailPhoneNumber='';
       }else {
-        if (this.emailPhoneNumber.trim().length > 11) {
-          if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
-            this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
-          } else {
-            this.errorEmailPhoneNumber = '';
-          }
-        } else {
-          if (!isNumeric(this.emailPhoneNumber.trim())) {
+        if(!isFullOfSpaces(this.emailPhoneNumber))
+        {
+          if (this.emailPhoneNumber.trim().length > 11) {
             if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
               this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
             } else {
               this.errorEmailPhoneNumber = '';
             }
           } else {
-            if(this.emailPhoneNumber.trim().length < 10){
-              this.errorEmailPhoneNumber = 'Please enter phone number 10 digits or 11 digits.';
-            }else{
-              this.errorEmailPhoneNumber = '';
+            if (!isNumeric(this.emailPhoneNumber.trim())) {
+              if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.emailPhoneNumber.trim())) {
+                this.errorEmailPhoneNumber = 'Please enter valid email or phone number.';
+              } else {
+                this.errorEmailPhoneNumber = '';
+              }
+            } else {
+              if(this.emailPhoneNumber.trim().length < 10){
+                this.errorEmailPhoneNumber = 'Please enter phone number 10 digits or 11 digits.';
+              }else{
+                this.errorEmailPhoneNumber = '';
+              }
             }
           }
         }
@@ -96,7 +99,7 @@ export default {
         this.errorName = 'Please enter name.';
       }
 
-      if (!this.emailPhoneNumber) {
+      if (!this.emailPhoneNumber || this.emailPhoneNumber.trim() ==="") {
         this.errorEmailPhoneNumber = 'Please enter email or phone number.';
       }else{
         try{
@@ -203,14 +206,21 @@ function isValidVietnameseName(name) {
   return regex.test(removeAscent(name));
 }
 
-
+function isFullOfSpaces(s) {
+  for (let char of s) {
+    if (char !== ' ') {
+      return false;
+    }
+  }
+  return true;
+}
 </script>
 
 <template>
   <div class="container">
     <ModalSuccess ref="modalSuccess" @handleContinue="handleContinue()" text-success="Register successfully"/>
     <Header style="height: 50px"/>
-    <Menu style="height: 200px" email-phone-home-page=""/>
+    <Menu style="height: 200px"/>
     <main class="main">
       <div class="container-child">
         <div class="main-content">

@@ -40,6 +40,10 @@ export default {
     }
   },
 
+  created() {
+    this.getEmailPhoneNumber();
+  },
+
   methods: {
     //method lấy ds
     productFlashSale() {
@@ -51,6 +55,10 @@ export default {
     productExplore(){
       return productExplore;
     },
+    getEmailPhoneNumber(){
+      console.log(this.emailPhoneHomePage);
+      return this.emailPhoneHomePage
+    }
   }
 }
 </script>
@@ -257,5 +265,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 </style>
