@@ -3,7 +3,9 @@ import './style-modal-logout.css';
 import CustomButton from "@/components/base/CustomButton.vue";
 export default {
   name: 'ModalConfirmLogout',
-  components: {CustomButton},
+  components: {
+    CustomButton
+  },
   data() {
     return {
       show: false

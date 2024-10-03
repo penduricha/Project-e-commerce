@@ -71,6 +71,8 @@ export default{
     // getLocalStorageRouter(){
     //   return getLocalStorageRouter();
     // },
+
+
     handleAbout(){
       this.$router.replace({
         path: '/about-page',
@@ -198,7 +200,6 @@ function removeRouter(){
 
   <ModalNotifyToLogout ref="logoutNotifyModal" @handleLogout="handleLogout()" />
 
-  <!-- div menu drop-->
   <div class="menu-account-drop" v-if="isDropdownOpenAccount">
     <div class="menu-account-drop-child">
       <div class="item-menu">
@@ -264,7 +265,7 @@ function removeRouter(){
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid #bcbcbc;
-  background-color: white;
+  background-color: transparent;
 }
 
 .menu-child{
