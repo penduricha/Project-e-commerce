@@ -151,8 +151,6 @@ function removeRouter(){
           </ul>
         </div>
       </div>
-      <!--      border: solid 2px;-->
-      <!--:style="{ textDecoration: (isActiveRoute('/signup-screen') || isActiveRoute('/')) ? 'underline' : 'none' }"-->
       <div class="menu-search">
         <div class="style-input-search"  :style="{ marginLeft: (!isActiveRoute('/signup-screen') && !isActiveRoute('/login-screen')) ? '-175px' : '0' }" style="padding-right: 10px;">
           <input type="text" placeholder="What are you looking for?" v-model="searchText" maxlength=30 class="style-input-search" style="width: 90%;">
@@ -256,8 +254,6 @@ function removeRouter(){
     </div>
   </div>
 </template>
-
-
 
 <style>
 .menu
