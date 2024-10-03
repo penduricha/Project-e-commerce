@@ -114,13 +114,7 @@ export default {
   flex: 1;
 }
 
-.view-service{
-  width: 100%;
-  margin-top: 10%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-}
+
 
 .view-statistic{
   width: 100%;
@@ -159,5 +153,14 @@ export default {
 
 .style-custom-item-manager{
   width: 30%;
+}
+
+.view-service{
+  width: 100%;
+  margin-top: 10%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  margin-left: -0.1%;
 }
 </style>

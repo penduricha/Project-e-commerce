@@ -257,10 +257,13 @@ function removeRouter(){
   </div>
 </template>
 
+
+
 <style>
 .menu
 {
   width: 1680px;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -378,13 +381,13 @@ function removeRouter(){
   border-color: transparent;
   display: flex;
   align-items: center;
-
   /*
   background-repeat: no-repeat;
   //background-image: url('@/assets/images/glass-search.png');
   //background-size: 24px 24px;
   //background-position: right 10px center;*/
 }
+
 
 .style-icon-menu{
   width: 28px;
@@ -406,7 +409,6 @@ function removeRouter(){
 
 .button-icon-account:hover{
   background-color: #DB4444;
-
 }
 
 .button-icon-account:hover svg {

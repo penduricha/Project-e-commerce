@@ -2,6 +2,7 @@
 import Header from "@/components/header-footer-menu/Header.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
 import './style-item-menu.css';
+import './style-home-page.css';
 import ImagePhone from "@/pages/ImagePhone.vue";
 import FlashSales from "@/components/home-page/FlashSales.vue";
 import productFlashSale from "@/assets/data-product/ProductFlashSale.js";
@@ -148,9 +149,9 @@ export default {
         <CustomService/>
       </div>
       <div class="view-arrow-up">
-        <div class="view-circle-arrow-up">
+        <a class="view-circle-arrow-up" href="">
           <img src="@/assets/images/icons_arrow-up.png" alt="icon" style="width: 24px; height: 24px;">
-        </div>
+        </a>
       </div>
     </main>
     <Footer style="height: 1500px; margin-top: 3%"/>
@@ -160,46 +161,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/input-white';
 @import '@/assets/container';
-
-
-.container-menu-image{
-  display: flex;
-  height: 400px;
-  width: 1680px;
-  padding: 0;
-}
-
-.container-menu{
-  height: 100%;
-  width: 350px;
-  border-right: 1px solid #bcbcbc;
-  margin-left: 7%;
-  //border: solid;
-  padding-top: 20px;
-}
-
-.container-image-advertise{
-  height: 49%;
-  width: 1176px;
-  position: absolute;
-  margin-left: 500px;
-  padding-top: 25px;
-  padding-left: 10px;
-}
-
-
-
-.menu-item-child{
-  width: 305px;
-  height: 40px;
-  background-color: transparent;
-  border-radius: 0;
-  text-align: left;
-  font-size: 16px;
-  border: none;
-  margin-left: 20px;
-}
-
 
 .dropdown-toggle::after {
   /* Đảm bảo có mũi tên */
@@ -215,41 +176,5 @@ export default {
   /* Quay mũi tên 315 do*/
   transform: rotate(315deg);
   text-align: right;
-}
-
-.view-product-slide{
-  width: 82%;
-  margin-left: 9%;
-  margin-top: 5%;
-  height: 120%;
-}
-
-.view-service{
-  width: 80%;
-  margin-top: 5%;
-  height: 140px;
-  margin-left: 9%;
-  display: flex;
-  justify-content: center;
-}
-
-.view-arrow-up{
-  height: 50px;
-  width: 90%;
-  margin-left: 5%;
-  margin-top: 5%;
-  display: flex;
-  justify-content: right;
-}
-
-.view-circle-arrow-up{
-  height: 100%;
-  width: 50px;
-  border-radius: 50px;
-  background-color: #F5F5F5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
 }
 </style>

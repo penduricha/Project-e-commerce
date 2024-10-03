@@ -96,6 +96,7 @@ export default {
             //login page
             alert('Login successfully.');
 
+            //save to local storage
             const router = new Router (this.emailPhoneNumber.trim(), "/home-page-with-account");
 
             saveRouterLocalStorage(router);

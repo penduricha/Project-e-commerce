@@ -167,8 +167,8 @@ export default {
     handleContinue(){
       this.$router.replace({ path: '/login-screen' }).catch((error) => { console.error('Error navigating :', error); });
     },
-    
 
+    //lock paste
     preventPaste(event) {
       event.preventDefault();
     },
@@ -224,11 +224,11 @@ function isFullOfSpaces(s) {
     <main class="main">
       <div class="container-child">
         <div class="main-content">
-          <div class="column-1">
+          <div class="column-left">
             <img src="@/assets/images/image-cart-phone.png" alt="Image Background" style="width: 100%; height: 100%"/>
           </div>
-          <div class="column-2">
-            <div class="column-2-1">
+          <div class="column-right">
+            <div class="view-create-account">
               <p style="font-size: 36px; text-align: left">Create an account</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
               <div style="width: 100%; height: 275px; margin-top: 30px;">
@@ -263,24 +263,27 @@ function isFullOfSpaces(s) {
 @import '@/assets/container';
 @import '@/assets/style-page-little.css';
 
-.column-1 {
-  flex: 3; /* Tỷ lệ 3 */
+.column-left {
+  flex: 3;
+  /* Tỷ lệ 3 */
   padding-left: 20px;
 
 }
-.column-2 {
-  flex: 2; /* Tỷ lệ 2 */
+.column-right {
+  flex: 2;
+  /* Tỷ lệ 2 */
   padding: 20px;
 
 }
 
 @media (max-width: 600px) {
   .container {
-    flex-direction: column; /* Chuyển thành cột trên màn hình hẹp */
+    flex-direction: column;
+    /* Chuyển thành cột trên màn hình hẹp */
   }
 }
 
-.column-2-1{
+.view-create-account{
   width: 60%;
   height: 70%;
   margin-left: 100px;
