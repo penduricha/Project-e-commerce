@@ -23,7 +23,14 @@ public class ProductType implements Serializable {
 
     private Long parentId;
 
+    //mapping with Product
     @ToString.Exclude
     @OneToMany(mappedBy = "productType", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
+
+    public ProductType(Long productTypeId,String typeProduct, Long parentId) {
+        this.productTypeId = productTypeId;
+        this.typeProduct = typeProduct;
+        this.parentId = parentId;
+    }
 }

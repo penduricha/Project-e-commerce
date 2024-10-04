@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Float Example</title>
+    <style>
+        .float-left {
+            float: left;
+            margin-right: 15px;
+        }
+
+        .float-right {
+            float: right;
+            margin-right: 1000px;
+        }
+
+        .content {
+            overflow: auto; /* Clear floats */
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <img src="https://via.placeholder.com/150" alt="Placeholder" class="float-left">
+    <p>This is a paragraph of text that will flow around the floated image. The text will wrap around the image on the left side.</p>
+    <img src="https://via.placeholder.com/150" alt="Placeholder" class="float-right">
+    <p>This is another paragraph of text that will flow around the second floated image on the right side. The float property allows for flexible layouts.</p>
+</div>
+</body>
+</html>

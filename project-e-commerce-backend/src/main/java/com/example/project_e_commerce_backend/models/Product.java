@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,10 +30,6 @@ public class Product implements Serializable {
 
     @Column(columnDefinition = "nvarchar(50)")
     private String status;
-
-    @ManyToOne
-    @JoinColumn(name = "productTypeId")
-    private ProductType productType;
 
     @Column(columnDefinition = "DATETIME", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -58,5 +56,21 @@ public class Product implements Serializable {
     @PreRemove
     protected void onDeleted(){
         removedAt = LocalDateTime.now();
+    }
+
+    //mapping from ProductType;
+    @ManyToOne
+    @JoinColumn(name = "productTypeId")
+    private ProductType productType;
+
+    //mapping with WareHouse
+    @ToString.Exclude
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<WareHouse> wareHouseList = new ArrayList<>();
+
+    public Product(String name, String description, String status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
 }
