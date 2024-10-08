@@ -18,7 +18,7 @@ import HomePageWithAccount from "@/pages/HomePageAccount.vue";
 // import 'vuetify/styles';
 // import '@mdi/font/css/materialdesignicons.css';
 // const vuetify = createVuetify();
-function getRouter(){
+function getRouterFromLocalStorage(){
     const router = localStorage.getItem('router');
     if(router){
         const { _emailPhoneNumber, _routerPath } = JSON.parse(router);
@@ -27,6 +27,10 @@ function getRouter(){
     else {
         return null;
     }
+}
+
+function getRouterFromSessionStorage(){
+
 }
 
 function initRouter(routers)
@@ -87,10 +91,10 @@ function initHomePageAccount(routerInit){
 
 //run
 function execute(){
-    if(getRouter() === null){
+    if(getRouterFromLocalStorage() === null){
         initRouter(routers);
     }else{
-        initHomePageAccount(getRouter());
+        initHomePageAccount(getRouterFromLocalStorage());
     }
 }
 
@@ -111,6 +115,5 @@ function execute(){
 // //app.unmount();
 // //app.use(Vue3GeoLocation);
 // app.mount('#app')
-
 
 execute();

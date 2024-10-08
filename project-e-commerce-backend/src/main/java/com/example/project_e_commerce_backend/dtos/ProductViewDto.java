@@ -1,24 +1,22 @@
 package com.example.project_e_commerce_backend.dtos;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ProductDto {
+public class ProductViewDto {
+    private Long productId;
 
     private String name;
-
-    private String description;
 
     private String status;
 
     private String typeProduct;
 
-    public ProductDto(String name, String description, String status, String typeProduct) {
+    public ProductViewDto(Long productId, String name, String status, String typeProduct) {
+        this.productId = productId;
         this.name = name;
-        this.description = description;
         this.status = status;
         this.typeProduct = typeProduct;
     }

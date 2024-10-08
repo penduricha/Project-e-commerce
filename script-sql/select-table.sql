@@ -4,13 +4,11 @@ select * from user;
 
 select * from product;
 
-
-
 select * from product_type;
 
-select * from discount;
-
 select * from ware_house;
+
+select * from discount;
 
 # delete from product;
 # delete from product_type;
@@ -28,6 +26,7 @@ select * from ware_house;
 #     p.product_type_id = ?; -- Thay ? bằng giá trị n-1 bạn muốn
 
 select
+    p.product_id,
     p.name,
     p.description,
     p.status,

@@ -14,7 +14,8 @@ public class CorsConfig implements WebMvcConfigurer{
                 .allowedOrigins(
                         "http://localhost:5173", //vue
                         "http://localhost:3000",  // ReactJS
-                        "http://localhost:8081",  // React Native may minh
+                        "http://localhost:8081",
+                        // React Native may minh
                         // dùng http://localhost:8082
                         "http://localhost:4200",  // Angular
                         "http://localhost:3001" ,//Next.js

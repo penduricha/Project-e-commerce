@@ -11,5 +11,10 @@ public interface I_UserService {
 
     public User findUserByEmailOrPhoneNumber(String emailOrPhoneNumber);
 
-    public void updateUserByEmail(String email, User user);
+    public Long getIdByEmailOrPhoneNumber(String emailOrPhoneNumber);
+
+    public User findUserById(Long id);
+
+    public void updateUserById(String emailOrPhoneNumber, User user);
+
 }

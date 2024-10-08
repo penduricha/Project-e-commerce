@@ -222,7 +222,6 @@ function isFullOfSpaces(s) {
 }
 .column-right {
   flex: 2;
-  /* Tỷ lệ 2 */
   padding: 20px;
 
 }
@@ -230,7 +229,6 @@ function isFullOfSpaces(s) {
 @media (max-width: 600px) {
   .container {
     flex-direction: column;
-    /* Chuyển thành cột trên màn hình hẹp */
   }
 }
 

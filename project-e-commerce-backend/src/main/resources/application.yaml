@@ -5,8 +5,12 @@ spring:
     password: 123
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
+#    tính năng open-in-view được bật theo mặc định.
+#  Điều này có thể gây ra các truy vấn cơ sở dữ liệu không cần thiết trong quá trình render view,
+#  ảnh hưởng đến hiệu suất và khả năng quản lý giao dịch.
+    open-in-view: false
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MariaDBDialect

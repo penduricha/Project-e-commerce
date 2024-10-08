@@ -1,6 +1,6 @@
 package com.example.project_e_commerce_backend.controllers;
 
-import com.example.project_e_commerce_backend.dtos.ProductDto;
+import com.example.project_e_commerce_backend.dtos.ProductViewDto;
 import com.example.project_e_commerce_backend.models.Product;
 import com.example.project_e_commerce_backend.services.imp.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<ProductDto> getAllProducts() {
+    public List<ProductViewDto> getAllProducts() {
         //return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
         return productService.getAllProducts();
     }

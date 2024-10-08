@@ -21,6 +21,7 @@ export default {
   methods: {
     handleHomePage(){
       if(getLocalStorageRouter() === null){
+        //quay trang home-page ko có tài khoản
         this.$router.replace({
           path: '/home-page',
         }).catch((error) => {
@@ -28,6 +29,7 @@ export default {
           alert(error);
         });
       }else{
+        //quay trang home-page có tài khoản
         this.$router.replace({
           path: '/home-page-with-account',
           query: {

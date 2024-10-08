@@ -1,6 +1,6 @@
 package com.example.project_e_commerce_backend.services.imp;
 
-import com.example.project_e_commerce_backend.dtos.ProductDto;
+import com.example.project_e_commerce_backend.dtos.ProductViewDto;
 import com.example.project_e_commerce_backend.models.Product;
 import com.example.project_e_commerce_backend.repositories.*;
 import com.example.project_e_commerce_backend.services.I_ProductService;
@@ -23,7 +23,7 @@ public class ProductService implements I_ProductService {
     }
 
     @Override
-    public List<ProductDto> getAllProducts() throws JpaSystemException{
+    public List<ProductViewDto> getAllProducts() throws JpaSystemException{
         return productRepository.getAllProductAndType();
     }
 }

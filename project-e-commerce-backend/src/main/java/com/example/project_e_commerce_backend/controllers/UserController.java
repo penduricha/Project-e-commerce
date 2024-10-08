@@ -31,6 +31,12 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/users/id/{emailOrPhoneNumber}")
+    public Long getIdByEmailOrPhoneNumber(@PathVariable String emailOrPhoneNumber) throws JpaSystemException {
+        return userService.getIdByEmailOrPhoneNumber(emailOrPhoneNumber);
+    }
+
+
     @GetMapping("/users/emailOrPhoneNumber/{emailOrPhoneNumber}")
     public ResponseEntity<User> findUserByEmailOrPhoneNumber(@PathVariable String emailOrPhoneNumber) {
         try {
@@ -42,6 +48,16 @@ public class UserController {
             }
         } catch (JpaSystemException e) {
             // Handle the JpaSystemException as appropriate
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/users/updateUser/{emailOrPhoneNumber}")
+    public ResponseEntity<User> updateUserById(@PathVariable String emailOrPhoneNumber,@RequestBody User user){
+        try{
+            userService.updateUserById(emailOrPhoneNumber,user);
+            return ResponseEntity.ok(user);
+        }catch(JpaSystemException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

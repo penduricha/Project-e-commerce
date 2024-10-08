@@ -1,8 +1,9 @@
 <script>
 
-import Router from "../../../demo-js/localStorage/Router.js";
+
 import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
 import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
+import Router from "@/routers/Router.js";
 
 export default{
   name:'Menu',
@@ -43,7 +44,7 @@ export default{
     },
 
     handleSignup(){
-      if(getLocalStorageRouter()!== null){
+      if(getLocalStorageRouter() !== null){
         this.openModalNotifyLogout();
       }else{
         this.$router.replace({
@@ -71,7 +72,6 @@ export default{
     // getLocalStorageRouter(){
     //   return getLocalStorageRouter();
     // },
-
 
     handleAbout(){
       this.$router.replace({
@@ -322,9 +322,9 @@ function removeRouter(){
 }
 
 .nav-item {
-  margin: 0 25px; /* Khoảng cách giữa các mục */
-  text-decoration: none; /* Mặc định không gạch chân */
-  cursor: pointer; /* Đổi con trỏ khi hover */
+  margin: 0 25px;
+  text-decoration: none;
+  cursor: pointer;
   height: 100%;
 }
 
@@ -338,36 +338,12 @@ function removeRouter(){
   /* Hiệu ứng chuyển tiếp */
 }
 
-/* Hiệu ứng hover */
 .nav-link:hover {
   background-color: transparent;
   /* Màu nền khi hover */
   border-radius: 5px;
-  /* Bo góc */
 }
 
-
-/*
-
-.input-container input {
-  width: 100%;
-  height: 90%;
-  padding: 10px 30px 10px;
-  background-color: #F5F5F5;
-  border: none;
-  border-radius: 5px;
-  --color-border-hover: white;
-}*/
-/*
-.placeholder-image {
-  position: absolute;
-  right: 10px;
-  margin-top: 21px;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  /*pointer-events: none;
-}*/
 .style-input-search {
   width: 100%;
   height: 100%;
@@ -378,11 +354,6 @@ function removeRouter(){
   border-color: transparent;
   display: flex;
   align-items: center;
-  /*
-  background-repeat: no-repeat;
-  //background-image: url('@/assets/images/glass-search.png');
-  //background-size: 24px 24px;
-  //background-position: right 10px center;*/
 }
 
 

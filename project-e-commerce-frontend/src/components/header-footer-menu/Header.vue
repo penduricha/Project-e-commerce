@@ -39,14 +39,15 @@ export default{
   display: flex;
   padding-top: 10px;
 }
+
 .custom-select {
-  border-radius: 1px; /* Bo góc */
+  border-radius: 1px;
   position: relative;
   height: 70%;
   margin-top: 10px;
   border: none;
 }
-/* Mũi tên tùy chỉnh */
+
 .custom-select::after{
   background-color: white;
 }
