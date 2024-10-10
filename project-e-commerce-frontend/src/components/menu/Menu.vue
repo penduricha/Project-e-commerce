@@ -340,7 +340,6 @@ function removeRouter(){
 
 .nav-link:hover {
   background-color: transparent;
-  /* Màu nền khi hover */
   border-radius: 5px;
 }
 
@@ -392,7 +391,6 @@ function removeRouter(){
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Đảm bảo nội dung căn giữa */
   z-index: 1000;
   width: 230px;
   height: 220px;

@@ -1,5 +1,3 @@
-// src/assets/styles/styles.scss
-// Thay đổi width cho phù hợp với responsive
 .footer {
   padding: 20px 0;
   flex: 0 0 2vh;
@@ -25,7 +23,6 @@
     }
   }
 
-  // Thay đổi màu cho copyright
   .copyright {
     color: dimgrey;
     text-align: center;

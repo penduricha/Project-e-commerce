@@ -1,7 +1,6 @@
 .item-style {
     width: 100%;
     height: auto;
-    /* Change to auto for better responsiveness */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,16 +8,16 @@
 
 .view-image-service {
     width: 100%;
-    height: auto; /* Change to auto for better responsiveness */
+    height: auto;
     display: flex;
     justify-content: center;
-    padding: 10px 0; /* Add padding for spacing */
+    padding: 10px 0;
 }
 
 .view-content-service {
     width: 100%;
     text-align: center;
-    padding: 10px 0; /* Add padding for spacing */
+    padding: 10px 0;
 }
 
 .style-title-service {

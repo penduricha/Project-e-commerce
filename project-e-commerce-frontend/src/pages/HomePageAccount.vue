@@ -180,17 +180,11 @@ export default {
 @import '@/assets/input-white';
 @import '@/assets/container';
 .dropdown-toggle::after {
-  /* Đảm bảo có mũi tên */
   content: '';
-  /* Hiển thị như một phần tử inline */
   display: inline-block;
-  /* Tạo mũi tên */
   border: solid;
-  /* Định dạng mũi tên */
   border-width: 0 2px 2px 0;
-  /* Kích thước mũi tên */
   padding: 4px;
-  /* Quay mũi tên 315 do*/
   transform: rotate(315deg);
   text-align: right;
 }

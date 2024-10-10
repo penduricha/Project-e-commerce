@@ -47,8 +47,8 @@ export default {
 //npm install -D sass-embedded
 </script>
 
-<style lang="scss" scoped>
-@import './Footer';
+<style>
+@import 'Footer.css';
 .title{
   font-size: 20px;
 }

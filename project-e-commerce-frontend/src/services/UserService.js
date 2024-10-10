@@ -10,8 +10,8 @@ const apiClient = axios.create({
 export default class UserService{
     constructor(){}
 
-    static getUserByEmailOrPhoneNumber(emailOrPhoneNumber){
-        return apiClient.get(`/users/emailOrPhoneNumber/${emailOrPhoneNumber}`);
+    static getUserByEmailOrPhoneNumber(emailPhoneNumber){
+        return apiClient.get(`/users/emailOrPhoneNumber/${emailPhoneNumber}`);
     }
 
     static createAccount(user) {
