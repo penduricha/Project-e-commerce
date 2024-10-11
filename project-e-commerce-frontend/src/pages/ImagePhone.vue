@@ -32,7 +32,7 @@ export default {
           <p style="font-size: 48px; color: #FAFAFA; font-weight: bolder;">Up to 10%<br>off Voucher</p>
         </div>
         <div class="background-shop-now">
-          <a href="" style="font-size: 16px; color: #FAFAFA; border-bottom: solid #FAFAFA; height: 100%; text-decoration: none;">Shop Now</a>
+          <a href="" class="shop-now-style">Shop Now</a>
           <svg @click="" width="24" height="24" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 15 15" style="color: #FAFAFA; margin-left: 5%; margin-top: 3%; cursor: pointer;">
             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
           </svg>
@@ -93,6 +93,18 @@ export default {
 .background-iphone{
   flex: 1.5;
   padding-top: 10px;
+}
+
+.shop-now-style{
+  font-size: 16px;
+  color: #FAFAFA;
+  border-bottom: solid #FAFAFA;
+  height: 100%;
+  text-decoration: none;
+}
+
+.shop-now-style:hover{
+  background-color: transparent;
 }
 
 </style>

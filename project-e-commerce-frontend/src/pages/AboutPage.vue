@@ -36,7 +36,7 @@ export default {
   methods:{
     getManagers(){
       return managers;
-    }
+    },
   }
 }
 </script>
@@ -113,8 +113,6 @@ export default {
 .image-description-story{
   flex: 1;
 }
-
-
 
 .view-statistic{
   width: 100%;

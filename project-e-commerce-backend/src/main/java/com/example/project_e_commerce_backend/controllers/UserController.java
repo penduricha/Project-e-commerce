@@ -36,7 +36,6 @@ public class UserController {
         return userService.getIdByEmailOrPhoneNumber(emailOrPhoneNumber);
     }
 
-
     @GetMapping("/users/emailOrPhoneNumber/{emailOrPhoneNumber}")
     public ResponseEntity<User> findUserByEmailOrPhoneNumber(@PathVariable String emailOrPhoneNumber) {
         try {

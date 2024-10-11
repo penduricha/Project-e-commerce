@@ -59,7 +59,8 @@ export default {
     getEmailPhoneNumber(){
       console.log(this.emailPhoneHomePage);
       return this.emailPhoneHomePage
-    }
+    },
+
   }
 }
 </script>
@@ -68,6 +69,7 @@ export default {
   <div class="container">
     <Header style="height: 50px"/>
     <Menu style="height: 200px"/>
+
     <main class="main">
       <div class="container-child-1">
         <div class="container-menu">

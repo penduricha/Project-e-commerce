@@ -1,7 +1,7 @@
 import UserService from "@/services/UserService.js";
 
 
-export default class UserDAO{
+export default class UserDao {
 
     constructor(){
         //cac thuoc tinh can set

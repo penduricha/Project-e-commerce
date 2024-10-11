@@ -4,50 +4,54 @@ import routers from "@/listRouters.js";
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import Router from "../demo-js/localStorage/Router.js";
+import RouterDao from "@/daos/RouterDao.js";
 import HomePage from "@/pages/HomePage.vue";
 import LoginScreen from "@/login-screen/LoginScreen.vue";
 import SignupScreen from "@/signup-screen/SignupScreen.vue";
 import Screen404 from "@/pages/Screen404.vue";
 import AboutPage from "@/pages/AboutPage.vue";
 import HomePageWithAccount from "@/pages/HomePageAccount.vue";
-
 //vuetify
 //npm install vuetify@next @mdi/font
 // import { createVuetify } from 'vuetify';
 // import 'vuetify/styles';
 // import '@mdi/font/css/materialdesignicons.css';
 // const vuetify = createVuetify();
-function getRouterFromLocalStorage(){
-    const router = localStorage.getItem('router');
-    if(router){
-        const { _emailPhoneNumber, _routerPath } = JSON.parse(router);
-        return new Router(_emailPhoneNumber, _routerPath);
-    }
-    else {
-        return null;
-    }
-}
+// function getRouterFromLocalStorage(){
+//     const router = localStorage.getItem('router');
+//     if(router){
+//         const { _emailPhoneNumber, _routerPath } = JSON.parse(router);
+//         return new Router(_emailPhoneNumber, _routerPath);
+//     }
+//     else {
+//         return null;
+//     }
+// }
 
-function getRouterFromSessionStorage(){
+// function getRouterFromSessionStorage(){
+//     const routerDao = new RouterDao();
+//     return routerDao.getRouterFromSessionStorage();
+// }
 
-}
+//tạo path và emailPhoneNumber
+const routerDao = new RouterDao();
 
-function initRouter(routers)
+//routerDao.saveRouterPathToSessionStorage("/about-page");
+
+const app = createApp(App);
+
+function initRouter(routers,routerPath)
 {
     const router = createRouter({
         // mode: 'history',
         history: createWebHistory(),
-        //ten bien du lieu truyen qua ko duoc trung
         routes: routers,
     });
-    const app = createApp(App)
-        // .use(vuetify);
+
+    // .use(vuetify);
     app.use(router);
-    //Dat con tro khi load man hinh, man hinh tro den khi chay main.js
-    //push quay ve duoc con replace ko quay ve
-    //init trang tại /home-page
-    router.replace('/home-page').catch((error) => {
+
+    router.replace(routerPath).catch((error) => {
         console.error('Error navigating: ', error);
         router.replace('/screen-404').catch(err => console.error(err));
     });
@@ -56,28 +60,26 @@ function initRouter(routers)
     app.mount('#app')
 }
 
-function initHomePageAccount(routerInit){
+function initHomePageAccount(emailPhoneNumber, routerPath){
     const router = createRouter({
         // mode: 'history',
         history: createWebHistory(),
         //ten bien du lieu truyen qua ko duoc trung
         routes: [
-            { path: '/', component:  HomePage},
+            { path: '/', component:  HomePageWithAccount, props: () => ({ emailPhoneHomePage: emailPhoneNumber })},
             { path: '/login-screen', component: LoginScreen },
             { path: '/signup-screen', component: SignupScreen },
             { path: '/home-page', component: HomePage },
             { path: '/screen-404', component: Screen404 },
+            { path: '/about-page-with-account', component: AboutPage },
             { path: '/about-page', component: AboutPage },
-            { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: routerInit._emailPhoneNumber })},
+            { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: emailPhoneNumber })}
         ],
     });
     const app = createApp(App)
     // .use(vuetify);
     app.use(router);
-    //Dat con tro khi load man hinh, man hinh tro den khi chay main.js
-    //push quay ve duoc con replace ko quay ve
-    //init trang tại /home-page
-    router.replace(routerInit._routerPath).catch((error) => {
+    router.replace(routerPath).catch((error) => {
         console.error('Error navigating: ', error);
         router.replace('/screen-404').catch(err => console.error(err));
     });
@@ -91,29 +93,23 @@ function initHomePageAccount(routerInit){
 
 //run
 function execute(){
-    if(getRouterFromLocalStorage() === null){
-        initRouter(routers);
+
+    if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+
+        let routerPath = routerDao.getRouterPathFromSessionStorage();
+
+        initRouter(routers,routerPath);
     }else{
-        initHomePageAccount(getRouterFromLocalStorage());
+
+        let routerPath = routerDao.getRouterPathFromSessionStorage();
+
+        let emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+
+        initHomePageAccount(emailPhoneNumber, routerPath);
     }
+
 }
 
 
-// const router = createRouter({
-//     // mode: 'history',
-//     history: createWebHistory(),
-//     //ten bien du lieu truyen qua ko duoc trung
-//     routes: routers,
-// });
-// const app = createApp(App)
-// // .use(vuetify);
-// app.use(router);
-// //Dat con tro khi load man hinh, man hinh tro den khi chay main.js
-// //push quay ve duoc con replace ko quay ve
-// //init trang tại /home-page
-// router.replace('/').catch((error) => { console.error('Error navigating: ', error); });
-// //app.unmount();
-// //app.use(Vue3GeoLocation);
-// app.mount('#app')
 
 execute();

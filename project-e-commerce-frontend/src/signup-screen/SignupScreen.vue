@@ -1,7 +1,7 @@
 <script>
 import Header from "@/components/header-footer-menu/Header.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
-import UserDAO from "@/daos/UserDAO.js";
+import UserDao from "@/daos/UserDao.js";
 import CustomButton from "@/components/base/CustomButton.vue";
 import Menu from "@/components/menu/Menu.vue";
 import User from "@/models/User.js";
@@ -151,7 +151,7 @@ export default {
           user=new User(null,emailOrPhoneNumber, passwordHashed, firstName, lastName, middleName,address);
         }
 
-        let resultCreateAccount = await UserDAO.createAccount(user);
+        let resultCreateAccount = await UserDao.createAccount(user);
 
         if(resultCreateAccount === 1){
           this.$refs.modalSuccess.openModal();
@@ -182,7 +182,7 @@ function isNumeric (str){
 }
 
 async function getUserByEmailOrPhoneNumber(emailPhoneNumber){
-  let user = await UserDAO.getUserByEmailOrPhoneNumber(emailPhoneNumber);
+  let user = await UserDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
   if(user!==null){
     return new User(user.email, user.phoneNumber, user.password, user.firstName, user.lastName, user.middleName, user.address);
   }else{

@@ -1,10 +1,8 @@
 <script>
-
-
 import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
 import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
-import Router from "@/routers/Router.js";
 
+import RouterDao from "@/daos/RouterDao.js";
 export default{
   name:'Menu',
 
@@ -44,9 +42,13 @@ export default{
     },
 
     handleSignup(){
-      if(getLocalStorageRouter() !== null){
+      const routerDao = new RouterDao();
+
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() !== null){
         this.openModalNotifyLogout();
       }else{
+        routerDao.saveRouterPathToSessionStorage("/signup-screen");
+
         this.$router.replace({
           path: '/signup-screen',
         }).catch((error) => {
@@ -57,7 +59,7 @@ export default{
     },
 
     handleLogout(){
-      removeRouter();
+      removeEmailPhoneNumber();
 
       alert("Log out successfully.");
 
@@ -74,16 +76,36 @@ export default{
     // },
 
     handleAbout(){
-      this.$router.replace({
-        path: '/about-page',
-      }).catch((error) => {
-        console.error('Error navigating :', error);
-        alert(error);
-      });
+      const routerDao = new RouterDao();
+
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+        routerDao.saveRouterPathToSessionStorage("/about-page");
+
+        this.$router.replace({
+          path: '/about-page',
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }else{
+        routerDao.saveRouterPathToSessionStorage("/about-page-with-account");
+
+        this.$router.replace({
+          path: '/about-page-with-account',
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
     },
 
     handleHomePage(){
-      if(getLocalStorageRouter() === null){
+      const routerDao = new RouterDao();
+
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+
+        routerDao.saveRouterPathToSessionStorage("/home-page");
+
         this.$router.replace({
           path: '/home-page',
         }).catch((error) => {
@@ -91,10 +113,12 @@ export default{
           alert(error);
         });
       }else{
+        routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
+
         this.$router.replace({
           path: '/home-page-with-account',
           query: {
-            emailPhoneHomePage: getLocalStorageRouter()._emailPhoneNumber,
+            emailPhoneHomePage: routerDao.getEmailPhoneNumberFromLocalStorage().trim(),
           }
         }).catch((error) => {
           console.error('Error navigating :', error);
@@ -105,21 +129,9 @@ export default{
   }
 }
 
-function getLocalStorageRouter(){
-  const router = localStorage.getItem('router');
-  if(router){
-    const { _emailPhoneNumber, _routerPath } = JSON.parse(router);
-    // let router= new Router(_emailPhoneNumber, _routerPath);
-    // return router._emailPhoneNumber;
-    return new Router(_emailPhoneNumber, _routerPath);
-  }
-  else {
-    return null;
-  }
-}
 
-function removeRouter(){
-  localStorage.removeItem('router');
+function removeEmailPhoneNumber(){
+  localStorage.removeItem('emailPhoneNumber');
 }
 
 </script>
@@ -133,14 +145,14 @@ function removeRouter(){
         </div>
         <div class="menu-navbar">
           <ul class="navbar-nav" style="justify-content: center; align-items: center; margin-top: 10px;">
-            <li class="nav-item" :style="{ borderBottom: ( (isActiveRoute('/home-page')) || (isActiveRoute('/home-page-with-account'))) ? 'solid 2px' : 'none' }">
+            <li class="nav-item" :style="{ borderBottom: ((isActiveRoute('/')) || (isActiveRoute('/home-page')) || (isActiveRoute('/home-page-with-account'))) ? 'solid 2px' : 'none' }">
               <button class="btn btn-light nav-link" @click.prevent="handleHomePage()">Home</button>
             </li>
             <li class="nav-item">
               <button class="btn btn-light nav-link" @click.prevent="">Contact</button>
             </li>
             <li class="nav-item"
-                :style="{ borderBottom: (isActiveRoute('/about-page')) ? 'solid 2px' : 'none' }">
+                :style="{ borderBottom: (isActiveRoute('/about-page') || isActiveRoute('/about-page-with-account')) ? 'solid 2px' : 'none' }">
               <button class="btn btn-light nav-link" @click.prevent="handleAbout()">About</button>
             </li>
             <li class="nav-item"
@@ -177,7 +189,7 @@ function removeRouter(){
 
           <div class="button-icon button-icon-account"
               @click="showDropdownAccount()"
-               v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404'))">
+               v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404')) && (!isActiveRoute('/about-page'))">
             <div style="width: 100%;
                         height: 100%;
                         display: flex;
@@ -209,7 +221,7 @@ function removeRouter(){
           </svg>
         </div>
         <div class="item-menu-content">
-          <router-link to="" class="style-item-menu-account">Manage My Account</router-link>
+          <button class="style-item-menu-account">Manage My Account</button>
         </div>
       </div>
       <div class="item-menu">
@@ -217,7 +229,7 @@ function removeRouter(){
           <img src="@/assets/image-menu-account/menu-order-icon.png" class="style-item-image" alt="menu order">
         </div>
         <div class="item-menu-content">
-          <router-link to="" class="style-item-menu-account">My Order</router-link>
+          <button class="style-item-menu-account">My Order</button>
         </div>
       </div>
       <div class="item-menu">
@@ -228,7 +240,7 @@ function removeRouter(){
           </svg>
         </div>
         <div class="item-menu-content">
-          <router-link to="" class="style-item-menu-account">My Cancellations</router-link>
+          <button class="style-item-menu-account">My Cancellations</button>
         </div>
       </div>
       <div class="item-menu">
@@ -238,7 +250,7 @@ function removeRouter(){
           </svg>
         </div>
         <div class="item-menu-content">
-          <router-link to="" class="style-item-menu-account">My Reviews</router-link>
+          <button class="style-item-menu-account">My Reviews</button>
         </div>
       </div>
       <div class="item-menu">
@@ -249,7 +261,7 @@ function removeRouter(){
           </svg>
         </div>
         <div class="item-menu-content">
-          <button @click="openModalLogout()" style="margin-left: -3px;" class="style-item-menu-account">Logout</button>
+          <button @click="openModalLogout()" style="margin-left: 1px;" class="style-item-menu-account">Logout</button>
         </div>
       </div>
     </div>
@@ -301,23 +313,13 @@ function removeRouter(){
   padding-left: 15%;
 }
 
-
-/*
-.menu-child-3{
-  flex: 1.2;
-  display: flex;
-  height: 70%;
-  padding-left: 20px;
-  border: solid;
-}*/
-
-
 .navbar-nav {
-  display: flex; /* Hiển thị các phần tử theo hàng */
+  display: flex;
+  /* Hiển thị các phần tử theo hàng */
   flex-direction: row;
-  list-style: none; /* Bỏ dấu chấm của danh sách */
-  padding: 0; /* Bỏ khoảng cách bên trong */
-  margin: 0; /* Bỏ khoảng cách bên ngoài */
+  list-style: none;
+  padding: 0;
+  margin: 0;
   height: 55%;
 }
 
@@ -331,11 +333,8 @@ function removeRouter(){
 
 .nav-link {
   text-decoration: none;
-  /* Bỏ gạch chân */
   color: black;
-  /* Màu chữ mặc định */
   transition: background-color 0.3s, color 0.3s;
-  /* Hiệu ứng chuyển tiếp */
 }
 
 .nav-link:hover {

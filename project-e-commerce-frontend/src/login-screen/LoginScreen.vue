@@ -3,9 +3,10 @@ import Header from "@/components/header-footer-menu/Header.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import Menu from "@/components/menu/Menu.vue";
-import UserDAO from "@/daos/UserDAO.js";
+import UserDao from "@/daos/UserDao.js";
 import User from "@/models/User.js";
 import Router from "@/routers/Router.js";
+import RouterDao from "@/daos/RouterDao.js";
 
 export default {
   name: 'LoginScreen',
@@ -96,10 +97,16 @@ export default {
             //login page
             alert('Login successfully.');
 
-            //save to local storage
-            const router = new Router (this.emailPhoneNumber.trim(), "/home-page-with-account");
+            const routerDao = new RouterDao();
 
-            saveRouterLocalStorage(router);
+            //save to local storage
+            const router = new Router ();
+
+            router.setEmailPhoneNumber(this.emailPhoneNumber.trim())
+
+            routerDao.saveEmailPhoneNumberLocalStorage(router._emailPhoneNumber);
+
+            routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
 
             this.$router.replace({
               path: '/home-page-with-account',
@@ -124,18 +131,18 @@ export default {
   }
 }
 
-function saveRouterLocalStorage(router){
-  if(router !== undefined){
-    localStorage.setItem('router', JSON.stringify(router));
-  }
-}
+// function saveRouterLocalStorage(router){
+//   if(router !== undefined){
+//     localStorage.setItem('router', JSON.stringify(router));
+//   }
+// }
 
 function isNumeric (str){
   return /^\d+$/.test(str);
 }
 
 async function getUserByEmailOrPhoneNumber(emailPhoneNumber){
-  let user = await UserDAO.getUserByEmailOrPhoneNumber(emailPhoneNumber);
+  let user = await UserDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
   if(user!==null){
     return new User(user.email, user.phoneNumber, user.password, user.firstName, user.lastName, user.middleName, user.address);
   }else{
