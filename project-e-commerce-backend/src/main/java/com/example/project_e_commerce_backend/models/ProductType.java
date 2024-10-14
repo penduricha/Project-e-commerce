@@ -1,5 +1,6 @@
 package com.example.project_e_commerce_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -8,7 +9,6 @@ import java.io.Serializable;
 @Getter
 @Entity
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductType implements Serializable {
@@ -18,14 +18,14 @@ public class ProductType implements Serializable {
     @Column(nullable = false)
     private Long productTypeId;
 
-    @Column(name = "typeProduct",columnDefinition = "nvarchar(50)",nullable = false)
+    @Column(columnDefinition = "nvarchar(50)", nullable = false, unique = true)
     private String typeProduct;
 
     private Long parentId;
 
     //mapping with Product
-    @ToString.Exclude
     @OneToMany(mappedBy = "productType", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public ProductType(Long productTypeId,String typeProduct, Long parentId) {

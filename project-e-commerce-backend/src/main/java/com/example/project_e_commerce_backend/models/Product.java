@@ -14,7 +14,6 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 public class Product implements Serializable {
 
     @Id

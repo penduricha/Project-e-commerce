@@ -10,23 +10,23 @@ import java.io.Serializable;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class WareHouse implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long wareHouseId;
 
-    @Column(columnDefinition = "nvarchar(20)")
+    @Column(columnDefinition = "nvarchar(20)", unique = true)
     private String size;
 
-    @Column(columnDefinition = "nvarchar(20)")
+    @Column(columnDefinition = "nvarchar(20)", unique = true)
     private String color;
 
     @Column(columnDefinition = "bigint", nullable=false)
     private int quantity;
 
-    @Column(columnDefinition = "nvarchar(200)", nullable=false)
+    @Column(columnDefinition = "nvarchar(200)")
     private String image;
 
     @Column(columnDefinition = "double", nullable=false)
@@ -47,4 +47,6 @@ public class WareHouse implements Serializable {
         this.image = image;
         this.price = price;
     }
+
+
 }

@@ -11,7 +11,6 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 public class Discount implements Serializable {
     @Id
     @OneToOne
