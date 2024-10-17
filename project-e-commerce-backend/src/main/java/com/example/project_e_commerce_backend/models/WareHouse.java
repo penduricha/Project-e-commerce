@@ -17,10 +17,10 @@ public class WareHouse implements Serializable {
     @Column(nullable = false)
     private Long wareHouseId;
 
-    @Column(columnDefinition = "nvarchar(20)", unique = true)
+    @Column(columnDefinition = "nvarchar(20)")
     private String size;
 
-    @Column(columnDefinition = "nvarchar(20)", unique = true)
+    @Column(columnDefinition = "nvarchar(20)")
     private String color;
 
     @Column(columnDefinition = "bigint", nullable=false)

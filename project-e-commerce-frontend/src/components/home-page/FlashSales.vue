@@ -16,12 +16,15 @@ export default {
 
   },
   methods: {
+
     getProductFlashSales(){
       return this.product;
     },
+
     groupFourProductFlashSales(){
       return chunkArray(this.getProductFlashSales(), 4);
     },
+
     getTextTile(textTitle){
       return textTitle;
     },

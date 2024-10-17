@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    @Query("select new com.example.project_e_commerce_backend.dtos.ProductViewDto(p.productId,p.name, p.status, pt.typeProduct) " +
-            "from Product p " +
-            "left join p.productType pt " +
-            "order by p.productId")
-    List<ProductViewDto> getAllProductAndType();
+//    @Query("select new com.example.project_e_commerce_backend.dtos.ProductViewDto(p.productId,p.name, p.status, pt.typeProduct) " +
+//            "from Product p " +
+//            "left join p.productType pt " +
+//            "order by p.productId")
+//    List<ProductViewDto> getAllProductAndType();
 }

@@ -18,7 +18,7 @@ public class ProductType implements Serializable {
     @Column(nullable = false)
     private Long productTypeId;
 
-    @Column(columnDefinition = "nvarchar(50)", nullable = false, unique = true)
+    @Column(columnDefinition = "nvarchar(50)", unique = true)
     private String typeProduct;
 
     private Long parentId;
@@ -28,7 +28,12 @@ public class ProductType implements Serializable {
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
-    public ProductType(Long productTypeId,String typeProduct, Long parentId) {
+    public ProductType(String typeProduct, Long parentId) {
+        this.typeProduct = typeProduct;
+        this.parentId = parentId;
+    }
+
+    public ProductType(Long productTypeId, String typeProduct, Long parentId) {
         this.productTypeId = productTypeId;
         this.typeProduct = typeProduct;
         this.parentId = parentId;

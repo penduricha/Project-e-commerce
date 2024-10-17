@@ -13,9 +13,13 @@ import productExplore from "@/assets/data-product/ProductExplore.js";
 import Menu from "@/components/menu/Menu.vue";
 import ExploreProduct from "@/components/home-page/ExploreProduct.vue";
 import CustomService from "@/components/base/CustomService.vue";
+import ProductTypeDao from "@/daos/ProductTypeDao.js";
+import CustomMenuChild_2 from "@/pages/CustomMenuChild_2.vue";
+
 export default {
   name: 'HomePage',
   components:{
+    CustomMenuChild_2,
     CustomService,
     ExploreProduct,
     Menu,
@@ -26,24 +30,92 @@ export default {
     ImagePhone,
     FlashSales,
   },
+
   data(){
     return{
-      isActiveWomenFashion: false,
+      productType_ParentId_Null: [],
+
+      productType_By_ParentId_2: [],
+
+      productType_By_ParentId_3: [],
+
+      isMenu_2_Open: false,
+
+      isMenu_3_Open: false,
     }
   },
+
+  created() {
+    this.getListProductType_That_ParentId_Null();
+  },
+
   methods: {
     //method lấy ds
     productFlashSale() {
       return productFlashSale;
     },
+
     productBestSelling(){
       return productBestSelling;
     },
+
     productExplore(){
       return productExplore;
     },
+
+    async getListProductType_That_ParentId_Null(){
+      //let productType_ParentId_Null = null;
+      const productTypeDao = new ProductTypeDao();
+
+      try{
+        this.productType_ParentId_Null = await productTypeDao.getListProductType_That_ParentId_Null();
+        console.log('List Product Type that parentId null:', this.productType_ParentId_Null);
+      }catch (error){
+        //chuyen trang 404
+        alert(error);
+      }
+    },
+
+    async toggleChild_2_Menu(productTypeId) {
+      this.isMenu_3_Open = false;
+      this.isMenu_2_Open = false;
+
+      const productTypeDao = new ProductTypeDao();
+      try {
+        const productType = await productTypeDao.getListProductType_By_ParentId(productTypeId);
+
+        console.log('List Product Type that parentId after clicked:', productType);
+
+        this.productType_By_ParentId_2 = productType;
+
+        //dong tang 2 va tang 3
+        this.isMenu_2_Open = !this.isMenu_2_Open;
+
+      } catch (error) {
+        alert(error);
+      }
+    },
+
+    async toggleChild_3_Menu(productTypeId){
+      this.isMenu_3_Open = false;
+
+      const productTypeDao = new ProductTypeDao();
+      try {
+        const productType = await productTypeDao.getListProductType_By_ParentId(productTypeId);
+
+        console.log('List Product Type that parentId after clicked:', productType);
+
+        this.productType_By_ParentId_3 = productType;
+
+        this.isMenu_3_Open = !this.isMenu_3_Open;
+      } catch (error) {
+        alert(error);
+      }
+    }
+
   }
 }
+
 </script>
 
 <template>
@@ -53,86 +125,56 @@ export default {
     <main class="main">
       <div class="container-menu-image">
         <div class="container-menu">
-          <div class="btn-group dropend">
-            <button
-                type="button"
-                @click=""
-                class="btn btn-secondary dropdown-toggle menu-item women-fashion"
-                data-bs-toggle="collapse"
-            >
-              Woman’s Fashion
-            </button>
-          </div>
+          <div v-for="p in productType_ParentId_Null" :key="p.productTypeId">
+            <div class="btn-group">
+              <button
+                  type="button"
+                  @click="toggleChild_2_Menu(p.productTypeId)"
+                  class="btn btn-secondary dropdown-toggle menu-item"
+              >
+              {{ p.typeProduct }}
+              </button>
+            </div>
 
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary dropdown-toggle menu-item men-fashion">
-              Men’s Fashion
-            </button>
-            <ul class="dropdown-menu">
+            <!-- Tầng 2 menu -->
 
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Electronics
-            </button>
-            <ul class="dropdown-menu">
+            <div class="container-menu-child-2" v-if="isMenu_2_Open">
+              <div v-for="p in productType_By_ParentId_2" :key="p.productTypeId">
+                <div class="btn-group">
+                  <button
+                      type="button"
+                      @click="toggleChild_3_Menu(p.productTypeId)"
+                      class="btn btn-secondary dropdown-toggle menu-item-2"
+                  >
+                    {{ p.typeProduct }}
+                  </button>
+                </div>
+              </div>
 
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Home & Lifestyle
-            </button>
-            <ul class="dropdown-menu">
+              <!-- Tang 3-->
 
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Medicine
-            </button>
-            <ul class="dropdown-menu">
-
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Sports & Outdoor
-            </button>
-            <ul class="dropdown-menu">
-
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Baby’s & Toys
-            </button>
-            <ul class="dropdown-menu">
-
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Groceries & Pets
-            </button>
-            <ul class="dropdown-menu">
-
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary menu-item">
-              Health & Beauty
-            </button>
-            <ul class="dropdown-menu">
-
-            </ul>
+              <div class="container-menu-child-3" v-if="isMenu_3_Open">
+                <div v-for="p in productType_By_ParentId_3" :key="p.productTypeId">
+                  <div class="btn-group">
+                    <button
+                        type="button"
+                        @click=""
+                        class="btn btn-secondary menu-item-3"
+                    >
+                      {{ p.typeProduct }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
         <div class="container-image-advertise">
           <ImagePhone/>
         </div>
       </div>
+
       <div class="view-product-slide">
         <FlashSales :product="productFlashSale()" />
       </div>

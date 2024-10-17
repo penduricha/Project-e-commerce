@@ -5,46 +5,34 @@ select * from user;
 # delete from product_type;
 # select * from product;
 #
-select * from product_type;
+
+
+# delete from product_type where product_type_id = 37;
 
 select * from product_type p where p.parent_id is null;
-#
-# select * from ware_house;
-#
-# select * from discount;
-#
-# # delete from product;
-# # delete from product_type;
-#
-# -- lay ds sp va co theo loai
-# # SELECT
-# #     p.id AS product_id,
-# #     p.name AS product_name,
-# #     pt.name AS product_type_name
-# # FROM
-# #     Product p
-# #         JOIN
-# #     ProductType pt ON p.product_type_id = pt.id
-# # WHERE
-# #     p.product_type_id = ?; -- Thay ? bằng giá trị n-1 bạn muốn
-#
-# select
-#     p.product_id,
-#     p.name,
-#     p.description,
-#     p.status,
-#     pt.type_product
-# from product p
-# left join product_type pt on p.product_type_id = pt.product_type_id
-# order by p.product_type_id;
-#
-# -- where pt.type_product ='Ball Sport'
+
+select * from product_type p where p.parent_id = 39;
+
+show columns from product;
+
+show columns from ware_house;
+
+select * from ware_house;
+
+select * from product;
+
+# delete from product;
+
+select * from ware_house;
+
+select * from product_type;
 
 
+select * from product where product_type_id = 17;
 
+select * from ware_house where product_id is null;
 
+select * from product_type pt left join product p
+on pt.product_type_id=p.product_type_id;
 
-
-
-
-
+update product set product_type_id = 90 where product_id =118;

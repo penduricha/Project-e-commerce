@@ -17,6 +17,11 @@ export default{
     ModalNotifyToLogout,
     ModalConfirmLogout,
   },
+
+  created() {
+
+  },
+
   methods:{
     handleSearch(){
       //alert("Searched")
@@ -58,6 +63,11 @@ export default{
       }
     },
 
+    getEmailPhoneNumberFromLocalStorage(){
+      const routerDao = new RouterDao();
+      return routerDao.getEmailPhoneNumberFromLocalStorage();
+    },
+
     handleLogout(){
       removeEmailPhoneNumber();
 
@@ -76,33 +86,43 @@ export default{
     // },
 
     handleAbout(){
+      //window.location.reload();
+
       const routerDao = new RouterDao();
 
-      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-        routerDao.saveRouterPathToSessionStorage("/about-page");
-
-        this.$router.replace({
-          path: '/about-page',
-        }).catch((error) => {
-          console.error('Error navigating :', error);
-          alert(error);
-        });
-      }else{
-        routerDao.saveRouterPathToSessionStorage("/about-page-with-account");
-
-        this.$router.replace({
-          path: '/about-page-with-account',
-        }).catch((error) => {
-          console.error('Error navigating :', error);
-          alert(error);
-        });
-      }
+      // if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+      //   routerDao.saveRouterPathToSessionStorage("/about-page");
+      //
+      //   this.$router.replace({
+      //     path: '/about-page',
+      //   }).catch((error) => {
+      //     console.error('Error navigating :', error);
+      //     alert(error);
+      //   });
+      // }else{
+      //   routerDao.saveRouterPathToSessionStorage("/about-page-with-account");
+      //
+      //   this.$router.replace({
+      //     path: '/about-page-with-account',
+      //   }).catch((error) => {
+      //     console.error('Error navigating :', error);
+      //     alert(error);
+      //   });
+      // }
+      routerDao.saveRouterPathToSessionStorage("/about-page");
+      this.$router.replace({
+                path: '/about-page',
+              }).catch((error) => {
+                console.error('Error navigating :', error);
+                alert(error);
+              });
     },
 
     handleHomePage(){
+
       const routerDao = new RouterDao();
 
-      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+      if(!routerDao.getEmailPhoneNumberFromLocalStorage()){
 
         routerDao.saveRouterPathToSessionStorage("/home-page");
 
@@ -189,7 +209,7 @@ function removeEmailPhoneNumber(){
 
           <div class="button-icon button-icon-account"
               @click="showDropdownAccount()"
-               v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404')) && (!isActiveRoute('/about-page'))">
+               v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404')) && ( getEmailPhoneNumberFromLocalStorage()!==null )">
             <div style="width: 100%;
                         height: 100%;
                         display: flex;

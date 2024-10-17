@@ -3,7 +3,6 @@ package com.example.project_e_commerce_backend.controllers;
 import com.example.project_e_commerce_backend.models.ProductType;
 import com.example.project_e_commerce_backend.services.imp.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +52,10 @@ public class ProductTypeController {
     @GetMapping("/productTypes/parentId/{parentId}")
     public List<ProductType> getAllProductTypes_ByParentId(@PathVariable Long parentId) throws JpaSystemException {
         return productTypeService.getAllProductTypes_ByParentId(parentId);
+    }
+
+    @GetMapping("/productTypes/get-productTypeId-by-typeProduct/{typeProduct}")
+    public Long getProductTypeId_By_TypeProduct(@PathVariable String typeProduct) throws JpaSystemException {
+        return productTypeService.getProductTypeId_By_TypeProduct(typeProduct);
     }
 }

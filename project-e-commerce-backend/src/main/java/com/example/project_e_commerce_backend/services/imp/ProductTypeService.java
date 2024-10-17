@@ -38,7 +38,6 @@ public class ProductTypeService implements I_ProductTypeService {
         return productTypeRepository.findByProductTypeId(productTypeId);
     }
 
-
     @Override
     public List<ProductType> getAllProductTypes_ByParentId_Null() throws JpaSystemException {
         return productTypeRepository.findProductTypesByParentIdNull();
@@ -47,6 +46,11 @@ public class ProductTypeService implements I_ProductTypeService {
     @Override
     public ProductType findProductType_ByTypeProduct(String typeProduct) throws JpaSystemException {
         return productTypeRepository.findByTypeProduct(typeProduct);
+    }
+
+    @Override
+    public Long getProductTypeId_By_TypeProduct(String typeProduct) {
+        return findProductType_ByTypeProduct(typeProduct).getProductTypeId();
     }
 
     @Override

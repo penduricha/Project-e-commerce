@@ -18,5 +18,7 @@ public interface I_ProductTypeService {
 
     public ProductType findProductType_ByTypeProduct(String typeProduct);
 
+    public Long getProductTypeId_By_TypeProduct(String typeProduct);
+
     public List<ProductType> getAllProductTypes_ByParentId(Long parentId);
 }

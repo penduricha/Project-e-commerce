@@ -40,7 +40,7 @@ const routerDao = new RouterDao();
 
 const app = createApp(App);
 
-function initRouter(routers,routerPath)
+function initRouter(routers, routerPath)
 {
     const router = createRouter({
         // mode: 'history',
@@ -71,7 +71,6 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
             { path: '/signup-screen', component: SignupScreen },
             { path: '/home-page', component: HomePage },
             { path: '/screen-404', component: Screen404 },
-            { path: '/about-page-with-account', component: AboutPage },
             { path: '/about-page', component: AboutPage },
             { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: emailPhoneNumber })}
         ],
@@ -93,7 +92,6 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
 
 //run
 function execute(){
-
     if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
 
         let routerPath = routerDao.getRouterPathFromSessionStorage();
@@ -107,7 +105,6 @@ function execute(){
 
         initHomePageAccount(emailPhoneNumber, routerPath);
     }
-
 }
 
 

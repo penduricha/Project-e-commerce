@@ -13,10 +13,58 @@
     align-items: center;
 }
 
-.woman-fashion::after{
-
+.menu-item:hover{
+    background-color: #888888;
 }
 
-.men-fashion::after{
+.container-menu-child-2{
+    position: absolute;
+    background-color: white;
+    width: 250px;
+    height: auto;
+    left: 26.8%;
+    top: 18.5%;
+}
 
+.menu-item-2{
+    width: 250px;
+    background-color: transparent;
+    border-radius: 0;
+    color: black;
+    text-align: left;
+    font-size: 16px;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-item-2:hover{
+    background-color: #888888;
+}
+
+.container-menu-child-3{
+    position: absolute;
+    background-color: white;
+    width: 250px;
+    height: auto;
+    left: 100%;
+    top: 0;
+}
+
+.menu-item-3{
+    width: 250px;
+    background-color: transparent;
+    border-radius: 0;
+    color: black;
+    text-align: left;
+    font-size: 16px;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-item-3:hover{
+    background-color: #888888;
 }

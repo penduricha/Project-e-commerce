@@ -24,6 +24,6 @@ public class ProductService implements I_ProductService {
 
     @Override
     public List<ProductViewDto> getAllProducts() throws JpaSystemException{
-        return productRepository.getAllProductAndType();
+        return null;
     }
 }
