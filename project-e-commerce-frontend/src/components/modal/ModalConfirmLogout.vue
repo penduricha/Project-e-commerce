@@ -1,5 +1,5 @@
 <script>
-import './style-modal-logout.css';
+import './style-modal-logout.scss';
 import CustomButton from "@/components/base/CustomButton.vue";
 export default {
   name: 'ModalConfirmLogout',

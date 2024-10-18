@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style>
-@import 'Footer.css';
+@import 'Footer.scss';
 .title{
   font-size: 20px;
 }

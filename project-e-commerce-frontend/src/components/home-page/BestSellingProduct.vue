@@ -1,8 +1,8 @@
 <script>
-import './style-view-slidebar.css';
+import './style-view-slidebar.scss';
 import Title from "@/components/home-page/Title.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
-import CustomItemProduct from "@/components/base/CustomItemProduct.vue";
+import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import CustomPaginationGrey from "@/components/paginations/CustomPaginationGrey.vue";
 
 export default {
@@ -76,9 +76,9 @@ export default {
   <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
     <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products" v-if="(getTextTile('Best Selling Product')!=='Best Selling Product')"/>
   </div>
-  <div class="view-list-pagination">
-    <CustomPaginationGrey v-if="isViewPagination"/>
-  </div>
+<!--  <div class="view-list-pagination">-->
+<!--    <CustomPaginationGrey v-if="isViewPagination"/>-->
+<!--  </div>-->
 </template>
 <style>
 .view-list-pagination{

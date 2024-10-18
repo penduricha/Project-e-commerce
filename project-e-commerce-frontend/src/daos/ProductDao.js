@@ -6,9 +6,24 @@ export default class ProductDao {
     }
 
     async getFlashSalesProducts() {
+        let products = [];
         try{
             const response = await ProductService.fetchProducts_By_Event_Flash_Sales();
-            return response.data;
+            products = response.data;
+            return products;
+        }catch(error){
+            console.error(error);
+            alert(error);
+            return null;
+        }
+    }
+
+    async getExploreOurProducts() {
+        let products = [];
+        try{
+            const response = await ProductService.fetchProducts_By_Event_Explore_Our_Products();
+            products = response.data;
+            return products;
         }catch(error){
             console.error(error);
             alert(error);

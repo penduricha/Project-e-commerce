@@ -1,5 +1,5 @@
 <script>
-import './style-custom-item.css';
+import './style-custom-item.scss';
 export default {
   name: 'CustomItemService',
   //dinh nghia cac doi tuong cua props

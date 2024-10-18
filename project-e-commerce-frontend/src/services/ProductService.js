@@ -15,4 +15,8 @@ export default class ProductService {
     static fetchProducts_By_Event_Flash_Sales(){
         return apiClient.get(`/products-flash-sales`);
     }
+
+    static fetchProducts_By_Event_Explore_Our_Products(){
+        return apiClient.get(`/products-explore-our-products`);
+    }
 }

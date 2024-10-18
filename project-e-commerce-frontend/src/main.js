@@ -1,5 +1,6 @@
 import './assets/main.css';
 import 'bootstrap/dist/css/bootstrap.css';
+
 import routers from "@/listRouters.js";
 import App from './App.vue';
 import { createApp } from 'vue';
@@ -11,10 +12,12 @@ import SignupScreen from "@/signup-screen/SignupScreen.vue";
 import Screen404 from "@/pages/Screen404.vue";
 import AboutPage from "@/pages/AboutPage.vue";
 import HomePageWithAccount from "@/pages/HomePageAccount.vue";
+
 //vuetify
 //npm install vuetify@next @mdi/font
-// import { createVuetify } from 'vuetify';
-// import 'vuetify/styles';
+import { createVuetify } from 'vuetify';
+import 'vuetify/styles';
+import 'vuetify/dist/vuetify-labs.min.css';
 // import '@mdi/font/css/materialdesignicons.css';
 // const vuetify = createVuetify();
 // function getRouterFromLocalStorage(){
@@ -32,6 +35,7 @@ import HomePageWithAccount from "@/pages/HomePageAccount.vue";
 //     const routerDao = new RouterDao();
 //     return routerDao.getRouterFromSessionStorage();
 // }
+const vuetify = createVuetify();
 
 //tạo path và emailPhoneNumber
 const routerDao = new RouterDao();
@@ -39,7 +43,7 @@ const routerDao = new RouterDao();
 //routerDao.saveRouterPathToSessionStorage("/about-page");
 
 const app = createApp(App);
-
+app.use(vuetify);
 function initRouter(routers, routerPath)
 {
     const router = createRouter({
@@ -48,7 +52,7 @@ function initRouter(routers, routerPath)
         routes: routers,
     });
 
-    // .use(vuetify);
+
     app.use(router);
 
     router.replace(routerPath).catch((error) => {

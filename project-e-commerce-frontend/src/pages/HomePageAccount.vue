@@ -1,8 +1,8 @@
 <script>
 import Header from "@/components/header-footer-menu/Header.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
-import './style-item-menu.css';
-import './style-home-page.css';
+import './style-item-menu.scss';
+import './style-home-page.scss';
 import ImagePhone from "@/pages/ImagePhone.vue";
 import FlashSales from "@/components/home-page/FlashSales.vue";
 import productFlashSale from "@/assets/data-product/ProductFlashSale.js";
@@ -228,16 +228,16 @@ export default {
         </div>
       </div>
       <div class="view-product-slide">
-        <FlashSales :product="productFlashSale()" />
+        <FlashSales/>
       </div>
 
       <hr style="margin-left: 9%; margin-top: 8%; width: 82%;">
 
       <div class="view-product-slide">
-        <BestSellingProduct :product="productBestSelling()" />
+<!--        <BestSellingProduct :product="productBestSelling()" />-->
       </div>
       <div class="view-product-slide">
-        <ExploreProduct :product="productExplore()" />
+        <ExploreProduct/>
       </div>
       <div class="view-service">
         <CustomService/>

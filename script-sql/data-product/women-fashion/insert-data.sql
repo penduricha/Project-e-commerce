@@ -70,7 +70,7 @@ with RankedProducts as (
             join ware_house w on w.product_id = p.product_id
             left join discount d on d.ware_house_id = w.ware_house_id
     where
-        w.quantity > 0 and mpe.event_purchasing_id = 4
+        w.quantity > 0 and e.name_event_purchasing='Best Selling Product'
 )
 select
     product_id,
@@ -86,6 +86,22 @@ where
     rn = 1
 order by product_id;
 
+select * from event_purchasing;
+
 select * from product p
 left join ware_house w on p.product_id = w.product_id
 where p.product_id = 56;
+
+select * from mapping_event_purchasing_product where event_purchasing_id = 4 order by product_id;
+
+select product_id from product order by product_id;
+
+insert into mapping_event_purchasing_product (event_purchasing_id, product_id) values
+(4, 101),
+(4, 102),
+(4, 103),
+(4, 104),
+(4, 105),
+(4, 106),
+(4, 107),
+(4, 108);

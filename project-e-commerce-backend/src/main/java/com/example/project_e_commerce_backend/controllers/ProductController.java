@@ -36,4 +36,14 @@ public class ProductController {
     public List<Map<String, Object>> getFlashSalesProducts() throws JpaSystemException {
         return productRepository.getProducts_By_Event("Flash Sales");
     }
+
+    @GetMapping("/products-explore-our-products")
+    public List<Map<String, Object>> getExploreProducts() throws JpaSystemException {
+        return productRepository.getProducts_By_Event("Explore Our Products");
+    }
+
+    @GetMapping("/products-best-selling")
+    public List<Map<String, Object>> getBestSellingProducts() throws JpaSystemException {
+        return productRepository.getProducts_By_Event("Best Selling Product");
+    }
 }

@@ -1,8 +1,9 @@
 <script>
-import './style-view-slidebar.css';
+import './style-view-slidebar.scss';
 import Title from "@/components/home-page/Title.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
-import CustomItemProduct from "@/components/base/CustomItemProduct.vue";
+import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
+import ProductDao from "@/daos/ProductDao.js";
 
 export default {
   name:'ExploreProduct',
@@ -11,20 +12,60 @@ export default {
     Title,
     CustomItemProduct,
   },
-  props:['product'],
-  data(){
 
+  data(){
+    return {
+      products_Explore_Products: [],
+
+      allProducts: [],
+      displayedProducts: [],
+      productsToShow: 8
+    }
   },
+
+  created(){
+    this.getExplore_Our_Product_From_API();
+  },
+
   methods: {
-    getExploreProducts(){
-      return this.product;
+    // async getExplore_Our_Product_From_API(){
+    //   const productDao = new ProductDao();
+    //   let products = [];
+    //   try{
+    //     products = await productDao.getExploreOurProducts();
+    //     console.log('Product Explore Our Product: ',products);
+    //     this.products_Explore_Products = products.slice(0,8);
+    //   }catch(e){
+    //     console.error(e);
+    //     alert(e);
+    //   }
+    // },
+    async getExplore_Our_Product_From_API() {
+      const productDao = new ProductDao();
+      try {
+        const products = await productDao.getExploreOurProducts();
+        console.log('Product Explore Our Product: ', products);
+        this.allProducts = products;
+        // Store all products
+        this.displayedProducts = this.allProducts.slice(0, this.productsToShow);
+      } catch (e) {
+        console.error(e);
+        alert(e);
+      }
     },
+
     groupFourExploreProducts(){
-      return chunkArray(this.getExploreProducts(), 4);
+      return chunkArray(this.displayedProducts, 4);
     },
-    getTextTile(textTitle){
-      return textTitle;
-    },
+
+    async toggleViewAll() {
+      if (this.productsToShow < this.allProducts.length) {
+        this.productsToShow += 8;
+        // Increase the number of products to show
+        this.displayedProducts = this.allProducts.slice(0, this.productsToShow);
+        // Update displayed products
+      }
+    }
   }
 }
 
@@ -41,12 +82,14 @@ function chunkArray(array, chunkSize) {
 <template>
   <div style="width: 100%; height: 70%">
     <div class="view-title">
-      <Title text-time-title="Our Products" :text-title="getTextTile('Explore Our Products')"/>
+      <Title text-time-title="Our Products" :text-title="'Explore Our Products'"/>
     </div>
     <!--    v-for="(row, rowIndex) in getProductRows()" :key="rowIndex"-->
+    <!--Co the dung scss-->
     <div class="view-list-product">
       <div v-for="(row, rowIndex) in groupFourExploreProducts()" :key="rowIndex" class="view-list-product-row"
-           :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }">
+           :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }"
+      >
         <div v-for="(product, productIndex) in row" :key="product.id"
              class="list-product"
              :style="{ marginRight: (row.length < 4 && productIndex !== row.length - 1) ? '60px' : '0' }">
@@ -54,7 +97,7 @@ function chunkArray(array, chunkSize) {
         </div>
       </div>
       <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
-        <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
+        <CustomButton @click="toggleViewAll()" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
       </div>
     </div>
   </div>

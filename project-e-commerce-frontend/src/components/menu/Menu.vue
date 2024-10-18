@@ -146,6 +146,35 @@ export default{
         });
       }
     },
+  },
+
+  computed: {
+    homepageClass() {
+      return (this.isActiveRoute('/') ||
+          this.isActiveRoute('/home-page') ||
+          this.isActiveRoute('/home-page-with-account'))
+          ? 'have-border-bottom'
+          : 'none-border-bottom';
+    },
+
+    aboutPageClass(){
+      return (this.isActiveRoute('/about-page'))
+          ? 'have-border-bottom'
+          : 'none-border-bottom';
+    },
+
+    loginScreenClass(){
+      return (this.isActiveRoute('/signup-screen'))
+          ? 'have-border-bottom'
+          : 'none-border-bottom';
+    },
+
+    inputSearchClass(){
+      return (!this.isActiveRoute('/signup-screen') && !this.isActiveRoute('/login-screen'))
+            ? 'have-margin-left'
+            : 'none-margin-left';
+
+    }
   }
 }
 
@@ -165,18 +194,21 @@ function removeEmailPhoneNumber(){
         </div>
         <div class="menu-navbar">
           <ul class="navbar-nav" style="justify-content: center; align-items: center; margin-top: 10px;">
-            <li class="nav-item" :style="{ borderBottom: ((isActiveRoute('/')) || (isActiveRoute('/home-page')) || (isActiveRoute('/home-page-with-account'))) ? 'solid 2px' : 'none' }">
+            <li class="nav-item"
+                :class="['menu-border-bottom',homepageClass]"
+            >
               <button class="btn btn-light nav-link" @click.prevent="handleHomePage()">Home</button>
             </li>
             <li class="nav-item">
               <button class="btn btn-light nav-link" @click.prevent="">Contact</button>
             </li>
             <li class="nav-item"
-                :style="{ borderBottom: (isActiveRoute('/about-page') || isActiveRoute('/about-page-with-account')) ? 'solid 2px' : 'none' }">
+                :class="['menu-border-bottom',aboutPageClass]"
+            >
               <button class="btn btn-light nav-link" @click.prevent="handleAbout()">About</button>
             </li>
             <li class="nav-item"
-                :style="{ borderBottom: (isActiveRoute('/signup-screen')) ? 'solid 2px' : 'none' }">
+              :class="['menu-border-bottom',loginScreenClass]">
               <button
                   class="btn btn-light nav-link nav-item-signup"
                   @click.prevent="handleSignup()"
@@ -186,9 +218,11 @@ function removeEmailPhoneNumber(){
         </div>
       </div>
       <div class="menu-search">
-        <div class="style-input-search"  :style="{ marginLeft: (!isActiveRoute('/signup-screen') && !isActiveRoute('/login-screen')) ? '-175px' : '0' }" style="padding-right: 10px;">
+        <div class="style-input-search"
+          :class="['margin-left-input',inputSearchClass]"
+        >
           <input type="text" placeholder="What are you looking for?" v-model="searchText" maxlength=30 class="style-input-search" style="width: 90%;">
-          <svg fill="currentColor" class="bi bi-search" viewBox="0 0 20 20" style="width: 25px; height: 25px; margin-top: 3px;" @click="handleSearch()">
+          <svg fill="currentColor" class="bi bi-search" viewBox="0 0 20 20" style="width: 25px; height: 25px; margin-top: 3px; cursor: pointer" @click="handleSearch()">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
         </div>
@@ -288,7 +322,7 @@ function removeEmailPhoneNumber(){
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .menu
 {
   width: 1680px;
@@ -460,5 +494,26 @@ function removeEmailPhoneNumber(){
 
 .style-item-menu-account:hover{
   background-color: transparent;
+}
+
+//menu click
+.menu-border-bottom{
+  &.none-border-bottom{
+    border-bottom: none;
+  }
+
+  &.have-border-bottom{
+    border-bottom: solid 2px;
+  }
+}
+
+.margin-left-input{
+  &.have-margin-left{
+    margin-left: -175px;
+  }
+
+  &.none-margin-left{
+    margin-left: 0;
+  }
 }
 </style>

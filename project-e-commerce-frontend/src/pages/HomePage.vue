@@ -1,8 +1,8 @@
 <script>
 import Header from "@/components/header-footer-menu/Header.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
-import './style-item-menu.css';
-import './style-home-page.css';
+import './style-item-menu.scss';
+import './style-home-page.scss';
 import ImagePhone from "@/pages/ImagePhone.vue";
 import FlashSales from "@/components/home-page/FlashSales.vue";
 import productFlashSale from "@/assets/data-product/ProductFlashSale.js";
@@ -219,16 +219,16 @@ export default {
       </div>
 
       <div class="view-product-slide">
-        <FlashSales :product="productFlashSale()" />
+        <FlashSales/>
       </div>
 
       <hr style="margin-left: 9%; margin-top: 8%; width: 82%;">
 
       <div class="view-product-slide">
-        <BestSellingProduct :product="productBestSelling()" />
+<!--        <BestSellingProduct :product="productBestSelling()" />-->
       </div>
       <div class="view-product-slide">
-        <ExploreProduct :product="productExplore()" />
+        <ExploreProduct/>
       </div>
       <div class="view-service">
         <CustomService/>
@@ -248,17 +248,11 @@ export default {
 @import '@/assets/container';
 
 .dropdown-toggle::after {
-  /* Đảm bảo có mũi tên */
   content: '';
-  /* Hiển thị như một phần tử inline */
   display: inline-block;
-  /* Tạo mũi tên */
   border: solid;
-  /* Định dạng mũi tên */
   border-width: 0 2px 2px 0;
-  /* Kích thước mũi tên */
   padding: 4px;
-  /* Quay mũi tên 315 do*/
   transform: rotate(315deg);
   text-align: right;
 }
