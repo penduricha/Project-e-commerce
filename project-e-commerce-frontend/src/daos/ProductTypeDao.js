@@ -1,4 +1,5 @@
 import ProductTypeService from "@/services/ProductTypeService.js";
+import ProductService from "@/services/ProductService.js";
 
 
 export default class ProductTypeDao {
@@ -28,7 +29,17 @@ export default class ProductTypeDao {
         return productType;
     }
 
-    getProductTypeId_By_Name_TypeProduct(typeProduct){
-        
+    async getTypeProductById(productTypeId) {
+        try {
+            const response = await ProductTypeService.fetchTypeProductById(productTypeId);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            alert(error);
+            return null;
+            // Trả về null khi có lỗi
+        }
     }
+
+
 }

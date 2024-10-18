@@ -1,110 +1,74 @@
-<script>
-
-export default {
-  name: 'ImagePhone',
-  components:{
-
-  },
-  data(){
-    return{
-
-    }
-  },
-  methods: {
-
-  }
-}
-</script>
-
 <template>
-  <div class="background-image">
-    <div class="background-advertise">
-      <div class="background-advertise-child">
-        <div class="background-apple-iphone-14">
-          <div class="background-apple">
-            <img src="@/assets/images/1200px-Apple_gray_logo%201.png" alt="apple" style="width: 40px; height: 49px"/>
-          </div>
-          <div class="background-iphone-14-series">
-            <p style="font-size: 16px; color: #FAFAFA; ">iPhone 14 Series</p>
-          </div>
-        </div>
-        <div class="background-voucher">
-          <p style="font-size: 48px; color: #FAFAFA; font-weight: bolder;">Up to 10%<br>off Voucher</p>
-        </div>
-        <div class="background-shop-now">
-          <a href="" class="shop-now-style">Shop Now</a>
-          <svg @click="" width="24" height="24" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 15 15" style="color: #FAFAFA; margin-left: 5%; margin-top: 3%; cursor: pointer;">
-            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-          </svg>
+  <div>
+    <component :is="currentComponent" />
+    <div style="width: 80.15%; background-color: black; display: flex; justify-content: center; align-items: center;">
+      <div class="group-button">
+        <div class="button-in-group" v-for="(button, index) in buttons" :key="index">
+          <button class="button-pagination" @click="changeComponent(index)"/>
+
         </div>
       </div>
-    </div>
-    <div class="background-iphone">
-      <img src="@/assets/images/hero_endframe__cvklg0xk3w6e_large%202.png" alt="iphone" style="width: 100%; height: 100%"/>
     </div>
   </div>
 </template>
 
+<script>
+import Samsung from "@/pages/list-image-advertise/Samsung.vue";
+import Iphone from "@/pages/list-image-advertise/Iphone.vue";
+import Xiaomi from "@/pages/list-image-advertise/Xiaomi.vue";
+import Oppo from "@/pages/list-image-advertise/Oppo.vue";
+import Ipad from "@/pages/list-image-advertise/Ipad.vue";
+
+export default {
+  name: 'MyComponent',
+  components: {
+    Samsung,
+    Iphone,
+    Xiaomi,
+    Oppo,
+    Ipad,
+  },
+  data() {
+    return {
+      currentComponent: 'Iphone',
+      //ds components
+      //theo trinh tu paginations
+      buttons: ['Iphone','Xiaomi','Samsung','Oppo','Ipad'],
+    }
+  },
+  methods: {
+    changeComponent(index) {
+      this.currentComponent = this.buttons[index];
+    },
+  },
+};
+</script>
 <style>
-.background-image{
-  width: 950px;
-  height: 344px;
+
+.group-button{
+  width: 100px;
+  height: 20px;
   display: flex;
-  background-color: black;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.background-advertise{
-  flex: 1;
-  padding: 40px;
-  display: flex;
-}
-
-.background-advertise-child{
-  flex: 1;
-  margin-left: 8%;
-}
-
-.background-apple-iphone-14{
-  height: 25%;
-  display: flex;
-}
-
-.background-apple{
-  flex: 2;
-}
-
-.background-iphone-14-series{
-  flex: 8;
-  align-content: center;
-}
-
-.background-voucher{
-  height: 50%;
-}
-
-.background-shop-now{
-  height: 12%;
-  width: 50%;
-  display: flex;
-  margin-top: 10%;
-}
-
-
-.background-iphone{
-  flex: 1.5;
-  padding-top: 10px;
-}
-
-.shop-now-style{
-  font-size: 16px;
-  color: #FAFAFA;
-  border-bottom: solid #FAFAFA;
-  height: 100%;
-  text-decoration: none;
-}
-
-.shop-now-style:hover{
+.button-in-group{
+  width: 15px;
+  height: 15px;
   background-color: transparent;
+  border-radius: 100px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.button-pagination{
+  border-radius: 200px;
+  border: none;
+  width: 80%;
+  height: 80%;
+  background-color: grey;
+}
 </style>

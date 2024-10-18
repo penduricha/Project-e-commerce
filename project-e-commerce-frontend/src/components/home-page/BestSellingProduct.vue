@@ -3,13 +3,13 @@ import './style-view-slidebar.css';
 import Title from "@/components/home-page/Title.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/base/CustomItemProduct.vue";
-import CustomPagination from "@/components/paginations/CustomPagination.vue";
+import CustomPaginationGrey from "@/components/paginations/CustomPaginationGrey.vue";
 
 export default {
   name:'BestSellingProduct',
 
   components:{
-    CustomPagination,
+    CustomPaginationGrey,
     CustomButton,
     Title,
     CustomItemProduct,
@@ -69,8 +69,6 @@ export default {
     <!-- ref="titleComponent": là dùng titleComponent gọi các data method nó ra-->
   </div>
   <div class="view-list-product" style="display: flex; margin-bottom: 4%; justify-content: space-between">
-  <!-- :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }"-->
-  <!-- Xet dieu khien khi sp > 4 -->
     <div v-for="(product) in getProductBestSelling()" :key="product.id" class="list-product">
       <CustomItemProduct :product="product" />
     </div>
@@ -78,10 +76,15 @@ export default {
   <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
     <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products" v-if="(getTextTile('Best Selling Product')!=='Best Selling Product')"/>
   </div>
-  <CustomPagination v-if="isViewPagination"/>
-  <!--  <CustomPagination v-if="!getIsViewAll()" />-->
-  <!--v-if="(getIsViewAll()===false)" -->
+  <div class="view-list-pagination">
+    <CustomPaginationGrey v-if="isViewPagination"/>
+  </div>
 </template>
 <style>
-
+.view-list-pagination{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

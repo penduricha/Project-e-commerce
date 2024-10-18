@@ -35,9 +35,22 @@ export default {
     this.validateName();
     this.validateEmailAndPhoneNumber();
     this.validatePassword();
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
   },
 
   methods: {
+    handleBeforeUnload(event) {
+      // Thiết lập thông báo
+      const message = 'Are you sure you want to leave this page? Your changes will not be saved.';
+      event.returnValue = message;
+      // Một số trình duyệt sẽ hiển thị thông báo này
+      return message;
+      // Một số trình duyệt yêu cầu trả về giá trị
+    },
+
     validateName(){
       if(!this.name){
         this.errorName='';

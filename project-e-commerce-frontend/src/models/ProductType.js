@@ -8,4 +8,8 @@ export default class ProductType {
         this._typeProduct = typeProduct;
         this._parentId = parentId;
     }
+
+    setTypeProduct(typeProduct){
+        this._typeProduct = typeProduct;
+    }
 }

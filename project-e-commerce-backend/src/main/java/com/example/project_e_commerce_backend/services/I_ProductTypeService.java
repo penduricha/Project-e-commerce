@@ -21,4 +21,6 @@ public interface I_ProductTypeService {
     public Long getProductTypeId_By_TypeProduct(String typeProduct);
 
     public List<ProductType> getAllProductTypes_ByParentId(Long parentId);
+
+    String getTypeProductById(Long productTypeId);
 }

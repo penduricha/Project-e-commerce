@@ -17,6 +17,14 @@ export default {
   },
   methods: {
 
+    getProductFlashSales_From_API(){
+      try{
+
+      }catch(e){
+
+      }
+    },
+
     getProductFlashSales(){
       return this.product;
     },

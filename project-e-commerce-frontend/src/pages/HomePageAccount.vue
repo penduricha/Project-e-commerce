@@ -48,6 +48,10 @@ export default {
 
       isMenu_3_Open: false,
 
+      //temp
+      temp_typeMenu_1: null,
+
+      temp_typeMenu_2: null,
     }
   },
 
@@ -93,42 +97,75 @@ export default {
       }
     },
 
-    async toggleChild_2_Menu(productTypeId) {
-      this.isMenu_3_Open = false;
-      this.isMenu_2_Open = false;
+    async toggleChild_2_Menu(productTypeId, typeProductMenu) {
+      // this.isMenu_3_Open = false;
+      // this.isMenu_2_Open = false;
 
       const productTypeDao = new ProductTypeDao();
       try {
         const productType = await productTypeDao.getListProductType_By_ParentId(productTypeId);
-
         console.log('List Product Type that parentId after clicked:', productType);
+        console.log(typeProductMenu);
 
-        this.productType_By_ParentId_2 = productType;
+        if(this.isMenu_2_Open === true && (this.isMenu_3_Open === true || this.isMenu_3_Open === false)){
 
-        //dong tang 2 va tang 3
-        this.isMenu_2_Open = !this.isMenu_2_Open;
+          let typeProduct = await productTypeDao.getTypeProductById(productTypeId);
+          console.log('Name menu:',typeProduct);
 
+          if(this.temp_typeMenu_1 === typeProduct){
+            //dong menu hien tai
+            this.isMenu_3_Open = false;
+            this.isMenu_2_Open = false;
+          }else{
+            //dong menu cu mo menu moi
+            this.temp_typeMenu_1 = typeProductMenu;
+            this.isMenu_3_Open = false;
+            this.isMenu_2_Open = false;
+
+            this.productType_By_ParentId_2 = productType;
+            //dong tang 2 va tang 3
+            this.isMenu_2_Open = !this.isMenu_2_Open;
+          }
+        }else{
+          this.temp_typeMenu_1 = typeProductMenu;
+          this.productType_By_ParentId_2 = productType;
+          //dong tang 2 va tang 3
+          this.isMenu_2_Open = !this.isMenu_2_Open;
+        }
       } catch (error) {
         alert(error);
       }
     },
 
-    async toggleChild_3_Menu(productTypeId){
-      this.isMenu_3_Open = false;
-
+    async toggleChild_3_Menu(productTypeId, typeProductMenu){
       const productTypeDao = new ProductTypeDao();
       try {
         const productType = await productTypeDao.getListProductType_By_ParentId(productTypeId);
-
         console.log('List Product Type that parentId after clicked:', productType);
 
-        this.productType_By_ParentId_3 = productType;
+        if(this.isMenu_3_Open === true){
+          let typeProduct = await productTypeDao.getTypeProductById(productTypeId);
+          console.log('Name menu:',typeProduct);
 
-        this.isMenu_3_Open = !this.isMenu_3_Open;
+          if(this.temp_typeMenu_2 === typeProduct){
+            this.isMenu_3_Open = false;
+          }else{
+            this.isMenu_3_Open = false;
+
+            this.temp_typeMenu_2 = typeProductMenu;
+            this.productType_By_ParentId_3 = productType;
+            this.isMenu_3_Open = !this.isMenu_3_Open;
+          }
+        }else{
+          //mở menu
+          this.temp_typeMenu_2 = typeProductMenu;
+          this.productType_By_ParentId_3 = productType;
+          this.isMenu_3_Open = !this.isMenu_3_Open;
+        }
       } catch (error) {
         alert(error);
       }
-    }
+    },
 
   }
 }
@@ -146,7 +183,7 @@ export default {
             <div class="btn-group">
               <button
                   type="button"
-                  @click="toggleChild_2_Menu(p.productTypeId)"
+                  @click="toggleChild_2_Menu(p.productTypeId, p.typeProduct)"
                   class="btn btn-secondary dropdown-toggle menu-item"
               >
                 {{ p.typeProduct }}
@@ -160,8 +197,8 @@ export default {
                 <div class="btn-group">
                   <button
                       type="button"
-                      @click="toggleChild_3_Menu(p.productTypeId)"
-                      class="btn btn-secondary dropdown-toggle menu-item-2"
+                      @click="toggleChild_3_Menu(p.productTypeId, p.typeProduct)"
+                      :class="['btn', 'btn-secondary', 'menu-item-2', { 'dropdown-toggle': p.typeProduct !== 'Others' }]"
                   >
                     {{ p.typeProduct }}
                   </button>

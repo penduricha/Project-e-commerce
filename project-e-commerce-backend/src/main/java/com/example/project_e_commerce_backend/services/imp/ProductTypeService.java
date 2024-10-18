@@ -57,4 +57,15 @@ public class ProductTypeService implements I_ProductTypeService {
     public List<ProductType> getAllProductTypes_ByParentId(Long parentId) throws JpaSystemException {
         return productTypeRepository.findProductTypesByParentId(parentId);
     }
+
+    @Override
+    public String getTypeProductById(Long productTypeId) throws JpaSystemException {
+        ProductType productTypeFound = findProductTypeById(productTypeId);
+        if(productTypeFound !=null){
+            return productTypeFound.getTypeProduct();
+        }
+        else{
+            return null;
+        }
+    }
 }

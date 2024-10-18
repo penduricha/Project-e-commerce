@@ -58,4 +58,9 @@ public class ProductTypeController {
     public Long getProductTypeId_By_TypeProduct(@PathVariable String typeProduct) throws JpaSystemException {
         return productTypeService.getProductTypeId_By_TypeProduct(typeProduct);
     }
+
+    @GetMapping("/productTypes/get-typeProduct-by-productTypeId/{productTypeId}")
+    public String getTypeProductById(@PathVariable Long productTypeId) throws JpaSystemException {
+        return productTypeService.getTypeProductById(productTypeId);
+    }
 }

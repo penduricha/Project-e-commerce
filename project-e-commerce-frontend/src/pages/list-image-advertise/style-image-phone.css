@@ -1,0 +1,7 @@
+.background-image{
+    width: 950px;
+    height: 344px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+}

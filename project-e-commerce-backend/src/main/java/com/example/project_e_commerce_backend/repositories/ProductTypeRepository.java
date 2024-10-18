@@ -17,4 +17,6 @@ public interface ProductTypeRepository extends JpaRepository<ProductType,Long> {
     List<ProductType> findProductTypesByParentIdNull();
 
     List<ProductType> findProductTypesByParentId(Long parentId);
+
+
 }
