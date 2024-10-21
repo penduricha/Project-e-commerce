@@ -17,13 +17,22 @@
     background-color: #888888;
 }
 
+.container-menu-child-1{
+    background-color: transparent;
+    height: 100%;
+    width: 335px;
+}
+
 .container-menu-child-2{
-    position: absolute;
-    background-color: white;
+    background-color: transparent;
+    height: 100%;
     width: 250px;
-    height: auto;
-    left: 26.8%;
-    top: 18.5%;
+}
+
+.container-menu-child-3{
+    background-color: transparent;
+    height: 100%;
+    width: 250px;
 }
 
 .menu-item-2{
@@ -43,14 +52,7 @@
     background-color: #888888;
 }
 
-.container-menu-child-3{
-    position: absolute;
-    background-color: white;
-    width: 250px;
-    height: auto;
-    left: 100%;
-    top: 0;
-}
+
 
 .menu-item-3{
     width: 250px;

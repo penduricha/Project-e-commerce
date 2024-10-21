@@ -6,19 +6,19 @@
 }
 
 .container-menu{
-    height: 100%;
-    width: 330px;
-    border-right: 1px solid #bcbcbc;
-    margin-left: 7%;
+    height: 400px;
+    width: 1000px;
+    margin-left: 120px;
     padding-top: 20px;
+    position: absolute;
+    display: flex;
 }
 
 .container-image-advertise{
-    height: 49%;
-    width: 1225px;
-    margin-left: 20px;
+    margin-left: 450px;
     padding-top: 25px;
     padding-left: 30px;
+    border-left: solid 1px grey;
 }
 
 .menu-item-child{

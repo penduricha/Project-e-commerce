@@ -4,6 +4,7 @@ import Title from "@/components/home-page/Title.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import CustomPaginationGrey from "@/components/paginations/CustomPaginationGrey.vue";
+import ProductDao from "@/daos/ProductDao.js";
 
 export default {
   name:'BestSellingProduct',
@@ -14,37 +15,39 @@ export default {
     Title,
     CustomItemProduct,
   },
-  props:['product'],
+
   data(){
+
     return {
-      isViewPagination: false,
+
+      product_Best_Selling: [],
+
     }
   },
-  created(){
 
+  created(){
+    this.getProductBestSelling_From_API();
   },
   mounted() {
     //this.getIsViewAll();
     //this.getIsViewAll();
   },
   methods: {
-    getProductBestSelling(){
-      return this.product;
+    async getProductBestSelling_From_API(){
+      const productDao = new ProductDao();
+      let products = [];
+      try{
+        products = await productDao.getBestSellingProducts();
+        console.log('Product Flash Sales: ',products);
+        this.product_Best_Selling = products.slice(0,4);
+      }catch(e){
+        console.error(e);
+        alert(e);
+      }
     },
-
-    getTextTile(textTitle){
-      return textTitle;
-    },
-
-    viewPagination(){
-      this.isViewPagination = !this.isViewPagination;
-    },
-
   },
   computed: {
-    buttonText() {
-      return this.isViewPagination ? 'Hide' : 'View All';
-    },
+
   },
 }
 //khai các ham xu li khac
@@ -61,30 +64,27 @@ export default {
 <!--  style="display: flex; margin-bottom: 4%;"-->
   <div class="view-title">
     <div class="view-title-information">
-      <Title text-time-title="Today's" ref="titleComponent"  :text-title="getTextTile('Best Selling Product') "/>
+      <Title text-time-title="Today's" ref="titleComponent"  :text-title="'Best Selling Product'"/>
     </div>
-    <div class="view-button-view-all" v-if="(getTextTile('Best Selling Product')==='Best Selling Product')">
-      <CustomButton  @click="viewPagination()"  style="width: 100%; height: 50%; margin-top: 34%;" :text-button="buttonText"/>
+    <div class="view-button-view-all" v-if="'Best Selling Product'">
+      <CustomButton  style="width: 100%; height: 50%; margin-top: 34%;" text-button="View All"/>
     </div>
     <!-- ref="titleComponent": là dùng titleComponent gọi các data method nó ra-->
   </div>
-  <div class="view-list-product" style="display: flex; margin-bottom: 4%; justify-content: space-between">
-    <div v-for="(product) in getProductBestSelling()" :key="product.id" class="list-product">
+  <div class="view-list-product" style="display: flex; margin-bottom: 4%; align-items: center;"
+       :style="{ justifyContent: (product_Best_Selling.length >= 4) ? 'space-between' : 'none' }"
+  >
+    <div v-for="(product) in product_Best_Selling" class="list-product"
+         :style="{ marginRight: (product_Best_Selling.length < 4) ? '60px' : '0' }"
+    >
       <CustomItemProduct :product="product" />
     </div>
   </div>
-  <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
-    <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products" v-if="(getTextTile('Best Selling Product')!=='Best Selling Product')"/>
-  </div>
+
 <!--  <div class="view-list-pagination">-->
 <!--    <CustomPaginationGrey v-if="isViewPagination"/>-->
 <!--  </div>-->
 </template>
-<style>
-.view-list-pagination{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+<style lang="scss">
+
 </style>

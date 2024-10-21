@@ -67,17 +67,6 @@ export default {
 
   methods: {
     //method lấy ds
-    productFlashSale() {
-      return productFlashSale;
-    },
-
-    productBestSelling(){
-      return productBestSelling;
-    },
-
-    productExplore(){
-      return productExplore;
-    },
 
     getEmailPhoneNumber(){
       console.log(this.emailPhoneHomePage);
@@ -98,9 +87,6 @@ export default {
     },
 
     async toggleChild_2_Menu(productTypeId, typeProductMenu) {
-      // this.isMenu_3_Open = false;
-      // this.isMenu_2_Open = false;
-
       const productTypeDao = new ProductTypeDao();
       try {
         const productType = await productTypeDao.getListProductType_By_ParentId(productTypeId);
@@ -179,46 +165,42 @@ export default {
     <main class="main">
       <div class="container-menu-image">
         <div class="container-menu">
-          <div v-for="p in productType_ParentId_Null" :key="p.productTypeId">
-            <div class="btn-group">
-              <button
-                  type="button"
-                  @click="toggleChild_2_Menu(p.productTypeId, p.typeProduct)"
-                  class="btn btn-secondary dropdown-toggle menu-item"
-              >
-                {{ p.typeProduct }}
-              </button>
-            </div>
-
-            <!-- Tầng 2 menu -->
-
-            <div class="container-menu-child-2" v-if="isMenu_2_Open">
-              <div v-for="p in productType_By_ParentId_2" :key="p.productTypeId">
-                <div class="btn-group">
-                  <button
-                      type="button"
-                      @click="toggleChild_3_Menu(p.productTypeId, p.typeProduct)"
-                      :class="['btn', 'btn-secondary', 'menu-item-2', { 'dropdown-toggle': p.typeProduct !== 'Others' }]"
-                  >
-                    {{ p.typeProduct }}
-                  </button>
-                </div>
+          <div class="container-menu-child-1">
+            <div v-for="p in productType_ParentId_Null" :key="p.productTypeId">
+              <div class="btn-group">
+                <button
+                    type="button"
+                    @click="toggleChild_2_Menu(p.productTypeId, p.typeProduct)"
+                    class="btn btn-secondary dropdown-toggle menu-item"
+                >
+                  {{ p.typeProduct }}
+                </button>
               </div>
-
-              <!-- Tang 3-->
-
-              <div class="container-menu-child-3" v-if="isMenu_3_Open">
-                <div v-for="p in productType_By_ParentId_3" :key="p.productTypeId">
-                  <div class="btn-group">
-                    <button
-                        type="button"
-                        @click=""
-                        class="btn btn-secondary menu-item-3"
-                    >
-                      {{ p.typeProduct }}
-                    </button>
-                  </div>
-                </div>
+            </div>
+          </div>
+          <div class="container-menu-child-2" v-if="isMenu_2_Open">
+            <div v-for="p in productType_By_ParentId_2" :key="p.productTypeId" style="background-color: white">
+              <div class="btn-group">
+                <button
+                    type="button"
+                    @click="toggleChild_3_Menu(p.productTypeId, p.typeProduct)"
+                    :class="['btn', 'btn-secondary', 'menu-item-2', { 'dropdown-toggle': p.typeProduct !== 'Others' }]"
+                >
+                  {{ p.typeProduct }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="container-menu-child-3" v-if="isMenu_3_Open">
+            <div v-for="p in productType_By_ParentId_3" :key="p.productTypeId" style="background-color: white">
+              <div class="btn-group">
+                <button
+                    type="button"
+                    @click=""
+                    class="btn btn-secondary menu-item-3"
+                >
+                  {{ p.typeProduct }}
+                </button>
               </div>
             </div>
           </div>
@@ -234,7 +216,7 @@ export default {
       <hr style="margin-left: 9%; margin-top: 8%; width: 82%;">
 
       <div class="view-product-slide">
-<!--        <BestSellingProduct :product="productBestSelling()" />-->
+        <BestSellingProduct/>
       </div>
       <div class="view-product-slide">
         <ExploreProduct/>

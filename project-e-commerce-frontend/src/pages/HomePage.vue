@@ -5,11 +5,9 @@ import './style-item-menu.scss';
 import './style-home-page.scss';
 import ImagePhone from "@/pages/ImagePhone.vue";
 import FlashSales from "@/components/home-page/FlashSales.vue";
-import productFlashSale from "@/assets/data-product/ProductFlashSale.js";
+
 import CustomButton from "@/components/base/CustomButton.vue";
 import BestSellingProduct from "@/components/home-page/BestSellingProduct.vue";
-import productBestSelling from "@/assets/data-product/ProductBestSelling.js";
-import productExplore from "@/assets/data-product/ProductExplore.js";
 import Menu from "@/components/menu/Menu.vue";
 import ExploreProduct from "@/components/home-page/ExploreProduct.vue";
 import CustomService from "@/components/base/CustomService.vue";
@@ -46,6 +44,7 @@ export default {
       temp_typeMenu_1: null,
 
       temp_typeMenu_2: null,
+
     }
   },
 
@@ -55,18 +54,6 @@ export default {
 
   methods: {
     //method lấy ds
-    productFlashSale() {
-      return productFlashSale;
-    },
-
-    productBestSelling(){
-      return productBestSelling;
-    },
-
-    productExplore(){
-      return productExplore;
-    },
-
     async getListProductType_That_ParentId_Null(){
       //let productType_ParentId_Null = null;
       const productTypeDao = new ProductTypeDao();
@@ -76,12 +63,53 @@ export default {
         console.log('List Product Type that parentId null:', this.productType_ParentId_Null);
       }catch (error){
         //chuyen trang 404
-        alert(error);
+        //alert(error);
+        this.$router.replace({ path: '/screen-404' }).catch((error) => { console.error('Error navigating :', error); });
       }
     },
 
     // getTypeProductById_Menu_1(productTypeId) {
     //   return this.productType_ParentId_Null.filter(p => p.productTypeId === productTypeId).typeProduct;
+    // },
+
+    // async toggleChild_2_Menu(productTypeId, typeProductMenu) {
+    //   // this.isMenu_3_Open = false;
+    //   // this.isMenu_2_Open = false;
+    //
+    //   const productTypeDao = new ProductTypeDao();
+    //   try {
+    //     const productType = await productTypeDao.getListProductType_By_ParentId(productTypeId);
+    //     console.log('List Product Type that parentId after clicked:', productType);
+    //     console.log(typeProductMenu);
+    //
+    //     if(this.isMenu_2_Open === true && (this.isMenu_3_Open === true || this.isMenu_3_Open === false)){
+    //
+    //       let typeProduct = await productTypeDao.getTypeProductById(productTypeId);
+    //       console.log('Name menu:',typeProduct);
+    //
+    //       if(this.temp_typeMenu_1 === typeProduct){
+    //         //dong menu hien tai
+    //         this.isMenu_3_Open = false;
+    //         this.isMenu_2_Open = false;
+    //       }else{
+    //         //dong menu cu mo menu moi
+    //         this.temp_typeMenu_1 = typeProductMenu;
+    //         this.isMenu_3_Open = false;
+    //         this.isMenu_2_Open = false;
+    //
+    //         this.productType_By_ParentId_2 = productType;
+    //         //dong tang 2 va tang 3
+    //         this.isMenu_2_Open = !this.isMenu_2_Open;
+    //       }
+    //     }else{
+    //       this.temp_typeMenu_1 = typeProductMenu;
+    //       this.productType_By_ParentId_2 = productType;
+    //       //dong tang 2 va tang 3
+    //       this.isMenu_2_Open = !this.isMenu_2_Open;
+    //     }
+    //   } catch (error) {
+    //     alert(error);
+    //   }
     // },
 
     async toggleChild_2_Menu(productTypeId, typeProductMenu) {
@@ -168,21 +196,21 @@ export default {
     <main class="main">
       <div class="container-menu-image">
         <div class="container-menu">
-          <div v-for="p in productType_ParentId_Null" :key="p.productTypeId">
-            <div class="btn-group">
-              <button
-                  type="button"
-                  @click="toggleChild_2_Menu(p.productTypeId, p.typeProduct)"
-                  class="btn btn-secondary dropdown-toggle menu-item"
-              >
-              {{ p.typeProduct }}
-              </button>
+          <div class="container-menu-child-1">
+              <div v-for="p in productType_ParentId_Null" :key="p.productTypeId">
+                <div class="btn-group">
+                  <button
+                      type="button"
+                      @click="toggleChild_2_Menu(p.productTypeId, p.typeProduct)"
+                      class="btn btn-secondary dropdown-toggle menu-item"
+                  >
+                    {{ p.typeProduct }}
+                  </button>
+                </div>
             </div>
-
-            <!-- Tầng 2 menu -->
-
-            <div class="container-menu-child-2" v-if="isMenu_2_Open">
-              <div v-for="p in productType_By_ParentId_2" :key="p.productTypeId">
+          </div>
+          <div class="container-menu-child-2" v-if="isMenu_2_Open">
+              <div v-for="p in productType_By_ParentId_2" :key="p.productTypeId" style="background-color: white">
                 <div class="btn-group">
                   <button
                       type="button"
@@ -193,30 +221,36 @@ export default {
                   </button>
                 </div>
               </div>
-
-              <!-- Tang 3-->
-
-              <div class="container-menu-child-3" v-if="isMenu_3_Open">
-                <div v-for="p in productType_By_ParentId_3" :key="p.productTypeId">
-                  <div class="btn-group">
-                    <button
-                        type="button"
-                        @click=""
-                        class="btn btn-secondary menu-item-3"
-                    >
-                      {{ p.typeProduct }}
-                    </button>
-                  </div>
-                </div>
+          </div>
+          <div class="container-menu-child-3" v-if="isMenu_3_Open">
+            <div v-for="p in productType_By_ParentId_3" :key="p.productTypeId" style="background-color: white">
+              <div class="btn-group">
+                <button
+                    type="button"
+                    @click=""
+                    class="btn btn-secondary menu-item-3"
+                >
+                  {{ p.typeProduct }}
+                </button>
               </div>
             </div>
           </div>
         </div>
-
         <div class="container-image-advertise">
           <ImagePhone/>
         </div>
       </div>
+
+<!--      <div class="btn-group dropend">-->
+<!--        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--          Dropright-->
+<!--        </button>-->
+<!--        <ul class="dropdown-menu">-->
+<!--          <li>Hello</li>-->
+<!--          <li>Hi</li>-->
+<!--        </ul>-->
+<!--      </div>-->
+
 
       <div class="view-product-slide">
         <FlashSales/>
@@ -225,7 +259,7 @@ export default {
       <hr style="margin-left: 9%; margin-top: 8%; width: 82%;">
 
       <div class="view-product-slide">
-<!--        <BestSellingProduct :product="productBestSelling()" />-->
+        <BestSellingProduct/>
       </div>
       <div class="view-product-slide">
         <ExploreProduct/>
@@ -256,4 +290,5 @@ export default {
   transform: rotate(315deg);
   text-align: right;
 }
+
 </style>

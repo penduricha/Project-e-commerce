@@ -5,6 +5,9 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import ProductDao from "@/daos/ProductDao.js";
 
+import { ref } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
 //npm install vue3-carousel
 //npm install vuetify@3.7.3
 export default {
@@ -13,8 +16,45 @@ export default {
     CustomButton,
     Title,
     CustomItemProduct,
+    Swiper,
+    SwiperSlide,
   },
 
+  setup() {
+    const mySwiper = ref(null); // Khai báo ref cho Swiper
+
+    const onSwiper = (swiper) => {
+      console.log(swiper);
+      mySwiper.value = swiper; // Lưu instance vào ref
+    };
+
+    const onSlideChange = () => {
+      console.log('slide change');
+    };
+
+    const slideCount = 4;
+    // Số lượng slide sẽ lướt mỗi lần
+
+    const prevSlide = () => {
+      if (mySwiper.value) {
+        mySwiper.value.slideTo(mySwiper.value.activeIndex - slideCount);
+      }
+    };
+
+    const nextSlide = () => {
+      if (mySwiper.value) {
+        mySwiper.value.slideTo(mySwiper.value.activeIndex + slideCount);
+      }
+    };
+
+    return {
+      mySwiper,
+      onSwiper,
+      onSlideChange,
+      prevSlide,
+      nextSlide,
+    };
+  },
   // props:['product'],
   data(){
     return {
@@ -34,7 +74,7 @@ export default {
       try{
         products = await productDao.getFlashSalesProducts();
         console.log('Product Flash Sales: ',products);
-        this.products_Flash_Sales = products.slice(0,4);
+        this.products_Flash_Sales = products;
       }catch(e){
         console.error(e);
         alert(e);
@@ -70,19 +110,49 @@ export default {
     <div class="view-title">
       <Title text-time-title="Today's" :text-title="'Flash Sales'"/>
     </div>
-    <!--        :class="['view-product-flash-sales', flashSalesClass]"-->
-    <!--        <div v-for="(product) in products_Flash_Sales.slice(0, 4)" :key="product.productId" class="list-product" :class="['view-margin-item', customItemProductClass]">-->
-    <!--          <CustomItemProduct :product="product" />-->
-    <!--        </div>-->
     <div class="view-list-product">
       <!--Ap dung computed cho scss-->
-      <div style="display: flex; width: auto;">
-        <div v-for="(product) in products_Flash_Sales" class="list-product margin-right-product">
-          <CustomItemProduct :product="product" />
+      <div style="display: flex; width: 110%; align-items: center; align-content: space-between;">,
+        <div class="view-arrow" style="position: absolute; z-index: 10;">
+          <button class="view-circle-arrow" @click="prevSlide" style="background: transparent; border: none;">
+            <svg class="icon arrow-left" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+              <path d="M7.99976 15L0.999756 8L7.99976 1" stroke="#333" stroke-width="1.2" stroke-linejoin="round">
+              </path>
+            </svg>
+          </button>
+        </div>
+        <swiper
+            ref="mySwiper"
+            :slides-per-view="5"
+            @swiper="onSwiper"
+            @slideChange="onSlideChange"
+            style="display: flex; align-items: center; width: 100%;"
+        >
+
+          <swiper-slide v-for="(product) in products_Flash_Sales" class="list-product margin-right-product">
+            <CustomItemProduct :product="product" />
+          </swiper-slide>
+
+          <!-- Thêm 3 cái slide trống để tránh kéo bị khuất -->
+          <swiper-slide class="list-product margin-right-product"></swiper-slide>
+          <swiper-slide class="list-product margin-right-product"></swiper-slide>
+          <swiper-slide class="list-product margin-right-product"></swiper-slide>
+        </swiper>
+        <div class="view-arrow" style="position: absolute; z-index: 10; margin-left: 1450px;">
+          <button class="view-circle-arrow" @click="nextSlide">
+            <svg class="icon arrow-right" viewBox="0 0 9 16"
+                 fill="none" xmlns="http://www.w3.org/2000/svg"
+                 style="width: 24px; height: 24px;"
+            >
+              <path d="M1 15L8 8L0.999999 1" stroke="#333"
+                    stroke-width="1.2" stroke-linejoin="round">
+              </path>
+            </svg>
+          </button>
         </div>
       </div>
 
-      <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center; margin-top: 5%">
+      <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center; margin-top: 4%">
         <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
       </div>
     </div>
@@ -134,8 +204,23 @@ export default {
 //}
 
 .margin-right-product {
-  margin-right: 50px;
+  margin-right: 60px;
 }
 
+.view-arrow{
+  height: 50px;
+  align-content: center;
+}
+
+.view-circle-arrow{
+  height: 100%;
+  width: 50px;
+  border-radius: 50px;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 
 </style>

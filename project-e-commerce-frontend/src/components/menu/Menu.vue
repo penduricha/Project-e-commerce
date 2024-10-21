@@ -180,7 +180,9 @@ export default{
 
 
 function removeEmailPhoneNumber(){
+  const routerDao = new RouterDao();
   localStorage.removeItem('emailPhoneNumber');
+  routerDao.saveRouterPathToSessionStorage("/home-page");
 }
 
 </script>
@@ -235,11 +237,14 @@ function removeEmailPhoneNumber(){
             </svg>
           </button>
 
-          <button class="button-icon">
+          <div class="button-icon">
+            <button class="style-icon-notification">
+              3
+            </button>
             <svg fill="currentColor" class="bi bi-cart3 style-icon-menu" viewBox="0 0 16 16">
               <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
             </svg>
-          </button>
+          </div>
 
           <div class="button-icon button-icon-account"
               @click="showDropdownAccount()"
@@ -420,7 +425,6 @@ function removeEmailPhoneNumber(){
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 80px;
   background-color: transparent;
   border: transparent;
 }
@@ -438,9 +442,7 @@ function removeEmailPhoneNumber(){
 .menu-account-drop {
   position: absolute;
   left: 77.5%;
-  /* Đặt vị trí từ bên trái */
   top: 14%;
-  /* Đặt vị trí từ trên cùng */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -515,5 +517,19 @@ function removeEmailPhoneNumber(){
   &.none-margin-left{
     margin-left: 0;
   }
+}
+
+.style-icon-notification{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #DB4444;
+  color: white;
+  margin-top: -24px;
+  margin-right: -20px;
+  border-radius: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

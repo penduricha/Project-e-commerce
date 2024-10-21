@@ -1,6 +1,6 @@
 import './assets/main.css';
 import 'bootstrap/dist/css/bootstrap.css';
-
+import 'bootstrap/dist/js/bootstrap.js';
 import routers from "@/listRouters.js";
 import App from './App.vue';
 import { createApp } from 'vue';
@@ -18,23 +18,7 @@ import HomePageWithAccount from "@/pages/HomePageAccount.vue";
 import { createVuetify } from 'vuetify';
 import 'vuetify/styles';
 import 'vuetify/dist/vuetify-labs.min.css';
-// import '@mdi/font/css/materialdesignicons.css';
-// const vuetify = createVuetify();
-// function getRouterFromLocalStorage(){
-//     const router = localStorage.getItem('router');
-//     if(router){
-//         const { _emailPhoneNumber, _routerPath } = JSON.parse(router);
-//         return new Router(_emailPhoneNumber, _routerPath);
-//     }
-//     else {
-//         return null;
-//     }
-// }
 
-// function getRouterFromSessionStorage(){
-//     const routerDao = new RouterDao();
-//     return routerDao.getRouterFromSessionStorage();
-// }
 const vuetify = createVuetify();
 
 //tạo path và emailPhoneNumber

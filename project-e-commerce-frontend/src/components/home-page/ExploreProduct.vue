@@ -97,7 +97,7 @@ function chunkArray(array, chunkSize) {
         </div>
       </div>
       <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
-        <CustomButton @click="toggleViewAll()" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
+        <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
       </div>
     </div>
   </div>

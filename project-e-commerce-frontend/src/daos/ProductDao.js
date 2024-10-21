@@ -30,4 +30,17 @@ export default class ProductDao {
             return null;
         }
     }
+
+    async getBestSellingProducts() {
+        let products = [];
+        try{
+            const response = await ProductService.fetchProducts_By_Event_Best_Selling();
+            products = response.data;
+            return products;
+        }catch(error){
+            console.error(error);
+            alert(error);
+            return null;
+        }
+    }
 }

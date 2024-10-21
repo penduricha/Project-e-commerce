@@ -1,11 +1,12 @@
 <template>
   <div>
     <component :is="currentComponent" />
-    <div style="width: 80.15%; background-color: black; display: flex; justify-content: center; align-items: center;">
+    <div style="width: 100%; background-color: black; display: flex; justify-content: center; align-items: center;">
       <div class="group-button">
-        <div class="button-in-group" v-for="(button, index) in buttons" :key="index">
-          <button class="button-pagination" @click="changeComponent(index)"/>
-
+        <div class="button-in-group" v-for="(button, index) in buttons" :key="index"
+             :style="getButtonStyle(index)">
+          <button class="button-pagination" @click="changeComponent(index)"
+                  :style="getPaginationStyle(index)"/>
         </div>
       </div>
     </div>
@@ -31,21 +32,30 @@ export default {
   data() {
     return {
       currentComponent: 'Iphone',
-      //ds components
-      //theo trinh tu paginations
-      buttons: ['Iphone','Xiaomi','Samsung','Oppo','Ipad'],
-    }
+      buttons: ['Iphone', 'Xiaomi', 'Samsung', 'Oppo', 'Ipad'],
+    };
   },
+
   methods: {
     changeComponent(index) {
       this.currentComponent = this.buttons[index];
     },
+    getButtonStyle(index) {
+      return {
+        backgroundColor: this.currentComponent === this.buttons[index] ? 'white' : 'grey',
+      };
+    },
+    getPaginationStyle(index) {
+      return {
+        backgroundColor: this.currentComponent === this.buttons[index] ? '#DB4444' : 'transparent',
+      };
+    },
   },
 };
 </script>
-<style>
 
-.group-button{
+<style>
+.group-button {
   width: 100px;
   height: 20px;
   display: flex;
@@ -53,10 +63,9 @@ export default {
   align-items: center;
 }
 
-.button-in-group{
+.button-in-group {
   width: 15px;
   height: 15px;
-  background-color: transparent;
   border-radius: 100px;
   border: none;
   display: flex;
@@ -64,11 +73,13 @@ export default {
   align-items: center;
 }
 
-.button-pagination{
+.button-pagination {
   border-radius: 200px;
   border: none;
-  width: 80%;
-  height: 80%;
-  background-color: grey;
+  width: 70%;
+  height: 70%;
+  background-color: transparent;
+  text-align: center;
+  /* Default background */
 }
 </style>

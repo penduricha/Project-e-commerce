@@ -19,4 +19,8 @@ export default class ProductService {
     static fetchProducts_By_Event_Explore_Our_Products(){
         return apiClient.get(`/products-explore-our-products`);
     }
+
+    static fetchProducts_By_Event_Best_Selling(){
+        return apiClient.get(`/products-best-selling`);
+    }
 }

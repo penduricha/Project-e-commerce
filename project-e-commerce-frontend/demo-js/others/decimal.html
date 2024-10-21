@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        function getDecimalPart(num) {
+            num = num.toFixed(2);
+            const integerPart = Math.floor(num);
+            const decimalPart = num - integerPart;
+            const decimalAsInt = Math.round(decimalPart * 10000);
+            return decimalAsInt.toString().padStart(2, '0');
+        }
+
+        function isZero(number){
+            return Number(number) === 0;
+        }
+
+        console.log(getDecimalPart(10.11));
+        console.log(getDecimalPart(10.13));
+        console.log(getDecimalPart(10.14));
+        console.log(getDecimalPart(10.0045));
+        console.log(isZero(getDecimalPart(10.00000)));
+    </script>
+</body>
+</html>
