@@ -88,7 +88,7 @@ function isZero(number){
             </div>
       </div>
       <div style="height: 50px;" class="item-cart">
-        <button @click="" class="add-to-cart">Add to Cart</button>
+        <button @click="" class="add-to-cart">Add To Cart</button>
       </div>
     </div>
     <div class="item-content">

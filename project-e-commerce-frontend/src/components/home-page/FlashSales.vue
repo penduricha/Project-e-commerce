@@ -5,11 +5,20 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import ProductDao from "@/daos/ProductDao.js";
 
-import { ref } from 'vue';
+
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 //npm install vue3-carousel
 //npm install vuetify@3.7.3
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import RouterDao from "@/daos/RouterDao.js";
 export default {
   name:'FlashSales',
   components:{
@@ -20,40 +29,55 @@ export default {
     SwiperSlide,
   },
 
+
   setup() {
-    const mySwiper = ref(null); // Khai báo ref cho Swiper
+
+
+    // const onSwiper = (swiper) => {
+    //   console.log(swiper);
+    //   mySwiper.value = swiper; // Lưu instance vào ref
+    // };
+    //
+    // const onSlideChange = () => {
+    //   console.log('slide change');
+    // };
 
     const onSwiper = (swiper) => {
       console.log(swiper);
-      mySwiper.value = swiper; // Lưu instance vào ref
     };
 
     const onSlideChange = () => {
       console.log('slide change');
     };
 
-    const slideCount = 4;
-    // Số lượng slide sẽ lướt mỗi lần
-
-    const prevSlide = () => {
-      if (mySwiper.value) {
-        mySwiper.value.slideTo(mySwiper.value.activeIndex - slideCount);
-      }
-    };
-
-    const nextSlide = () => {
-      if (mySwiper.value) {
-        mySwiper.value.slideTo(mySwiper.value.activeIndex + slideCount);
-      }
-    };
-
     return {
-      mySwiper,
       onSwiper,
       onSlideChange,
-      prevSlide,
-      nextSlide,
+      modules: [Navigation, Pagination, Scrollbar, A11y],
     };
+
+    //const slideCount = 1;
+    // Số lượng slide sẽ lướt mỗi lần
+
+    // const prevSlide = () => {
+    //   if (mySwiper.value) {
+    //     mySwiper.value.slideTo(mySwiper.value.activeIndex - slideCount);
+    //   }
+    // };
+    //
+    // const nextSlide = () => {
+    //   if (mySwiper.value) {
+    //     mySwiper.value.slideTo(mySwiper.value.activeIndex + slideCount);
+    //   }
+    // };
+    //
+    // return {
+    //   mySwiper,
+    //   onSwiper,
+    //   onSlideChange,
+    //   prevSlide,
+    //   nextSlide,
+    // };
   },
   // props:['product'],
   data(){
@@ -80,6 +104,17 @@ export default {
         alert(e);
       }
     },
+
+    handleViewAll_FlashSale(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/view-all-flash-sales");
+      this.$router.replace({
+        path: '/view-all-flash-sales',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
   },
 
   computed: {
@@ -92,6 +127,9 @@ export default {
     // customItemProductClass(){
     //   return this.products_Flash_Sales.length >= 4 ? 'margin-right-none' : 'margin-right-have';
     // },
+    slidesPerGroup () {
+      return this.products_Flash_Sales.length % 2 === 0 ? 2 : 1;
+    }
   }
 }
 //khai các ham xu li khac
@@ -112,48 +150,47 @@ export default {
     </div>
     <div class="view-list-product">
       <!--Ap dung computed cho scss-->
-      <div style="display: flex; width: 110%; align-items: center; align-content: space-between;">,
-        <div class="view-arrow" style="position: absolute; z-index: 10;">
-          <button class="view-circle-arrow" @click="prevSlide" style="background: transparent; border: none;">
-            <svg class="icon arrow-left" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
-              <path d="M7.99976 15L0.999756 8L7.99976 1" stroke="#333" stroke-width="1.2" stroke-linejoin="round">
-              </path>
-            </svg>
-          </button>
-        </div>
+      <div class="style-view-flash-sales">,
+<!--        <div class="view-arrow" >-->
+<!--          <button class="view-circle-arrow" @click="prevSlide" style="background: transparent; border: none;">-->
+<!--            <svg class="icon arrow-left" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">-->
+<!--              <path d="M7.99976 15L0.999756 8L7.99976 1" stroke="#333" stroke-width="1.2" stroke-linejoin="round">-->
+<!--              </path>-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
         <swiper
-            ref="mySwiper"
-            :slides-per-view="5"
+            :modules="modules"
+            :slides-per-view="4"
+            :space-between="60"
+            :slides-per-group="slidesPerGroup"
+            navigation
             @swiper="onSwiper"
             @slideChange="onSlideChange"
-            style="display: flex; align-items: center; width: 100%;"
+            class="style-swiper"
+            :navigation="{ nextEl: '.custom-next', prevEl: '.custom-prev' }"
         >
 
           <swiper-slide v-for="(product) in products_Flash_Sales" class="list-product margin-right-product">
             <CustomItemProduct :product="product" />
           </swiper-slide>
-
-          <!-- Thêm 3 cái slide trống để tránh kéo bị khuất -->
-          <swiper-slide class="list-product margin-right-product"></swiper-slide>
-          <swiper-slide class="list-product margin-right-product"></swiper-slide>
-          <swiper-slide class="list-product margin-right-product"></swiper-slide>
         </swiper>
-        <div class="view-arrow" style="position: absolute; z-index: 10; margin-left: 1450px;">
-          <button class="view-circle-arrow" @click="nextSlide">
-            <svg class="icon arrow-right" viewBox="0 0 9 16"
-                 fill="none" xmlns="http://www.w3.org/2000/svg"
-                 style="width: 24px; height: 24px;"
-            >
-              <path d="M1 15L8 8L0.999999 1" stroke="#333"
-                    stroke-width="1.2" stroke-linejoin="round">
-              </path>
-            </svg>
-          </button>
-        </div>
+<!--        <div class="view-arrow" style="position: absolute; z-index: 10; margin-left: 1450px;">-->
+<!--          <button class="view-circle-arrow" @click="nextSlide">-->
+<!--            <svg class="icon arrow-right" viewBox="0 0 9 16"-->
+<!--                 fill="none" xmlns="http://www.w3.org/2000/svg"-->
+<!--                 style="width: 24px; height: 24px;"-->
+<!--            >-->
+<!--              <path d="M1 15L8 8L0.999999 1" stroke="#333"-->
+<!--                    stroke-width="1.2" stroke-linejoin="round">-->
+<!--              </path>-->
+<!--            </svg>-->
+<!--          </button>-->
+<!--        </div>-->
       </div>
 
-      <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center; margin-top: 4%">
-        <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
+      <div class="style-button-view-all">
+        <CustomButton @click="handleViewAll_FlashSale()" class="button-view-all" text-button="View All Products"/>
       </div>
     </div>
   </div>
@@ -202,6 +239,41 @@ export default {
 //    justify-content: justify-content(4);
 //  }
 //}
+.swiper-button-next {
+  margin-top: -70px;
+}
+
+.swiper-button-prev{
+  margin-top: -70px;
+}
+
+
+.style-swiper{
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.style-view-flash-sales{
+  display: flex;
+  width: 100%;
+  align-content: space-between;
+}
+
+.style-button-view-all{
+  width: 100%;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+}
+
+.button-view-all{
+  width: 234px;
+  height: 100%;
+  text-align: center;
+}
 
 .margin-right-product {
   margin-right: 60px;
@@ -210,6 +282,9 @@ export default {
 .view-arrow{
   height: 50px;
   align-content: center;
+  position: absolute;
+  z-index: 10;
+  padding-top: 160px;
 }
 
 .view-circle-arrow{
@@ -221,6 +296,21 @@ export default {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+.custom-prev, .custom-next {
+  position: absolute;
+  color: red;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-prev {
+  left: 10px;
+}
+
+.custom-next {
+  right: 10px;
 }
 
 </style>

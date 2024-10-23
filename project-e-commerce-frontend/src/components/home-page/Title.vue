@@ -2,7 +2,7 @@
 import CustomButton from "@/components/base/CustomButton.vue";
 
 export default {
-  name:'Title',
+  name:'ViewTitle',
 
   props: ['textTimeTitle','textTitle'],
 
@@ -35,10 +35,6 @@ export default {
         <p class="style-content-title">{{textTitle}}</p>
       </div>
     </div>
-<!--    <div class="content-button-view">-->
-<!--      <CustomButton  @click=""  style="width: 100%; height: 50%; margin-top: 30%;" text-button="View All"/>-->
-<!--      &lt;!&ndash; v-if="getTextTitle() !== 'Flash Sales'" &ndash;&gt;-->
-<!--    </div>-->
   </div>
 </template>
 
@@ -47,8 +43,6 @@ export default {
   height: 100%;
   flex: 7;
 }
-
-
 
 .title-time{
   height: 40px;

@@ -33,8 +33,14 @@ from Product p
 ) w_min on p.product_id = w_min.product_id
 left join ware_house w on w.ware_house_id = w_min.warehouse_id
 left join discount d on d.ware_house_id = w.ware_house_id
-where (e.name_event_purchasing = 'New' or e.name_event_purchasing ='Explore Our Products')
+where (e.name_event_purchasing = 'Flash Sales')
 and w.quantity > 0 order by product_id;
+
+select * from mapping_event_purchasing_product where event_purchasing_id = 1 order by product_id;
+
+select product_id from product order by product_id;
+
+delete from mapping_event_purchasing_product where mapping_event_purchasing_product = 89;
 
 select * from discount;
 
@@ -98,14 +104,11 @@ select * from mapping_event_purchasing_product where event_purchasing_id = 1 ord
 select product_id from product order by product_id;
 
 insert into mapping_event_purchasing_product (event_purchasing_id, product_id) values
-(1, 111),
-(1, 112),
-(1, 113),
-(1, 114),
-(1, 115),
-(1, 116),
-(1, 117),
-(1, 118);
+(1, 120),
+(1, 121),
+(1, 122),
+(1, 123),
+(1, 124);
 
 select * from mapping_event_purchasing_product where event_purchasing_id = 3 order by product_id;
 
@@ -149,7 +152,7 @@ with RankedProducts as (
     where
         w.quantity > 0
         and
-        (e.name_event_purchasing='Explore Our Products' or e.name_event_purchasing='New')
+        (e.name_event_purchasing='Flash Sales')
 )
 select
     product_id,

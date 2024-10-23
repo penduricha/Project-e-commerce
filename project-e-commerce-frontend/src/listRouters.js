@@ -4,6 +4,7 @@ import HomePage from "@/pages/HomePage.vue";
 import HomePageWithAccount from "@/pages/HomePageAccount.vue";
 import Screen404 from "@/pages/Screen404.vue";
 import AboutPage from "@/pages/AboutPage.vue";
+import ViewAll_FlashSales from "@/components/home-page/view-all-products/ViewAll_FlashSales.vue";
 
 const routers = [
     { path: '/', component:  HomePage},
@@ -12,6 +13,7 @@ const routers = [
     { path: '/home-page', component: HomePage },
     { path: '/screen-404', component: Screen404 },
     { path: '/about-page', component: AboutPage },
+    { path: '/view-all-flash-sales', component: ViewAll_FlashSales },
     { path: '/home-page-with-account', component: HomePageWithAccount,
         props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })},
 ];

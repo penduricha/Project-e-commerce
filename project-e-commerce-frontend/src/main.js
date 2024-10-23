@@ -12,6 +12,7 @@ import SignupScreen from "@/signup-screen/SignupScreen.vue";
 import Screen404 from "@/pages/Screen404.vue";
 import AboutPage from "@/pages/AboutPage.vue";
 import HomePageWithAccount from "@/pages/HomePageAccount.vue";
+import ViewAll_FlashSales from "@/components/home-page/view-all-products/ViewAll_FlashSales.vue";
 
 //vuetify
 //npm install vuetify@next @mdi/font
@@ -60,6 +61,7 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
             { path: '/home-page', component: HomePage },
             { path: '/screen-404', component: Screen404 },
             { path: '/about-page', component: AboutPage },
+            { path: '/view-all-flash-sales', component: ViewAll_FlashSales },
             { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: emailPhoneNumber })}
         ],
     });
