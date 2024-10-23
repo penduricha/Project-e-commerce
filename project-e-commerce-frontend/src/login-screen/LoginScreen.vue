@@ -187,6 +187,7 @@ function isFullOfSpaces(s) {
               <p style="font-size: 36px; text-align: left">Log in to Exclusive</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
               <div style="width: 100%; height: 275px; margin-top: 30px;">
+
                 <input @input="validateEmailAndPhoneNumber()" type="text" maxlength=50 v-model="emailPhoneNumber" class="form-control input" placeholder="Email or Phone Number">
                 <span class="span-error">{{errorEmailPhoneNumber}}</span>
 

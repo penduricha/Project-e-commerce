@@ -1,6 +1,9 @@
 <script>
+import CustomButton from "@/components/base/CustomButton.vue";
+
 export default {
   name: 'ModalSuccess',
+  components: {CustomButton},
   props:['textSuccess'],
   data() {
     return {
@@ -28,10 +31,8 @@ export default {
 <template>
   <div class="modal" v-if="show" role="dialog">
     <div class="modal-content" style="width: 20%; border-style: solid">
-      <h5 style="text-align: center">{{textSuccess}}</h5>
-      <div class="buttons">
-        <button class="btn btn-success" @click="continueProgram()" style="border-radius: 10px">OK</button>
-      </div>
+      <h5 style="text-align: center">Register Successfully</h5>
+      <CustomButton class="buttons" @click="continueProgram()" style="border-radius: 4px" text-button="Return to Login."/>
     </div>
   </div>
 </template>
@@ -43,17 +44,19 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
+  border-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
   background-color: #fefefe;
   padding: 20px;
   border: 1px solid #888;
-  width: 30%;
+  width: 200px;
+  height: 200px;
+  margin-top: 1px;
   display: flex;
   justify-content: center;
   justify-items: center;
@@ -63,5 +66,7 @@ export default {
   display: flex;
   margin-top: 20px;
   justify-content: center;
+  height: 50px;
+  align-items: center;
 }
 </style>

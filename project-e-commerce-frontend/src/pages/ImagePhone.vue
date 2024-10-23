@@ -1,9 +1,9 @@
 <template>
   <div>
     <component :is="currentComponent" />
-    <div style="width: 100%; background-color: black; display: flex; justify-content: center; align-items: center;">
+    <div class="container-pagination">
       <div class="group-button">
-        <div class="button-in-group" v-for="(button, index) in buttons" :key="index"
+        <div class="button-in-group" v-for="(button, index) in buttons"
              :style="getButtonStyle(index)">
           <button class="button-pagination" @click="changeComponent(index)"
                   :style="getPaginationStyle(index)"/>
@@ -55,6 +55,17 @@ export default {
 </script>
 
 <style>
+
+.container-pagination{
+
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 950px;
+}
+
 .group-button {
   width: 100px;
   height: 20px;
@@ -71,6 +82,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .button-pagination {

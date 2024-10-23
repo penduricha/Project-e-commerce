@@ -1,6 +1,7 @@
 <script>
 import CustomDiscount from "@/components/base/CustomDiscount.vue";
 import Product from "@/models/Product.js";
+import CustomNewLabel from "@/components/base/CustomNewLabel.vue";
 
 export default {
   name: 'CustomItemProduct',
@@ -8,6 +9,7 @@ export default {
   //   // Có thể thêm props nếu cần
   // },
   components: {
+    CustomNewLabel,
     CustomDiscount,
   },
 
@@ -22,6 +24,7 @@ export default {
       {
         return priceView.toFixed(2);
       }
+      ///return  price - price*(numberOfDiscount / 100);
     },
 
     getProduct(){
@@ -29,7 +32,9 @@ export default {
           this.product.name,
           this.product.image,
           this.product.price,
-          this.product.number_of_discounts);
+          this.product.number_of_discounts,
+          this.product.name_event_purchasing
+      );
     }
   },
 
@@ -58,9 +63,12 @@ function isZero(number){
 
   <div class="item-product">
     <div style="background-color: #F5F5F5; border-radius: 4px; width: auto" >
-        <CustomDiscount :text-number-discount=getProduct()._numberOfDiscount*(-1)
+        <CustomDiscount :text-number-discount="getProduct()._numberOfDiscount*(-1)"
                         background-color="#DB4444"
                         v-if="getProduct()._numberOfDiscount > 0" style=" margin-top: 10px; margin-left: 15px; position: absolute"/>
+        <CustomNewLabel text="NEW"
+                      background-color="#00FF66"
+                      v-if="getProduct()._nameEventPurchasing === 'New'" style=" margin-top: 10px; margin-left: 15px; position: absolute"/>
         <div class="item-heart-eye">
           <div class="item-heart">
             <svg fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16" style="width: 20px; height: 20px; cursor: pointer;">
@@ -76,7 +84,7 @@ function isZero(number){
         </div>
         <div class="item-image">
             <div class="image-content">
-              <img :src="getProduct()._image" style="width: auto; height: 100%;" alt="product-image"/>
+              <img :src="getProduct()._image" style="width: 100%; height: 100%;" alt="product-image"/>
             </div>
       </div>
       <div style="height: 50px;" class="item-cart">
@@ -87,7 +95,7 @@ function isZero(number){
       <div class="content-product">
         <p style="font-size: 16px; font-weight: 500">{{product.name}}</p>
         <div class="content-price">
-          <p style="font-size: 16px; color: #DB4444; font-weight: 600;" v-if="product.price !== 0 ">${{ getPrice_By_Discount(getProduct()._price, getProduct()._numberOfDiscount)}}</p>
+          <p style="font-size: 16px; color: #DB4444; font-weight: 600;" v-if="getProduct()._price !== 0 ">${{ getPrice_By_Discount(getProduct()._price, getProduct()._numberOfDiscount)}}</p>
           <p style="font-size: 16px; color: #7c7c7c; font-weight: 600; margin-left: 5%; text-decoration: line-through;" v-if="getProduct()._numberOfDiscount > 0">${{ getProduct()._price }}</p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import Menu from "@/components/menu/Menu.vue";
 import User from "@/models/User.js";
 import ModalSuccess from "@/components/modal/ModalSuccess.vue";
+import RouterDao from "@/daos/RouterDao.js";
 
 
 export default {
@@ -178,6 +179,8 @@ export default {
     },
 
     handleContinue(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/login-screen");
       this.$router.replace({ path: '/login-screen' }).catch((error) => { console.error('Error navigating :', error); });
     },
 
@@ -256,8 +259,8 @@ function isFullOfSpaces(s) {
                 <CustomButton @click="validateNullAndCreateAccount()" style="width: 100%; height: 20%; margin-top: 30px" text-button="Create Account"/>
                 <div style="display: flex; margin-top: 10px;">
                   <p style="font-size: 16px; text-align: left; margin-top: 3px;">Already have account?</p>
-                  <div style="height: 50%; border-bottom: solid 1px; width: 12.75%; padding: 0; margin-left: 15px; margin-top: 3px;">
-                    <router-link to="/login-screen" style="font-size: 16px; text-align: left;  color: black; text-decoration: none;" class="login">Log in</router-link>
+                  <div style="height: 50%;  width: 12.75%; padding: 0; margin-left: 15px; margin-top: 3px;">
+                    <p @click="handleContinue()" style="font-size: 16px; text-align: left;  color: black; text-decoration: none; border-bottom: solid 1px; cursor: pointer; display: flex; justify-content: center; align-items: center;" class="login">Log in</p>
                   </div>
                 </div>
               </div>

@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Entity
 @Setter
-@ToString
 @NoArgsConstructor
 public class Product implements Serializable {
 

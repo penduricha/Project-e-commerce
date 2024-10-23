@@ -90,7 +90,7 @@ function chunkArray(array, chunkSize) {
       <div v-for="(row, rowIndex) in groupFourExploreProducts()" :key="rowIndex" class="view-list-product-row"
            :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }"
       >
-        <div v-for="(product, productIndex) in row" :key="product.id"
+        <div v-for="(product, productIndex) in row"
              class="list-product"
              :style="{ marginRight: (row.length < 4 && productIndex !== row.length - 1) ? '60px' : '0' }">
           <CustomItemProduct :product="product" />

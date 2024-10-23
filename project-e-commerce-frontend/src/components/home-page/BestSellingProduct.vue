@@ -32,6 +32,7 @@ export default {
     //this.getIsViewAll();
     //this.getIsViewAll();
   },
+
   methods: {
     async getProductBestSelling_From_API(){
       const productDao = new ProductDao();
@@ -46,6 +47,7 @@ export default {
       }
     },
   },
+
   computed: {
 
   },
@@ -66,7 +68,7 @@ export default {
     <div class="view-title-information">
       <Title text-time-title="Today's" ref="titleComponent"  :text-title="'Best Selling Product'"/>
     </div>
-    <div class="view-button-view-all" v-if="'Best Selling Product'">
+    <div class="view-button-view-all">
       <CustomButton  style="width: 100%; height: 50%; margin-top: 34%;" text-button="View All"/>
     </div>
     <!-- ref="titleComponent": là dùng titleComponent gọi các data method nó ra-->

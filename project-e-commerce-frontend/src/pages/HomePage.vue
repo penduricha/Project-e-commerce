@@ -240,18 +240,6 @@ export default {
           <ImagePhone/>
         </div>
       </div>
-
-<!--      <div class="btn-group dropend">-->
-<!--        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--          Dropright-->
-<!--        </button>-->
-<!--        <ul class="dropdown-menu">-->
-<!--          <li>Hello</li>-->
-<!--          <li>Hi</li>-->
-<!--        </ul>-->
-<!--      </div>-->
-
-
       <div class="view-product-slide">
         <FlashSales/>
       </div>

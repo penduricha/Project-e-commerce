@@ -21,8 +21,8 @@ export default{
       <p style="color: white; margin-top: 15px; font-size: 14px;">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</p>
       <a href="" style="color: white; margin-top: 12px; font-size: 14px; font-weight: bold; text-decoration: underline; margin-left: 10px">ShopNow</a>
     </div>
-    <div style="justify-content: center; display: flex; flex: 1;">
-      <select name="languages" v-model="language" style="color: white; background-color: black; margin-left: 225px; width: 80px;" class="custom-select">
+    <div style="justify-content: center; display: flex; flex: 1; align-items: center">
+      <select name="languages" v-model="language" style="color: white; background-color: black; margin-left: 230px; width: 80px;" class="custom-select">
         <option value="English">English</option>
         <option value="Italian">Italian</option>
         <option value="French">French</option>
@@ -41,7 +41,7 @@ export default{
 }
 
 .custom-select {
-  border-radius: 1px;
+  border-radius: 0;
   position: relative;
   height: 70%;
   margin-top: 10px;

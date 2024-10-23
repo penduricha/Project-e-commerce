@@ -39,7 +39,7 @@ public class ProductController {
 
     @GetMapping("/products-explore-our-products")
     public List<Map<String, Object>> getExploreProducts() throws JpaSystemException {
-        return productRepository.getProducts_By_Event("Explore Our Products");
+        return productRepository.getProducts_By_event_Explore_Product();
     }
 
     @GetMapping("/products-best-selling")

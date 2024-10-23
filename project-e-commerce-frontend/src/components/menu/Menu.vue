@@ -248,15 +248,9 @@ function removeEmailPhoneNumber(){
 
           <div class="button-icon button-icon-account"
               @click="showDropdownAccount()"
+               style="border-radius: 80px"
                v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404')) && ( getEmailPhoneNumberFromLocalStorage()!==null )">
-            <div style="width: 100%;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 80px;
-                        background-color: transparent;
-                        border: transparent; ">
+            <div class="style-icon-account">
               <svg fill="currentColor" class="bi bi-person style-icon-menu style-account-icon" viewBox="0 0 16 16">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
               </svg>
@@ -352,6 +346,7 @@ function removeEmailPhoneNumber(){
   flex: 10;
   display: flex;
 }
+
 .menu-exclusive{
   flex: 0.4;
   display: flex;
@@ -374,7 +369,6 @@ function removeEmailPhoneNumber(){
 
 .navbar-nav {
   display: flex;
-  /* Hiển thị các phần tử theo hàng */
   flex-direction: row;
   list-style: none;
   padding: 0;
@@ -406,7 +400,7 @@ function removeEmailPhoneNumber(){
   height: 100%;
   background-color: #F5F5F5;
   padding-left: 5px;
-  border-radius: 4px;
+  border-radius: 2px;
   font-size: 16px;
   border-color: transparent;
   display: flex;
@@ -441,8 +435,8 @@ function removeEmailPhoneNumber(){
 
 .menu-account-drop {
   position: absolute;
-  left: 77.5%;
-  top: 14%;
+  margin-left: 1300px;
+  margin-top: 130px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -531,5 +525,16 @@ function removeEmailPhoneNumber(){
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.style-icon-account{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 80px;
+  background-color: transparent;
+  border: transparent;
 }
 </style>

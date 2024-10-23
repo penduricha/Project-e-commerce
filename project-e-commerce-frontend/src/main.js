@@ -81,16 +81,11 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
 //run
 function execute(){
     if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-
         let routerPath = routerDao.getRouterPathFromSessionStorage();
-
         initRouter(routers,routerPath);
     }else{
-
         let routerPath = routerDao.getRouterPathFromSessionStorage();
-
         let emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
-
         initHomePageAccount(emailPhoneNumber, routerPath);
     }
 }

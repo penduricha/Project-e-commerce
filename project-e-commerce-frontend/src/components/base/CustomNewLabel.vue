@@ -1,10 +1,10 @@
 <script>
 export default {
-  name: 'CustomDiscount',
+  name: 'CustomNewLabel',
   // props: {
   //   // Có thể thêm props nếu cần
   // },
-  props: ['textNumberDiscount','backgroundColor'],
+  props: ['text','backgroundColor'],
   methods: {
 
   },
@@ -17,13 +17,14 @@ export default {
 </script>
 
 <template>
-  <div class="container-discount" :style="{ backgroundColor: backgroundColor }">
-    {{textNumberDiscount}}%
+  <div class="container-new" :style="{ backgroundColor: backgroundColor }">
+<!--    <p style="font-size: 12px; color: #FAFAFA; text-align: center;">{{text}}</p>-->
+    {{text}}
   </div>
 </template>
 
 <style>
-.container-discount{
+.container-new{
   width: 55px;
   height: 25px;
   border-radius: 4px;

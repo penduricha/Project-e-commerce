@@ -12,7 +12,8 @@ const routers = [
     { path: '/home-page', component: HomePage },
     { path: '/screen-404', component: Screen404 },
     { path: '/about-page', component: AboutPage },
-    { path: '/home-page-with-account', component: HomePageWithAccount, props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })},
+    { path: '/home-page-with-account', component: HomePageWithAccount,
+        props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })},
 ];
 export default routers;
 
