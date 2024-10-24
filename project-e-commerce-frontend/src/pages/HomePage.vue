@@ -244,7 +244,7 @@ export default {
         <FlashSales/>
       </div>
 
-      <hr style="margin-left: 9%; margin-top: 8%; width: 82%;">
+      <hr class="style-hr-line">
 
       <div class="view-product-slide">
         <BestSellingProduct/>
@@ -277,6 +277,12 @@ export default {
   padding: 4px;
   transform: rotate(315deg);
   text-align: right;
+}
+
+.style-hr-line{
+  margin-left: 9%;
+  margin-top: 8%;
+  width: 82%;
 }
 
 </style>

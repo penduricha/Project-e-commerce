@@ -170,15 +170,7 @@ function isFullOfSpaces(s) {
     <Menu style="height: 200px"/>
     <main class="main">
       <div class="container-child">
-        <div style="
-                    display: flex;
-                    justify-content: center;
-                    height: 85%;
-                    width: 127%;
-                    margin-top: 70px;
-                    padding: 0;
-                    margin-left: 25px;
-        ">
+        <div class="view-login">
           <div class="column-left">
             <img src="@/assets/images/image-cart-phone.png" alt="Image Background" style="width: 100%; height: 100%;"/>
           </div>
@@ -249,6 +241,16 @@ function isFullOfSpaces(s) {
 
 .forget-password:hover{
   background-color: transparent;
+}
+
+.view-login{
+  display: flex;
+  justify-content: center;
+  height: 85%;
+  width: 127%;
+  margin-top: 70px;
+  padding: 0;
+  margin-left: 25px;
 }
 
 </style>

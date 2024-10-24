@@ -48,7 +48,7 @@ export default {
     <main class="main" style="padding-left: 200px; padding-right: 200px;">
       <div class="description-shop">
         <div class="description-story">
-          <div style="height: 55%;width: 100%; display: flex; justify-content: space-between; flex-direction: column;">
+          <div class="description-story-child">
             <p style="font-size: 54px; font-weight: 500;">Our Story</p>
             <p style="font-size: 16px;">Launched in 2015, Exclusive is South Asia’s premier online shopping <br>
               marketplace with an active present in Bangladesh. Supported <br>
@@ -108,6 +108,14 @@ export default {
   flex: 1;
   display: flex;
   align-items: center;
+}
+
+.description-story-child{
+  height: 55%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .image-description-story{

@@ -4,6 +4,7 @@ import Title from "@/components/home-page/Title.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import ProductDao from "@/daos/ProductDao.js";
+import RouterDao from "@/daos/RouterDao.js";
 
 export default {
   name:'ExploreProduct',
@@ -28,18 +29,6 @@ export default {
   },
 
   methods: {
-    // async getExplore_Our_Product_From_API(){
-    //   const productDao = new ProductDao();
-    //   let products = [];
-    //   try{
-    //     products = await productDao.getExploreOurProducts();
-    //     console.log('Product Explore Our Product: ',products);
-    //     this.products_Explore_Products = products.slice(0,8);
-    //   }catch(e){
-    //     console.error(e);
-    //     alert(e);
-    //   }
-    // },
     async getExplore_Our_Product_From_API() {
       const productDao = new ProductDao();
       try {
@@ -65,6 +54,17 @@ export default {
         this.displayedProducts = this.allProducts.slice(0, this.productsToShow);
         // Update displayed products
       }
+    },
+
+    handleViewAll_ExploreOur_Products(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/view-all-explore-our-product");
+      this.$router.replace({
+        path: '/view-all-explore-our-product',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
     }
   }
 }
@@ -84,8 +84,6 @@ function chunkArray(array, chunkSize) {
     <div class="view-title">
       <Title text-time-title="Our Products" :text-title="'Explore Our Products'"/>
     </div>
-    <!--    v-for="(row, rowIndex) in getProductRows()" :key="rowIndex"-->
-    <!--Co the dung scss-->
     <div class="view-list-product">
       <div v-for="(row, rowIndex) in groupFourExploreProducts()" :key="rowIndex" class="view-list-product-row"
            :style="{ justifyContent: (row.length === 4) ? 'space-between' : 'none' }"
@@ -97,7 +95,7 @@ function chunkArray(array, chunkSize) {
         </div>
       </div>
       <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
-        <CustomButton @click="" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
+        <CustomButton @click="handleViewAll_ExploreOur_Products()" style="width: 234px; height: 100%; text-align: center;" text-button="View All Products"/>
       </div>
     </div>
   </div>

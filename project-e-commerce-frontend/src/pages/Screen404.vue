@@ -62,14 +62,14 @@ function getLocalStorageRouter(){
   <div class="container">
     <Header style="height: 50px"/>
     <Menu style="height: 200px"/>
-    <main class="main" style="height: 360px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <main class="main main-style">
       <div class="title-404">
         <div>
           <p style="font-size: 90px; font-weight: 450;">404 Not Found</p>
           <p style="text-align: center; font-size: 16px;">Your visited page not found. You may go home page.</p>
         </div>
       </div>
-      <CustomButton @click="handleHomePage()" style="width: 254px; height: 56px; margin-top: 15px;" text-button="Back to home page"/>
+      <CustomButton @click="handleHomePage()" class="button-back" text-button="Back to home page"/>
     </main>
     <Footer style="height: 1500px;"/>
   </div>
@@ -84,5 +84,19 @@ function getLocalStorageRouter(){
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.button-back{
+  width: 254px;
+  height: 56px;
+  margin-top: 15px;
+}
+
+.main-style{
+  height: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 </style>

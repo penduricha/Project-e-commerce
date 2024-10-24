@@ -31,7 +31,6 @@ export default{
       let products = [];
       try{
         products = await productDao.getFlashSalesProducts();
-        //console.log('Product Flash Sales: ',products);
         this.products_Flash_Sales = products;
         let products_View = await products;
         console.log('Product Flash Sales: ',products_View);
@@ -52,6 +51,8 @@ export default{
         // Increase the number of products to show
         this.displayedProducts = this.products_Flash_Sales.slice(0, this.productsToShow);
         // Update displayed products
+        console.log(this.productsToShow);
+        console.log(this.products_Flash_Sales.length);
       }
     }
   }
@@ -86,7 +87,7 @@ function chunkArray(array, chunkSize) {
               <CustomItemProduct :product="product" />
             </div>
           </div>
-          <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;">
+          <div style="width: 100%; height: 56px; display: flex; justify-content: center; align-items: center;" v-if="productsToShow <= products_Flash_Sales.length">
             <CustomButton @click="toggleViewAll()" style="width: 234px; height: 100%; text-align: center;" text-button="View More"/>
           </div>
         </div>

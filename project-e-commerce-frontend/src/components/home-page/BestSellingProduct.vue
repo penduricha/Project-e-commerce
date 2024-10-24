@@ -5,6 +5,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import CustomPaginationGrey from "@/components/paginations/CustomPaginationGrey.vue";
 import ProductDao from "@/daos/ProductDao.js";
+import RouterDao from "@/daos/RouterDao.js";
 
 export default {
   name:'BestSellingProduct',
@@ -46,7 +47,20 @@ export default {
         alert(e);
       }
     },
+
+    handleViewAll_BestSelling_Products(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/view-all-best-selling-product");
+      this.$router.replace({
+        path: '/view-all-best-selling-product',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
   },
+
+
 
   computed: {
 
@@ -66,10 +80,10 @@ export default {
 <!--  style="display: flex; margin-bottom: 4%;"-->
   <div class="view-title">
     <div class="view-title-information">
-      <Title text-time-title="Today's" ref="titleComponent"  :text-title="'Best Selling Product'"/>
+      <Title text-time-title="This Month" ref="titleComponent"  :text-title="'Best Selling Product'"/>
     </div>
     <div class="view-button-view-all">
-      <CustomButton  style="width: 100%; height: 50%; margin-top: 34%;" text-button="View All"/>
+      <CustomButton @click="handleViewAll_BestSelling_Products()"  style="width: 100%; height: 50%; margin-top: 34%;" text-button="View All"/>
     </div>
     <!-- ref="titleComponent": là dùng titleComponent gọi các data method nó ra-->
   </div>

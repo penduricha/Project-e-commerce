@@ -28,7 +28,7 @@ export default {
       <div class="title-time">
         <div class="icon-red"/>
         <div class="time-content">
-          <p class="style-time-content">{{textTimeTitle}}</p>
+          <p class="style-time-content" style="font-weight: 600; color: #DB4444;">{{textTimeTitle}}</p>
         </div>
       </div>
       <div class="title-content">
@@ -73,18 +73,14 @@ export default {
   height: 100%;
   /*cho cac thanh phan vertical giua*/
   padding-left: 16px;
-
+  color: #DB4444;
 }
 
 .style-time-content {
-  color: #DB4444;
   font-size: 16px;
   width: 100%;
   height: 100%;
-  display: flex;               /* Enable Flexbox */
-  align-items: center;        /* Center content vertically */
-  /*justify-content: center;    /* Center content horizontally (optional) */
-  /* Remove default margin */
-  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 </style>

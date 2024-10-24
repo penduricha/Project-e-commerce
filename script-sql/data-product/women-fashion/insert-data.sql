@@ -33,7 +33,7 @@ from Product p
 ) w_min on p.product_id = w_min.product_id
 left join ware_house w on w.ware_house_id = w_min.warehouse_id
 left join discount d on d.ware_house_id = w.ware_house_id
-where (e.name_event_purchasing = 'Flash Sales')
+where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our Products')
 and w.quantity > 0 order by product_id;
 
 select * from mapping_event_purchasing_product where event_purchasing_id = 1 order by product_id;
@@ -152,7 +152,7 @@ with RankedProducts as (
     where
         w.quantity > 0
         and
-        (e.name_event_purchasing='Flash Sales')
+        (e.event_purchasing_id = 1)
 )
 select
     product_id,
@@ -167,3 +167,25 @@ from
 where
     rn = 1
 order by product_id;
+
+with prioritized_products as ( select p.product_id, p.name, w.image, w.price, coalesce(d.number_of_discounts, 0) as number_of_discounts,
+e.name_event_purchasing, row_number() over (partition by p.product_id order by
+    case
+        when e.name_event_purchasing = 'New' then 1
+        when e.name_event_purchasing = 'Explore Our Products' then 2 else 3 end) as rn
+    from Product p
+        join mapping_event_purchasing_product mpe on p.product_id = mpe.product_id
+        join event_purchasing e on mpe.event_purchasing_id = e.event_purchasing_id
+        left join (select product_id, min(ware_house_id) AS warehouse_id
+                    from ware_house group by product_id
+        ) w_min on p.product_id = w_min.product_id
+    left join ware_house w on w.ware_house_id = w_min.warehouse_id
+    left join discount d on d.ware_house_id = w.ware_house_id
+    where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our Products') and w.quantity > 0)
+select product_id, name, image, name_event_purchasing, price, number_of_discounts
+from prioritized_products
+where
+    rn = 1
+order by
+    product_id;
+

@@ -23,7 +23,7 @@ export default {
       </div>
       <div class="item-link-account">
         <img src="@/assets/image-icon-social-network/twitter.png" alt="Twitter" class="style-icon-social-network">
-        <img src="@/assets/image-icon-social-network/instragram.png" alt="IG" class="style-icon-social-network">
+        <img src="@/assets/image-icon-social-network/instagram.png" alt="IG" class="style-icon-social-network">
         <img src="@/assets/image-icon-social-network/linkedin.png" alt="Linkedin" class="style-icon-social-network">
       </div>
     </div>

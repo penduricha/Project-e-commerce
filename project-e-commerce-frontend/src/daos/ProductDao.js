@@ -24,7 +24,6 @@ export default class ProductDao {
         try {
             const response = await ProductService.fetchProducts_By_Event_Explore_Our_Products();
             products = response.data;
-
             // Map the products directly to a new array of objects
             // products_Clean = products.map(product => ({
             //     product_id: product.product_id,

@@ -50,7 +50,7 @@ public class Product implements Serializable {
     @JoinColumn(name = "productTypeId")
     private ProductType productType;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<MappingEventPurchasingProduct> mappingEventPurchasingProducts = new ArrayList<>();
 

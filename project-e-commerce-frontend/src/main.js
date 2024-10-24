@@ -19,6 +19,8 @@ import ViewAll_FlashSales from "@/components/home-page/view-all-products/ViewAll
 import { createVuetify } from 'vuetify';
 import 'vuetify/styles';
 import 'vuetify/dist/vuetify-labs.min.css';
+import ViewAll_BestSellingProducts from "@/components/home-page/view-all-products/ViewAll_BestSellingProducts.vue";
+import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products/ViewAll_ExploreOurProducts.vue";
 
 const vuetify = createVuetify();
 
@@ -62,6 +64,8 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
             { path: '/screen-404', component: Screen404 },
             { path: '/about-page', component: AboutPage },
             { path: '/view-all-flash-sales', component: ViewAll_FlashSales },
+            { path: '/view-all-best-selling-product', component: ViewAll_BestSellingProducts },
+            { path: '/view-all-explore-our-product', component: ViewAll_ExploreOurProducts },
             { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: emailPhoneNumber })}
         ],
     });

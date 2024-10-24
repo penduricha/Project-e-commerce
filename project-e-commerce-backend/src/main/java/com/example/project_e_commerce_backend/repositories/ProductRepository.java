@@ -40,20 +40,64 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         "    rn = 1 order by product_id",nativeQuery = true)
     List<Map<String, Object>> getProducts_By_Event(@Param("eventName") String eventName);
 
-//    @Query(value = "",nativeQuery = true)
-//    List<Map<String, Object>> getProducts_By_eventPurchasing_Id(@Param("eventPurchasingId") Long eventPurchasingId);
-    @Query(value = "select p.product_id, p.name, w.image,e.name_event_purchasing, w.price, coalesce(d.number_of_discounts, 0) as number_of_discounts " +
-            "from Product p " +
-            "join mapping_event_purchasing_product mpe on p.product_id = mpe.product_id " +
-            "join event_purchasing e on mpe.event_purchasing_id = e.event_purchasing_id " +
-            "left join (" +
-            "    select product_id, min(ware_house_id) as warehouse_id " +
-            "    from ware_house " +
-            "    group by product_id " +
-            ") w_min on p.product_id = w_min.product_id " +
-            "left join ware_house w on w.ware_house_id = w_min.warehouse_id " +
-            "left join discount d on d.ware_house_id = w.ware_house_id " +
-            "where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our Products') " +
-            "and w.quantity > 0 order by product_id;", nativeQuery = true)
+    @Query(value = "with prioritized_products as ( select p.product_id, p.name, w.image, w.price, coalesce(d.number_of_discounts, 0) as number_of_discounts,\n" +
+            "e.name_event_purchasing, row_number() over (partition by p.product_id order by\n" +
+            "    case\n" +
+            "        when e.name_event_purchasing = 'New' then 1\n" +
+            "        when e.name_event_purchasing = 'Explore Our Products' then 2 else 3 end) as rn\n" +
+            "    from Product p\n" +
+            "        join mapping_event_purchasing_product mpe on p.product_id = mpe.product_id\n" +
+            "        join event_purchasing e on mpe.event_purchasing_id = e.event_purchasing_id\n" +
+            "        left join (select product_id, min(ware_house_id) AS warehouse_id\n" +
+            "                    from ware_house group by product_id\n" +
+            "        ) w_min on p.product_id = w_min.product_id\n" +
+            "    left join ware_house w on w.ware_house_id = w_min.warehouse_id\n" +
+            "    left join discount d on d.ware_house_id = w.ware_house_id\n" +
+            "    where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our Products') and w.quantity > 0)\n" +
+            "select product_id, name, image, name_event_purchasing, price, number_of_discounts\n" +
+            "from prioritized_products\n" +
+            "where\n" +
+            "    rn = 1\n" +
+            "order by\n" +
+            "    product_id;", nativeQuery = true)
     List<Map<String, Object>> getProducts_By_event_Explore_Product();
+
+
+    @Query(value="with RankedProducts as (\n" +
+            "    select\n" +
+            "        p.product_id,\n" +
+            "        p.name,\n" +
+            "        w.image,\n" +
+            "        w.ware_house_id,\n" +
+            "        w.price,\n" +
+            "        e.name_event_purchasing,\n" +
+            "        coalesce(d.number_of_discounts, 0) as number_of_discounts,\n" +
+            "        row_number() over (partition by p.product_id order by w.ware_house_id) as rn\n" +
+            "    from\n" +
+            "        Product p\n" +
+            "            join mapping_event_purchasing_product mpe on p.product_id = mpe.product_id\n" +
+            "            join event_purchasing e on mpe.event_purchasing_id = e.event_purchasing_id\n" +
+            "            join ware_house w on w.product_id = p.product_id\n" +
+            "            left join discount d on d.ware_house_id = w.ware_house_id\n" +
+            "    where\n" +
+            "        w.quantity > 0\n" +
+            "        and\n" +
+            "        (e.event_purchasing_id = :eventPurchasingId)\n" +
+            ")\n" +
+            "select\n" +
+            "    product_id,\n" +
+            "    name,\n" +
+            "    image,\n" +
+            "    ware_house_id,\n" +
+            "    price,\n" +
+            "    name_event_purchasing,\n" +
+            "    number_of_discounts\n" +
+            "from\n" +
+            "    RankedProducts\n" +
+            "where\n" +
+            "    rn = 1\n" +
+            "order by product_id;", nativeQuery = true)
+    List<Map<String, Object>> getProductsBy_EventPurchasingId(@Param("eventPurchasingId") Long eventPurchasingId);
+
+    Product findProductByProductId(Long productId);
 }

@@ -2,6 +2,7 @@
 import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
 import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
 
+
 import RouterDao from "@/daos/RouterDao.js";
 export default{
   name:'Menu',
@@ -247,78 +248,100 @@ function removeEmailPhoneNumber(){
           </div>
 
           <div class="button-icon button-icon-account"
-              @click="showDropdownAccount()"
                style="border-radius: 80px"
                v-if="(!isActiveRoute('/home-page')) && (!isActiveRoute('/screen-404')) && ( getEmailPhoneNumberFromLocalStorage()!==null )">
-            <div class="style-icon-account">
+            <button class="style-icon-account"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
+            >
               <svg fill="currentColor" class="bi bi-person style-icon-menu style-account-icon" viewBox="0 0 16 16">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
               </svg>
+            </button>
+<!--            <ul class="dropdown-menu">-->
+<!--              <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--              <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--              <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--            </ul>-->
+            <div class="menu-account-drop dropdown-menu" >
+              <div class="menu-account-drop-child">
+                <div class="item-menu">
+                  <div class="item-menu-image">
+                    <svg fill="currentColor" class="bi bi-person style-icon-menu style-account-icon" viewBox="0 0 16 16" style="color: white">
+                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                    </svg>
+                  </div>
+                  <div class="item-menu-content">
+                    <button class="style-item-menu-account">Manage My Account</button>
+                  </div>
+                </div>
+                <div class="item-menu">
+                  <div class="item-menu-image">
+                    <img src="@/assets/image-menu-account/menu-order-icon.png" class="style-item-image" alt="menu order">
+                  </div>
+                  <div class="item-menu-content">
+                    <button class="style-item-menu-account">My Order</button>
+                  </div>
+                </div>
+                <div class="item-menu">
+                  <div class="item-menu-image">
+                    <svg fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16" style="color: white; width: 25px; height: 25px;">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                  </div>
+                  <div class="item-menu-content">
+                    <button class="style-item-menu-account">My Cancellations</button>
+                  </div>
+                </div>
+                <div class="item-menu">
+                  <div class="item-menu-image">
+                    <svg fill="currentColor" class="bi bi-star" viewBox="0 0 16 16" style="color: white; width: 25px; height: 25px;">
+                      <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+                    </svg>
+                  </div>
+                  <div class="item-menu-content">
+                    <button class="style-item-menu-account">My Reviews</button>
+                  </div>
+                </div>
+                <div class="item-menu">
+                  <div class="item-menu-image">
+                    <svg fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16" style="color: white; width: 25px; height: 25px; margin-left: -8px">
+                      <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
+                      <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
+                    </svg>
+                  </div>
+                  <div class="item-menu-content">
+                    <button @click="openModalLogout()" style="margin-left: 1px;" class="style-item-menu-account">Logout</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
+
+<!--  <div class="dropdown">-->
+<!--    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--      Dropdown button-->
+<!--    </button>-->
+<!--    <ul class="dropdown-menu">-->
+<!--      <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--      <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--      <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--    </ul>-->
+<!--  </div>-->
+
+
+  <!-- @click="showDropdownAccount()"-->
   <!-- modal logout -->
   <ModalConfirmLogout ref="logoutModal" @handleLogout="handleLogout()" />
 
   <ModalNotifyToLogout ref="logoutNotifyModal" @handleLogout="handleLogout()" />
 
-  <div class="menu-account-drop" v-if="isDropdownOpenAccount">
-    <div class="menu-account-drop-child">
-      <div class="item-menu">
-        <div class="item-menu-image">
-          <svg fill="currentColor" class="bi bi-person style-icon-menu style-account-icon" viewBox="0 0 16 16" style="color: white">
-            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-          </svg>
-        </div>
-        <div class="item-menu-content">
-          <button class="style-item-menu-account">Manage My Account</button>
-        </div>
-      </div>
-      <div class="item-menu">
-        <div class="item-menu-image">
-          <img src="@/assets/image-menu-account/menu-order-icon.png" class="style-item-image" alt="menu order">
-        </div>
-        <div class="item-menu-content">
-          <button class="style-item-menu-account">My Order</button>
-        </div>
-      </div>
-      <div class="item-menu">
-        <div class="item-menu-image">
-          <svg fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16" style="color: white; width: 25px; height: 25px;">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-          </svg>
-        </div>
-        <div class="item-menu-content">
-          <button class="style-item-menu-account">My Cancellations</button>
-        </div>
-      </div>
-      <div class="item-menu">
-        <div class="item-menu-image">
-          <svg fill="currentColor" class="bi bi-star" viewBox="0 0 16 16" style="color: white; width: 25px; height: 25px;">
-            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
-          </svg>
-        </div>
-        <div class="item-menu-content">
-          <button class="style-item-menu-account">My Reviews</button>
-        </div>
-      </div>
-      <div class="item-menu">
-        <div class="item-menu-image">
-          <svg fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16" style="color: white; width: 25px; height: 25px; margin-left: -8px">
-            <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
-            <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
-          </svg>
-        </div>
-        <div class="item-menu-content">
-          <button @click="openModalLogout()" style="margin-left: 1px;" class="style-item-menu-account">Logout</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </template>
 
 <style lang="scss">

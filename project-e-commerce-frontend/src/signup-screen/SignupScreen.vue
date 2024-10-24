@@ -247,7 +247,7 @@ function isFullOfSpaces(s) {
             <div class="view-create-account">
               <p style="font-size: 36px; text-align: left">Create an account</p>
               <p style="font-size: 16px; text-align: left; margin-top: 24px;">Enter your details below</p>
-              <div style="width: 100%; height: 275px; margin-top: 30px;">
+              <div class="style-form">
                 <input type="text" maxlength=120 v-model="name" class="form-control input" placeholder="Name" @input="validateName()">
                 <span class="span-error">{{errorName}}</span>
 
@@ -259,12 +259,11 @@ function isFullOfSpaces(s) {
                 <CustomButton @click="validateNullAndCreateAccount()" style="width: 100%; height: 20%; margin-top: 30px" text-button="Create Account"/>
                 <div style="display: flex; margin-top: 10px;">
                   <p style="font-size: 16px; text-align: left; margin-top: 3px;">Already have account?</p>
-                  <div style="height: 50%;  width: 12.75%; padding: 0; margin-left: 15px; margin-top: 3px;">
-                    <p @click="handleContinue()" style="font-size: 16px; text-align: left;  color: black; text-decoration: none; border-bottom: solid 1px; cursor: pointer; display: flex; justify-content: center; align-items: center;" class="login">Log in</p>
+                  <div class="style-view-login">
+                    <p @click="handleContinue()"  class="login">Log in</p>
                   </div>
                 </div>
               </div>
-              <!--Truyen tham so props cho CustomButton-->
             </div>
           </div>
         </div>
@@ -300,6 +299,32 @@ function isFullOfSpaces(s) {
   height: 70%;
   margin-left: 100px;
   margin-top: 100px;
+}
+
+.style-form{
+  width: 100%;
+  height: 275px;
+  margin-top: 30px;
+}
+
+.style-view-login{
+  height: 50%;
+  width: 12.75%;
+  padding: 0;
+  margin-left: 15px;
+  margin-top: 3px;
+}
+
+.login{
+  font-size: 16px;
+  text-align: left;
+  color: black;
+  text-decoration: none;
+  border-bottom: solid 1px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login:hover{

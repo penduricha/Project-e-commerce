@@ -1,0 +1,15 @@
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (50, 1);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (50, 2);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (50, 3);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 28);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 29);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 48);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 49);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 142);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 143);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (50, 158);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (50, 159);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (50, 162);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 163);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 174);
+INSERT INTO ecommerce_shop.discount (number_of_discounts, ware_house_id) VALUES (20, 175);
