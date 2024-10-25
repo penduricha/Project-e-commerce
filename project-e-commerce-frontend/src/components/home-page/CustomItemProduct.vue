@@ -86,9 +86,9 @@ function isZero(number){
             <div class="image-content">
               <img :src="getProduct()._image" style="width: 100%; height: 100%;" alt="product-image"/>
             </div>
-      </div>
+        </div>
       <div style="height: 50px;" class="item-cart">
-        <button @click="" class="add-to-cart">Add To Cart</button>
+        <button @click="" class="add-to-cart">Buy Now</button>
       </div>
     </div>
     <div class="item-content">

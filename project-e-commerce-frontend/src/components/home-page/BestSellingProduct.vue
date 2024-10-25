@@ -77,7 +77,6 @@ export default {
 </script>
 
 <template>
-<!--  style="display: flex; margin-bottom: 4%;"-->
   <div class="view-title">
     <div class="view-title-information">
       <Title text-time-title="This Month" ref="titleComponent"  :text-title="'Best Selling Product'"/>
@@ -85,7 +84,6 @@ export default {
     <div class="view-button-view-all">
       <CustomButton @click="handleViewAll_BestSelling_Products()"  style="width: 100%; height: 50%; margin-top: 34%;" text-button="View All"/>
     </div>
-    <!-- ref="titleComponent": là dùng titleComponent gọi các data method nó ra-->
   </div>
   <div class="view-list-product" style="display: flex; margin-bottom: 4%; align-items: center;"
        :style="{ justifyContent: (product_Best_Selling.length >= 4) ? 'space-between' : 'none' }"
@@ -96,10 +94,6 @@ export default {
       <CustomItemProduct :product="product" />
     </div>
   </div>
-
-<!--  <div class="view-list-pagination">-->
-<!--    <CustomPaginationGrey v-if="isViewPagination"/>-->
-<!--  </div>-->
 </template>
 <style lang="scss">
 

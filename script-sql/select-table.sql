@@ -55,3 +55,15 @@ select * from ware_house order by ware_house_id;
 select p.name, pt.type_product, pt.product_type_id from product_type pt
 left join product p on pt.product_type_id = p.product_type_id
 where product_id is not null order by product_id;
+
+select * from ware_house where color is not null;
+
+select size from ware_house where size is not null;
+
+select image from ware_house where color is not null;
+
+# clean mã màu thành hexa
+# update ware_house
+# set color = concat('#', lpad(round(rand() * 16777215), 6, '0'))
+# where color is not null;
+

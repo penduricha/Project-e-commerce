@@ -10,7 +10,6 @@ export default{
   data(){
     return{
       searchText: null,
-      isDropdownOpenAccount: false,
     }
   },
 
@@ -33,10 +32,6 @@ export default{
     // }
     isActiveRoute(route) {
       return this.$route.path === route;
-    },
-
-    showDropdownAccount() {
-      this.isDropdownOpenAccount = !this.isDropdownOpenAccount;
     },
 
     openModalLogout(){
