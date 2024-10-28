@@ -1,5 +1,6 @@
 package com.example.project_e_commerce_backend.repositories;
 
+import com.example.project_e_commerce_backend.dtos.ProductViewDto;
 import com.example.project_e_commerce_backend.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         "        left join discount d on d.ware_house_id = w.ware_house_id " +
         "    where " +
         "        e.name_event_purchasing = :eventName " +
-        "        and w.quantity > 0 " +
         ") " +
         "select " +
         "    product_id, " +
@@ -53,7 +53,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "        ) w_min on p.product_id = w_min.product_id\n" +
             "    left join ware_house w on w.ware_house_id = w_min.warehouse_id\n" +
             "    left join discount d on d.ware_house_id = w.ware_house_id\n" +
-            "    where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our Products') and w.quantity > 0)\n" +
+            "    where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our Products') and w.quantity >= 0)\n"+
             "select product_id, name, image, name_event_purchasing, price, number_of_discounts\n" +
             "from prioritized_products\n" +
             "where\n" +
@@ -80,8 +80,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "            join ware_house w on w.product_id = p.product_id\n" +
             "            left join discount d on d.ware_house_id = w.ware_house_id\n" +
             "    where\n" +
-            "        w.quantity > 0\n" +
-            "        and\n" +
             "        (e.event_purchasing_id = :eventPurchasingId)\n" +
             ")\n" +
             "select\n" +
@@ -99,5 +97,38 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "order by product_id;", nativeQuery = true)
     List<Map<String, Object>> getProductsBy_EventPurchasingId(@Param("eventPurchasingId") Long eventPurchasingId);
 
-    Product findProductByProductId(Long productId);
+    @Query("select new com.example.project_e_commerce_backend.dtos.ProductViewDto(p.productId, p.name, p.description, p.createdAt, p.updatedAt, p.productType.productTypeId) " +
+            "from Product p " +
+            "where p.productId = :productId")
+    ProductViewDto findProductByProductId(@Param("productId") Long productId);
+
+    @Query(value="with RankedProducts as (\n" +
+            "    select\n" +
+            "        p.product_id,\n" +
+            "        p.name,\n" +
+            "        w.image,\n" +
+            "        w.ware_house_id,\n" +
+            "        w.price,\n" +
+            "        coalesce(d.number_of_discounts, 0) as number_of_discounts,\n" +
+            "        row_number() over (partition by p.product_id order by w.ware_house_id) as rn\n" +
+            "    from\n" +
+            "        Product p\n" +
+            "            join ware_house w on w.product_id = p.product_id\n" +
+            "            left join discount d on d.ware_house_id = w.ware_house_id\n" +
+            "    where\n" +
+            "        w.quantity >= 0 and p.product_type_id = :productTypeId and p.product_id != :productId\n" +
+            ")\n" +
+            "select\n" +
+            "    product_id,\n" +
+            "    name,\n" +
+            "    image,\n" +
+            "    ware_house_id,\n" +
+            "    price,\n" +
+            "    number_of_discounts\n" +
+            "from\n" +
+            "    RankedProducts\n" +
+            "where\n" +
+            "    rn = 1\n" +
+            "order by product_id", nativeQuery = true)
+    List<Map<String, Object>> getProducts_Related_By_ProductTypeId(@Param("productTypeId") Long productTypeId, @Param("productId") Long productId);
 }

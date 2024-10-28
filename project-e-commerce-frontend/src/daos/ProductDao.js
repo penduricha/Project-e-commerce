@@ -41,11 +41,36 @@ export default class ProductDao {
         }
     }
 
-
     async getBestSellingProducts() {
         let products = [];
         try{
             const response = await ProductService.fetchProducts_By_Event_Best_Selling();
+            products = response.data;
+            return products;
+        }catch(error){
+            console.error(error);
+            alert(error);
+            return null;
+        }
+    }
+
+    async getProduct_By_ProductId(productId){
+        let products = [];
+        try {
+            const response = await ProductService.fetchProducts_By_ProductId(productId);
+            products = response.data;
+            return products;
+        }catch(error){
+            console.error(error);
+            alert(error);
+            return null;
+        }
+    }
+
+    async getList_Related_Product(productTypeId, productId){
+        let products = [];
+        try{
+            const response = await ProductService.fetch_Related_Products(productTypeId,productId);
             products = response.data;
             return products;
         }catch(error){

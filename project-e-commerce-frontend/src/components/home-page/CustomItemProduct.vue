@@ -2,6 +2,7 @@
 import CustomDiscount from "@/components/base/CustomDiscount.vue";
 import Product from "@/models/Product.js";
 import CustomNewLabel from "@/components/base/CustomNewLabel.vue";
+import RouterDao from "@/daos/RouterDao.js";
 
 export default {
   name: 'CustomItemProduct',
@@ -28,14 +29,30 @@ export default {
     },
 
     getProduct(){
-      return new Product(this.product.productId,
+      return new Product(
+          this.product.product_id,
           this.product.name,
           this.product.image,
           this.product.price,
           this.product.number_of_discounts,
           this.product.name_event_purchasing
       );
-    }
+    },
+
+    handleToProductDetail(){
+      const routerDao = new RouterDao();
+      routerDao.saveProductIdToSessionStorage(this.getProduct()._productId);
+      routerDao.saveRouterPathToSessionStorage("/product-detail");
+      this.$router.push({
+        path: '/product-detail',
+        query: {
+          productIdProductDetail: this.getProduct()._productId,
+        }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
   },
 
   data(){
@@ -88,7 +105,7 @@ function isZero(number){
             </div>
         </div>
       <div style="height: 50px;" class="item-cart">
-        <button @click="" class="add-to-cart">Buy Now</button>
+        <button @click="handleToProductDetail()" class="add-to-cart">Buy Now</button>
       </div>
     </div>
     <div class="item-content">

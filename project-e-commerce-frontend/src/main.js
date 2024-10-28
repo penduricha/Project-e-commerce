@@ -67,8 +67,13 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
             { path: '/view-all-flash-sales', component: ViewAll_FlashSales },
             { path: '/view-all-best-selling-product', component: ViewAll_BestSellingProducts },
             { path: '/view-all-explore-our-product', component: ViewAll_ExploreOurProducts },
-            { path: '/product-detail', component: ProductDetail },
-            { path: '/home-page-with-account', component: HomePageWithAccount, props: () => ({ emailPhoneHomePage: emailPhoneNumber })}
+            { path: '/product-detail', component: ProductDetail,
+                props: (route) => ({ productIdProductDetail: route.query.productIdProductDetail })
+            },
+            {
+                path: '/home-page-with-account', component: HomePageWithAccount,
+                props: () => ({ emailPhoneHomePage: emailPhoneNumber })
+            }
         ],
     });
     const app = createApp(App)

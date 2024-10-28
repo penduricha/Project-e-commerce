@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Size Color</title>
+</head>
+<body>
+    <script>
+        const wareHouses = [
+            { "wareHouseId": 37, "size": "L", "color": "#0070E8", "quantity": 100, "price": 100.0, "numberOfDiscount": 0.0 },
+            { "wareHouseId": 38, "size": "L", "color": "#FF0000", "quantity": 100, "price": 100.0, "numberOfDiscount": 0.0 },
+            { "wareHouseId": 39, "size": "L", "color": "#EEDC39", "quantity": 200, "price": 150.0, "numberOfDiscount": 0.0 }
+        ];
+
+
+
+        console.log(Array.from(
+            wareHouses.reduce((map, warehouse) => {
+                if (!map.has(warehouse.size)) {
+                    map.set(warehouse.size, warehouse);
+                }
+                return map;
+            }, new Map()).values()
+        ).map(w => w.size));
+    </script>
+</body>
+</html>

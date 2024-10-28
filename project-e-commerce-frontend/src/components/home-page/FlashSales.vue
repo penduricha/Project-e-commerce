@@ -149,16 +149,7 @@ export default {
       <Title text-time-title="Today's" :text-title="'Flash Sales'"/>
     </div>
     <div class="view-list-product">
-      <!--Ap dung computed cho scss-->
       <div class="style-view-flash-sales">,
-<!--        <div class="view-arrow" >-->
-<!--          <button class="view-circle-arrow" @click="prevSlide" style="background: transparent; border: none;">-->
-<!--            <svg class="icon arrow-left" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">-->
-<!--              <path d="M7.99976 15L0.999756 8L7.99976 1" stroke="#333" stroke-width="1.2" stroke-linejoin="round">-->
-<!--              </path>-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
         <swiper
             :modules="modules"
             :slides-per-view="4"
@@ -175,18 +166,6 @@ export default {
             <CustomItemProduct :product="product" />
           </swiper-slide>
         </swiper>
-<!--        <div class="view-arrow" style="position: absolute; z-index: 10; margin-left: 1450px;">-->
-<!--          <button class="view-circle-arrow" @click="nextSlide">-->
-<!--            <svg class="icon arrow-right" viewBox="0 0 9 16"-->
-<!--                 fill="none" xmlns="http://www.w3.org/2000/svg"-->
-<!--                 style="width: 24px; height: 24px;"-->
-<!--            >-->
-<!--              <path d="M1 15L8 8L0.999999 1" stroke="#333"-->
-<!--                    stroke-width="1.2" stroke-linejoin="round">-->
-<!--              </path>-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
       </div>
 
       <div class="style-button-view-all">

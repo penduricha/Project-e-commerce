@@ -32,15 +32,14 @@ export default {
   height: 100%;
   margin-left: 2%;
   display: flex;
+  align-items: center;
 }
 
 .item-size{
-  height: 100%;
-  width: 50px;
-  padding-left: 3%;
-  padding-right: 3%;
+  height: 80%;
+  width: 40px;
   border: solid grey;
-  margin-right: 4%;
+  margin-right: 2%;
   border-radius: 4px;
   background-color: transparent;
   cursor: pointer;

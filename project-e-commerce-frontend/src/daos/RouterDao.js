@@ -32,6 +32,14 @@ export default class RouterDao{
         }
     }
 
+    saveProductIdToSessionStorage(productId){
+        sessionStorage.setItem('productIdSession', productId);
+    }
+
+    getProductIdFromSessionStorage(){
+        return sessionStorage.getItem('productIdSession');
+    }
+
     getEmailPhoneNumberFromLocalStorage(){
         const emailPhoneNumber = localStorage.getItem('emailPhoneNumber');
         if(emailPhoneNumber){

@@ -4,6 +4,10 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomGroupItemSize from "@/pages/view-product-detail/CustomGroupItemSize.vue";
 import CustomGroupItemColor from "@/pages/view-product-detail/CustomGroupItemColor.vue";
 import StarRating from 'vue-star-rating';
+import WareHouseDao from "@/daos/WareHouseDao.js";
+import ProductDao from "@/daos/ProductDao.js";
+
+
 //npm install vue-star-rating@next
 export default {
   name: 'ViewProduct',
@@ -21,12 +25,64 @@ export default {
     return{
       warehouses_By_ProductId: [],
       countQuantityBuy: 0,
+      firstWarehouse: null,
+      product: null,
 
       rating: "No Rating Selected",
       currentRating: "No Rating",
       currentSelectedRating: "No Current Rating",
       boundRating: 3,
+
+      listSize: [],
+      listColor: [],
+      listImagesWithColor: [],
     }
+  },
+
+  async created() {
+    await this.getWareHousesBy_ProductId();
+
+    this.wareHouses_By_ProductId = await this.getWareHousesBy_ProductId();
+
+    if (this.wareHouses_By_ProductId && this.wareHouses_By_ProductId.length > 0) {
+      this.firstWarehouse = this.wareHouses_By_ProductId[0];
+    }
+    console.log('Warehouse Id first: ',  this.firstWarehouse.wareHouseId);
+
+    this.product = await this.getProduct_By_ProductId();
+
+    //trich size ra
+    this.listSize = Array.from(
+        this.wareHouses_By_ProductId.reduce((map, warehouse) => {
+          if (!map.has(warehouse.size)) {
+            map.set(warehouse.size, warehouse);
+          }
+          return map;
+        }, new Map()).values()
+    ).map(w => w.size);
+
+    this.listColor = Array.from(
+        this.wareHouses_By_ProductId.reduce((map, warehouse) => {
+          if (!map.has(warehouse.color)) {
+            map.set(warehouse.color, warehouse);
+          }
+          return map;
+        }, new Map()).values()
+    ).map(w => w.color);
+
+    this.listImagesWithColor = this.wareHouses_By_ProductId.filter(warehouse =>
+        warehouse.color !== null && warehouse.wareHouseId !== this.firstWarehouse.wareHouseId
+    );
+
+    console.log('List size: ',this.listSize);
+    console.log('List color: ',this.listColor);
+    console.log('List image with color: ',this.listImagesWithColor);
+  },
+
+  async mounted() {
+    //mounted fetch api -> bien Vuejs
+    //this.setWarehouses_By_ProductId();
+
   },
 
   methods: {
@@ -46,6 +102,32 @@ export default {
     handleReduced(){
       this.countQuantityBuy -= 1;
     },
+
+    async getWareHousesBy_ProductId() {
+      const wareHouseDao = new WareHouseDao();
+      try {
+        let wareHouses_By_ProductId = await wareHouseDao.getListWareHouseBy_ProductId(this.productId);
+        console.log('List Warehouse: ', wareHouses_By_ProductId);
+        return wareHouses_By_ProductId;
+      } catch (e) {
+        console.error(e);
+        alert(e);
+        return null;
+      }
+    },
+
+    async getProduct_By_ProductId(){
+      const productDao = new ProductDao();
+      try {
+        let product = await productDao.getProduct_By_ProductId(this.productId);
+        console.log('Product: ', product);
+        return product;
+      } catch (e) {
+        console.error(e);
+        alert(e);
+        return null;
+      }
+    }
   },
 
   computed: {
@@ -54,26 +136,42 @@ export default {
           ? 'quantity-greater-zero'
           : 'quantity-equal-zero';
     },
+
+    buttonReduceClass(){
+      return (this.countQuantityBuy > 0)
+          ? 'quantity-greater-zero'
+          : 'quantity-equal-zero';
+    },
   }
 
 }
+
+// async function getProduct_By_ProductId(productId){
+//   const productDao = new ProductDao();
+//   let p = await productDao.getProduct_By_ProductId(productId);
+//   if(p!==null){
+//     return new ProductViewDto(p.productId, p.name, p.description, p.createAt, p.updateAt);
+//   }else{
+//     return null;
+//   }
+// }
 </script>
 
 <template>
-  <div class="container-view-product">
+  <div class="container-view-product" >
     <div class="view-image-product">
-      <div class="view-list-image-color">
-
+      <div class="view-list-image-color" >
+        <div v-for="(w) in listImagesWithColor">
+          <img :src="w.image" alt="image color" class="style-image-color-list">
+        </div>
       </div>
       <div class="view-image-init">
-        <img src="https://raw.githubusercontent.com/penduricha/Image_E_Commerce/refs/heads/master/men's-fashion/hat/normal.png"
-             alt="delivery"
-             class="style-image-init">
+        <img v-if="firstWarehouse" :src="firstWarehouse.image" alt="delivery" class="style-image-init">
       </div>
     </div>
     <div class="view-information-product">
       <div class="view-information-product-child" style="flex: 3; border-bottom: solid grey">
-        <div class="style-name-product" >HV G-92 Gamepad</div>
+        <div class="style-name-product" v-if="product">{{product.name}}</div>
         <div style="width: 80%; height: 25px; display: flex; margin-top: 5px;">
           <div style="flex: 1; display:inline-block;">
             <star-rating
@@ -91,20 +189,22 @@ export default {
             In Stock
           </div>
         </div>
-        <p class="style-price">$192.00</p>
-        <p class="style-description">PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install & mess free removal Pressure sensitive.</p>
+        <p class="style-price" v-if="firstWarehouse">${{firstWarehouse.price.toFixed(2)}}</p>
+        <p class="style-description" v-if="product">{{product.description}}</p>
       </div>
       <div class="view-information-product-child">
-        <div class="view-item-warehouse" style="border: solid grey; width: 40%; border-radius: 4px; display: flex; margin-top: 4%">
+        <div class="style-item-choose-quantity">
           <button @click="handleReduced()"
                   :disabled="countQuantityBuy <= 0"
-                  style="flex: 1; border-right: solid grey;" class="style-button-quantity">
+                  class="style-button-minus"
+                  :class="['style-button-quantity-reduce',buttonReduceClass]"
+          >
             -
           </button>
-          <div style="flex: 1.5; font-weight: 500; display: flex; font-size: 24px; justify-content: center; align-items: center;">
+          <div class="style-number-quantity">
             {{countQuantityBuy}}
           </div>
-          <button @click="handleIncrease()" style="flex: 1; border-left: solid grey;"
+          <button @click="handleIncrease()" class="style-button-plus"
                   :class="['style-button-quantity-increase',buttonIncreaseClass]">
             +
           </button>
@@ -116,7 +216,7 @@ export default {
         <div class="view-item-warehouse style-size-color" style="display: flex; align-items: center; ">
           Color:
           <CustomGroupItemColor/>
-        </div >
+        </div>
         <div class="view-item-warehouse" >
           <button @click="" class="button-add-to-cart">Add To Cart</button>
         </div>
@@ -169,6 +269,11 @@ export default {
   width: 100%;
   height: 100%;
   flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .view-image-init{
@@ -183,6 +288,7 @@ export default {
 
 .view-information-product{
   flex: 1;
+  height: 700px;
   display: flex;
   flex-direction: column;
 }
@@ -266,8 +372,11 @@ export default {
 }
 
 .style-image-init{
-  width: 80%;
-  height: 80%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .view-item-warehouse{
@@ -301,7 +410,7 @@ export default {
 .style-button-quantity-increase{
   &.quantity-greater-zero{
     cursor: pointer;
-    font-size: 30px;
+    font-size: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -311,11 +420,67 @@ export default {
 
   &.quantity-equal-zero{
     cursor: pointer;
-    font-size: 30px;
+    font-size: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
 
   }
+}
+
+.style-button-quantity-reduce{
+  &.quantity-greater-zero{
+    font-size: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &.quantity-equal-zero{
+
+    font-size: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+  }
+}
+
+.style-item-choose-quantity{
+  border: solid grey;
+  height: 45px;
+  width: 35%;
+  border-radius: 4px;
+  display: flex;
+  margin-top: 4%
+}
+
+.style-button-minus{
+  flex: 1;
+  border-right: solid grey;
+}
+
+.style-button-plus{
+  flex: 1;
+  border-left: solid grey;
+}
+
+.style-number-quantity{
+  flex: 2;
+  font-weight: 500;
+  display: flex;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.style-image-color-list{
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  /* Đảm bảo hình ảnh phủ đầy div mà không bị biến dạng */
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 </style>

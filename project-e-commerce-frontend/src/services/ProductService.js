@@ -23,4 +23,12 @@ export default class ProductService {
     static fetchProducts_By_Event_Best_Selling(){
         return apiClient.get(`/products-best-selling`);
     }
+
+    static fetchProducts_By_ProductId(productId){
+        return apiClient.get(`/products/productId/${productId}`)
+    }
+
+    static fetch_Related_Products(productTypeId, productId){
+        return apiClient.get(`/products/related/${productTypeId}/${productId}`);
+    }
 }

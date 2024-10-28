@@ -11,7 +11,7 @@ import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 
 const routers = [
     // ProductDetail
-    { path: '/', component: ProductDetail},
+    { path: '/', component: HomePage},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },
@@ -20,9 +20,12 @@ const routers = [
     { path: '/view-all-flash-sales', component: ViewAll_FlashSales },
     { path: '/view-all-best-selling-product', component: ViewAll_BestSellingProducts },
     { path: '/view-all-explore-our-product', component: ViewAll_ExploreOurProducts },
-    { path: '/product-detail', component: ProductDetail },
+    { path: '/product-detail', component: ProductDetail,
+        props: (route) => ({ productIdProductDetail: route.query.productIdProductDetail })
+    },
     { path: '/home-page-with-account', component: HomePageWithAccount,
-        props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })},
+        props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })
+    },
 ];
 export default routers;
 

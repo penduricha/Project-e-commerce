@@ -1,6 +1,6 @@
 use ecommerce_shop;
 
-select * from user where id = 24;
+select phone_number from user where id = 24;
 
 # delete from product_type;
 # select * from product;
@@ -30,8 +30,7 @@ select * from product_type;
 select * from product_type pt left join product p
 on pt.product_type_id=p.product_type_id;
 
-select * from product p left join ware_house w
-on p.product_id=w.product_id;
+
 
 select * from event_purchasing;
 
@@ -67,3 +66,33 @@ select image from ware_house where color is not null;
 # set color = concat('#', lpad(round(rand() * 16777215), 6, '0'))
 # where color is not null;
 
+select * from product where product_type_id = 16 and product_id !=39;
+
+with RankedProducts as (
+    select
+        p.product_id,
+        p.name,
+        w.image,
+        w.ware_house_id,
+        w.price,
+        coalesce(d.number_of_discounts, 0) as number_of_discounts,
+        row_number() over (partition by p.product_id order by w.ware_house_id) as rn
+    from
+        Product p
+            join ware_house w on w.product_id = p.product_id
+            left join discount d on d.ware_house_id = w.ware_house_id
+    where
+        w.quantity >= 0 and p.product_type_id = 16 and p.product_id !=39
+)
+select
+    product_id,
+    name,
+    image,
+    ware_house_id,
+    price,
+    number_of_discounts
+from
+    RankedProducts
+where
+    rn = 1
+order by product_id;

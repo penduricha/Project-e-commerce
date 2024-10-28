@@ -35,9 +35,9 @@ export default {
 }
 
 .item-color{
-  height: 100%;
-  width: 14%;
-  margin-right: 4%;
+  height: 80%;
+  width: 40px;
+  margin-right: 2%;
   border-radius: 4px;
   border: #104888;
   background-color: #104888;
