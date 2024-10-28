@@ -36,7 +36,7 @@ export default {
 
 .item-size{
   height: 100%;
-  width: auto;
+  width: 50px;
   padding-left: 3%;
   padding-right: 3%;
   border: solid grey;

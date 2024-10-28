@@ -50,7 +50,7 @@ export default{
       }else{
         routerDao.saveRouterPathToSessionStorage("/signup-screen");
 
-        this.$router.replace({
+        this.$router.push({
           path: '/signup-screen',
         }).catch((error) => {
           console.error('Error navigating :', error);
@@ -106,7 +106,7 @@ export default{
       //   });
       // }
       routerDao.saveRouterPathToSessionStorage("/about-page");
-      this.$router.replace({
+      this.$router.push({
                 path: '/about-page',
               }).catch((error) => {
                 console.error('Error navigating :', error);
@@ -122,7 +122,7 @@ export default{
 
         routerDao.saveRouterPathToSessionStorage("/home-page");
 
-        this.$router.replace({
+        this.$router.push({
           path: '/home-page',
         }).catch((error) => {
           console.error('Error navigating :', error);
@@ -131,7 +131,7 @@ export default{
       }else{
         routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
 
-        this.$router.replace({
+        this.$router.push({
           path: '/home-page-with-account',
           query: {
             emailPhoneHomePage: routerDao.getEmailPhoneNumberFromLocalStorage().trim(),

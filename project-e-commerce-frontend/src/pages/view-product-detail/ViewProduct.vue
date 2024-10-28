@@ -48,6 +48,14 @@ export default {
     },
   },
 
+  computed: {
+    buttonIncreaseClass(){
+      return (this.countQuantityBuy > 0)
+          ? 'quantity-greater-zero'
+          : 'quantity-equal-zero';
+    },
+  }
+
 }
 </script>
 
@@ -68,7 +76,13 @@ export default {
         <div class="style-name-product" >HV G-92 Gamepad</div>
         <div style="width: 80%; height: 25px; display: flex; margin-top: 5px;">
           <div style="flex: 1; display:inline-block;">
-            <star-rating style="margin-top: -5%" :star-size="20" :show-rating="false"></star-rating>
+            <star-rating
+                inactive-color="grey"
+                active-color="#FFAD33"
+                style="margin-top: -5%"
+                :star-size="20"
+                :show-rating="false"
+            />
           </div>
           <div style="flex: 1; padding-left: 5px; color: grey; font-size: 14px;">
             (150 Reviews)
@@ -90,7 +104,8 @@ export default {
           <div style="flex: 1.5; font-weight: 500; display: flex; font-size: 24px; justify-content: center; align-items: center;">
             {{countQuantityBuy}}
           </div>
-          <button @click="handleIncrease()" style="flex: 1; border-left: solid grey;" class="style-button-quantity">
+          <button @click="handleIncrease()" style="flex: 1; border-left: solid grey;"
+                  :class="['style-button-quantity-increase',buttonIncreaseClass]">
             +
           </button>
         </div>
@@ -281,5 +296,26 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center
+}
+
+.style-button-quantity-increase{
+  &.quantity-greater-zero{
+    cursor: pointer;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #DB4444;
+    color: white;
+  }
+
+  &.quantity-equal-zero{
+    cursor: pointer;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
 }
 </style>

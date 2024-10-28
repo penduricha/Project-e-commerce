@@ -184,6 +184,12 @@ export default {
       this.$router.replace({ path: '/login-screen' }).catch((error) => { console.error('Error navigating :', error); });
     },
 
+    handleLogin(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/login-screen");
+      this.$router.push({ path: '/login-screen' }).catch((error) => { console.error('Error navigating :', error); });
+    },
+
     //lock paste
     preventPaste(event) {
       event.preventDefault();
@@ -260,7 +266,7 @@ function isFullOfSpaces(s) {
                 <div style="display: flex; margin-top: 10px;">
                   <p style="font-size: 16px; text-align: left; margin-top: 3px;">Already have account?</p>
                   <div class="style-view-login">
-                    <p @click="handleContinue()"  class="login">Log in</p>
+                    <p @click="handleLogin()"  class="login">Log in</p>
                   </div>
                 </div>
               </div>

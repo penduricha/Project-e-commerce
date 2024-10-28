@@ -10,6 +10,7 @@ import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 
 const routers = [
+    // ProductDetail
     { path: '/', component: ProductDetail},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },

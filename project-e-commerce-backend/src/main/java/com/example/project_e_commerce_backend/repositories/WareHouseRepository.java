@@ -16,5 +16,4 @@ public interface WareHouseRepository extends JpaRepository<WareHouse,Long> {
             "from WareHouse w " +
             "left join Discount d on w.wareHouseId = d.wareHouse.wareHouseId where w.product.productId = :productId")
     List<WareHouseDto> getWareHousesByProduct_ProductId(@Param("productId") Long productId);
-
 }
