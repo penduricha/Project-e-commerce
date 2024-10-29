@@ -40,18 +40,38 @@ export default {
     },
 
     handleToProductDetail(){
-      const routerDao = new RouterDao();
-      routerDao.saveProductIdToSessionStorage(this.getProduct()._productId);
-      routerDao.saveRouterPathToSessionStorage("/product-detail");
-      this.$router.push({
-        path: '/product-detail',
-        query: {
-          productIdProductDetail: this.getProduct()._productId,
-        }
-      }).catch((error) => {
-        console.error('Error navigating :', error);
-        alert(error);
-      });
+      if(this.isActiveRoute("/product-detail")){
+        //window.location.reload();
+        const routerDao = new RouterDao();
+        routerDao.saveProductIdToSessionStorage(this.getProduct()._productId);
+        this.$router.push({
+          path: '/product-detail',
+          query: {
+            productIdProductDetail: this.getProduct()._productId,
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+        window.location.reload();
+      }else{
+        const routerDao = new RouterDao();
+        routerDao.saveProductIdToSessionStorage(this.getProduct()._productId);
+        routerDao.saveRouterPathToSessionStorage("/product-detail");
+        this.$router.push({
+          path: '/product-detail',
+          query: {
+            productIdProductDetail: this.getProduct()._productId,
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
+    },
+
+    isActiveRoute(route) {
+      return this.$route.path === route;
     },
   },
 

@@ -59,7 +59,7 @@ export default {
     handleViewAll_ExploreOur_Products(){
       const routerDao = new RouterDao();
       routerDao.saveRouterPathToSessionStorage("/view-all-explore-our-product");
-      this.$router.replace({
+      this.$router.push({
         path: '/view-all-explore-our-product',
       }).catch((error) => {
         console.error('Error navigating :', error);

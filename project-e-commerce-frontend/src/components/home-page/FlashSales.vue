@@ -108,7 +108,7 @@ export default {
     handleViewAll_FlashSale(){
       const routerDao = new RouterDao();
       routerDao.saveRouterPathToSessionStorage("/view-all-flash-sales");
-      this.$router.replace({
+      this.$router.push({
         path: '/view-all-flash-sales',
       }).catch((error) => {
         console.error('Error navigating :', error);

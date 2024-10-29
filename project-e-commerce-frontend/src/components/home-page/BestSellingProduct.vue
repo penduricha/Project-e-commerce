@@ -51,7 +51,7 @@ export default {
     handleViewAll_BestSelling_Products(){
       const routerDao = new RouterDao();
       routerDao.saveRouterPathToSessionStorage("/view-all-best-selling-product");
-      this.$router.replace({
+      this.$router.push({
         path: '/view-all-best-selling-product',
       }).catch((error) => {
         console.error('Error navigating :', error);

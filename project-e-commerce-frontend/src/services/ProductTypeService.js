@@ -25,4 +25,8 @@ export default class ProductTypeService{
     static fetchTypeProductById(productTypeId){
         return apiClient.get(`/productTypes/get-typeProduct-by-productTypeId/${productTypeId}`);
     }
+
+    static fetchProductType_By_ProductTypeId(productTypeId){
+        return apiClient.get(`/productTypes/productTypeId/${productTypeId}`);
+    }
 }

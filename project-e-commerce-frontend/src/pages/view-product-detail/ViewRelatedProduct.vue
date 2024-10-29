@@ -6,6 +6,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomItemProduct from "@/components/home-page/CustomItemProduct.vue";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import {A11y, Navigation, Pagination, Scrollbar} from "swiper/modules";
+import ProductTypeDao from "@/daos/ProductTypeDao.js";
 
 export default {
 
@@ -25,6 +26,7 @@ export default {
     return{
       products_related_by_productTypeId: [],
       product: null,
+      //productType_By_ProductTypeId: null,
     }
   },
 
@@ -79,7 +81,9 @@ export default {
   },
 
   async created() {
+    //theo step functions
     this.product = await this.getProduct_By_ProductId();
+    //this.productType_By_ProductTypeId = await this.getProductType_By_ProductTypeId();
     this.products_related_by_productTypeId = await this.getList_Related_Product();
   },
 
@@ -115,6 +119,19 @@ export default {
         return null;
       }
     },
+
+    // async getProductType_By_ProductTypeId(){
+    //   const productTypeDao = new ProductTypeDao();
+    //   try {
+    //     let product = await productTypeDao.getProductType_By_ProductTypeId(this.product.productTypeId);
+    //     console.log('Product Type parentId: ',product.parentId);
+    //     return product;
+    //   } catch (e) {
+    //     console.error(e);
+    //     alert(e);
+    //     return null;
+    //   }
+    // }
   },
 
   computed: {

@@ -43,6 +43,8 @@ export default {
       const routerDao = new RouterDao();
       return routerDao.getProductIdFromSessionStorage();
     },
+
+
   }
 
 }

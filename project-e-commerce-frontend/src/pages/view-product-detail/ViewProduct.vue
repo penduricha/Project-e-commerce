@@ -27,6 +27,7 @@ export default {
       countQuantityBuy: 0,
       firstWarehouse: null,
       product: null,
+      groupedColorsBySize: null,
 
       rating: "No Rating Selected",
       currentRating: "No Rating",
@@ -36,6 +37,9 @@ export default {
       listSize: [],
       listColor: [],
       listImagesWithColor: [],
+
+      //choose size;
+      sizeChoose: null,
     }
   },
 
@@ -45,30 +49,61 @@ export default {
     this.wareHouses_By_ProductId = await this.getWareHousesBy_ProductId();
 
     if (this.wareHouses_By_ProductId && this.wareHouses_By_ProductId.length > 0) {
-      this.firstWarehouse = this.wareHouses_By_ProductId[0];
+      if(this.wareHouses_By_ProductId.filter(size => size !== null).length > 0){
+
+        this.firstWarehouse = this.wareHouses_By_ProductId.filter(size => size !== null)[0];
+
+        // this.groupedColorsBySize = this.wareHouses_By_ProductId.reduce((gr, item) => {
+        //   const size = item.size;
+        //   const color = item.color;
+        //   if (!gr[size]) {
+        //     gr[size] = [];
+        //   }
+        //   if (color !== null && !acc[size].includes(color)) {
+        //     gr[size].push(color);
+        //   }
+        //   return gr;
+        // }, {});
+        //nguon https://dmitripavlutin.com/javascript-array-group/
+        this.groupedColorsBySize = this.wareHouses_By_ProductId.reduce((group, wh) =>{
+          const { size } = wh;
+          group[size] = group[size] ?? [];
+          group[size].push(wh.color);
+          return group;
+        }, {});
+
+
+
+      }else{
+        this.firstWarehouse = this.wareHouses_By_ProductId[0];
+        this.listColor = [...new Set(
+            this.wareHouses_By_ProductId
+                .map(w => w.color)
+                .filter(color => color !== null)
+        )];
+      }
     }
+
+    console.log('Warehouse first: ',  this.firstWarehouse);
     console.log('Warehouse Id first: ',  this.firstWarehouse.wareHouseId);
+    console.log('Warehouse Size first: ',  this.firstWarehouse.size);
+    console.log('Warehouse Color first: ',this.firstWarehouse.color);
+    console.log('Group color by size: ', this.groupedColorsBySize);
+
+    //set màu khi init
+    this.setListColorGroup(this.firstWarehouse.size);
 
     this.product = await this.getProduct_By_ProductId();
 
     //trich size ra
-    this.listSize = Array.from(
-        this.wareHouses_By_ProductId.reduce((map, warehouse) => {
-          if (!map.has(warehouse.size)) {
-            map.set(warehouse.size, warehouse);
-          }
-          return map;
-        }, new Map()).values()
-    ).map(w => w.size);
+    this.listSize = [...new Set(
+        this.wareHouses_By_ProductId
+            .map(w => w.size)
+            .filter(size => size !== null)
+    )];
 
-    this.listColor = Array.from(
-        this.wareHouses_By_ProductId.reduce((map, warehouse) => {
-          if (!map.has(warehouse.color)) {
-            map.set(warehouse.color, warehouse);
-          }
-          return map;
-        }, new Map()).values()
-    ).map(w => w.color);
+    //this.listColor = this.wareHouses_By_ProductId.map(w => w.color !== null ? w.color : []);
+
 
     this.listImagesWithColor = this.wareHouses_By_ProductId.filter(warehouse =>
         warehouse.color !== null && warehouse.wareHouseId !== this.firstWarehouse.wareHouseId
@@ -95,6 +130,18 @@ export default {
     // setCurrentSelectedRating: function(rating) {
     //   this.currentSelectedRating = "You have Selected: " + rating + " stars";
     // }
+    setListColorGroup(size) {
+      if (this.groupedColorsBySize) {
+        if (this.groupedColorsBySize[size]) {
+          this.listColor = this.groupedColorsBySize[size];
+        } else {
+          this.listColor = [];
+        }
+      } else {
+        this.listColor = [];
+      }
+    },
+
     handleIncrease(){
       this.countQuantityBuy += 1;
     },
@@ -127,6 +174,13 @@ export default {
         alert(e);
         return null;
       }
+    },
+
+    handleSizeChosen(size) {
+      this.sizeChoose = size;
+      console.log('Choose size event: ',this.sizeChoose);
+      this.setListColorGroup(this.sizeChoose);
+      console.log('List color: ',this.listColor);
     }
   },
 
@@ -161,7 +215,7 @@ export default {
   <div class="container-view-product" >
     <div class="view-image-product">
       <div class="view-list-image-color" >
-        <div v-for="(w) in listImagesWithColor">
+        <div v-for="(w) in listImagesWithColor" style="margin-bottom: 10px;">
           <img :src="w.image" alt="image color" class="style-image-color-list">
         </div>
       </div>
@@ -209,13 +263,23 @@ export default {
             +
           </button>
         </div>
-        <div class="view-item-warehouse style-size-color" style="display: flex; align-items: center;">
-          Size:
-          <CustomGroupItemSize/>
+        <div class="view-item-warehouse style-size-color" >
+          <div v-if="listSize.length > 0">Size:</div>
+          <CustomGroupItemSize v-if="listSize.length > 0"
+                               :list-size="listSize"
+                               :size-ware-house-first="this.firstWarehouse.size"
+                               @size-chosen="handleSizeChosen"
+          />
         </div>
-        <div class="view-item-warehouse style-size-color" style="display: flex; align-items: center; ">
-          Color:
-          <CustomGroupItemColor/>
+        <div class="view-item-warehouse style-size-color" >
+          <div v-if="listColor.length > 0">Color:</div>
+          <CustomGroupItemColor v-if="listColor.length > 0"
+                                :size-ware-house-first="this.firstWarehouse.size"
+                                :color-ware-house-first="this.firstWarehouse.color"
+                                :list-color="listColor"
+                                :size-choose="sizeChoose"
+                                :list-size="listSize"
+          />
         </div>
         <div class="view-item-warehouse" >
           <button @click="" class="button-add-to-cart">Add To Cart</button>
@@ -380,8 +444,8 @@ export default {
 }
 
 .view-item-warehouse{
-  flex: 1;
   margin-top: 2%;
+  flex: 1;
 }
 
 .button-add-to-cart{
@@ -397,6 +461,9 @@ export default {
 
 .style-size-color{
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  height: 20px;
 }
 
 .style-button-quantity{
@@ -480,7 +547,7 @@ export default {
   height: auto;
   object-fit: cover;
   /* Đảm bảo hình ảnh phủ đầy div mà không bị biến dạng */
-  margin-bottom: 5px;
+
   cursor: pointer;
 }
 </style>

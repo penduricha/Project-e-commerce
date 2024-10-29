@@ -96,3 +96,5 @@ from
 where
     rn = 1
 order by product_id;
+
+select parent_id from product_type where product_type_id = 16;

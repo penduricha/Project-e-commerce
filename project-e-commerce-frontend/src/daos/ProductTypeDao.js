@@ -41,5 +41,17 @@ export default class ProductTypeDao {
         }
     }
 
+    async getProductType_By_ProductTypeId(productTypeId){
+        try {
+            const response = await ProductTypeService.fetchProductType_By_ProductTypeId(productTypeId);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            alert(error);
+            return null;
+            // Trả về null khi có lỗi
+        }
+    }
+
 
 }

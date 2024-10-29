@@ -82,29 +82,7 @@ export default{
     // },
 
     handleAbout(){
-      //window.location.reload();
-
       const routerDao = new RouterDao();
-
-      // if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-      //   routerDao.saveRouterPathToSessionStorage("/about-page");
-      //
-      //   this.$router.replace({
-      //     path: '/about-page',
-      //   }).catch((error) => {
-      //     console.error('Error navigating :', error);
-      //     alert(error);
-      //   });
-      // }else{
-      //   routerDao.saveRouterPathToSessionStorage("/about-page-with-account");
-      //
-      //   this.$router.replace({
-      //     path: '/about-page-with-account',
-      //   }).catch((error) => {
-      //     console.error('Error navigating :', error);
-      //     alert(error);
-      //   });
-      // }
       routerDao.saveRouterPathToSessionStorage("/about-page");
       this.$router.push({
                 path: '/about-page',
