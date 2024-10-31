@@ -90,12 +90,13 @@ export default {
 
 .view-product-detail{
   width: 80%;
-  height: 60%;
+  height: 50%;
 }
 
 .view-related-product{
   width: 80%;
-  height: 40%;
+  height: 55%;
+  margin-top: 50px;
 }
 
 </style>

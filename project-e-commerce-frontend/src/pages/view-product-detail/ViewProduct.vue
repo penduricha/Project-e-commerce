@@ -1,8 +1,7 @@
 <script>
 //npm install vue-star-rating@2.1.0
 import CustomButton from "@/components/base/CustomButton.vue";
-import CustomGroupItemSize from "@/pages/view-product-detail/CustomGroupItemSize.vue";
-import CustomGroupItemColor from "@/pages/view-product-detail/CustomGroupItemColor.vue";
+
 import StarRating from 'vue-star-rating';
 import WareHouseDao from "@/daos/WareHouseDao.js";
 import ProductDao from "@/daos/ProductDao.js";
@@ -13,8 +12,7 @@ export default {
   name: 'ViewProduct',
 
   components: {
-    CustomGroupItemColor,
-    CustomGroupItemSize,
+
     CustomButton,
     StarRating,
   },
@@ -22,12 +20,13 @@ export default {
   props: ['productId'],
 
   data(){
-    return{
+    return {
       warehouses_By_ProductId: [],
       countQuantityBuy: 0,
       firstWarehouse: null,
       product: null,
       groupedColorsBySize: null,
+      image_main: null,
 
       rating: "No Rating Selected",
       currentRating: "No Rating",
@@ -36,10 +35,13 @@ export default {
 
       listSize: [],
       listColor: [],
-      listImagesWithColor: [],
 
       //choose size;
       sizeChoose: null,
+      colorChoose: null,
+
+      //error
+      notifyChoose: null,
     }
   },
 
@@ -52,37 +54,29 @@ export default {
       if(this.wareHouses_By_ProductId.filter(size => size !== null).length > 0){
 
         this.firstWarehouse = this.wareHouses_By_ProductId.filter(size => size !== null)[0];
-
-        // this.groupedColorsBySize = this.wareHouses_By_ProductId.reduce((gr, item) => {
-        //   const size = item.size;
-        //   const color = item.color;
-        //   if (!gr[size]) {
-        //     gr[size] = [];
-        //   }
-        //   if (color !== null && !acc[size].includes(color)) {
-        //     gr[size].push(color);
-        //   }
-        //   return gr;
-        // }, {});
         //nguon https://dmitripavlutin.com/javascript-array-group/
-        this.groupedColorsBySize = this.wareHouses_By_ProductId.reduce((group, wh) =>{
-          const { size } = wh;
-          group[size] = group[size] ?? [];
-          group[size].push(wh.color);
-          return group;
-        }, {});
+        if(this.wareHouses_By_ProductId.filter(color => color !== null).length > 0){
+          this.groupedColorsBySize = this.wareHouses_By_ProductId.reduce((group, wh) =>{
+            const { size } = wh;
+            group[size] = group[size] ?? [];
+            group[size].push(wh);
+            return group;
+          }, {});
 
-
-
+          this.listColor = [];
+        }
       }else{
         this.firstWarehouse = this.wareHouses_By_ProductId[0];
         this.listColor = [...new Set(
-            this.wareHouses_By_ProductId
-                .map(w => w.color)
-                .filter(color => color !== null)
-        )];
-      }
+              this.wareHouses_By_ProductId
+                  .filter(color => color !== null)
+          )];
+        }
+    }else{
+      alert('No product Detail.');
     }
+
+    this.image_main = this.firstWarehouse.image;
 
     console.log('Warehouse first: ',  this.firstWarehouse);
     console.log('Warehouse Id first: ',  this.firstWarehouse.wareHouseId);
@@ -91,7 +85,7 @@ export default {
     console.log('Group color by size: ', this.groupedColorsBySize);
 
     //set màu khi init
-    this.setListColorGroup(this.firstWarehouse.size);
+    //this.setListColorGroup(this.firstWarehouse.size);
 
     this.product = await this.getProduct_By_ProductId();
 
@@ -102,21 +96,25 @@ export default {
             .filter(size => size !== null)
     )];
 
-    //this.listColor = this.wareHouses_By_ProductId.map(w => w.color !== null ? w.color : []);
+    if(this.listSize.filter(size => size !== null).length === 0){
+      this.listColor = [...new Set(
+          this.wareHouses_By_ProductId
+              .filter(color => color !== null)
+      )];
+    }
 
-
-    this.listImagesWithColor = this.wareHouses_By_ProductId.filter(warehouse =>
-        warehouse.color !== null && warehouse.wareHouseId !== this.firstWarehouse.wareHouseId
-    );
+    // this.listImagesWithColor = [... new Set(
+    //     this.wareHouses_By_ProductId.filter(warehouse =>
+    //         warehouse.color !== null
+    //     )
+    // )];
 
     console.log('List size: ',this.listSize);
     console.log('List color: ',this.listColor);
-    console.log('List image with color: ',this.listImagesWithColor);
+    //console.log('List image with color: ',this.listImagesWithColor);
   },
 
   async mounted() {
-    //mounted fetch api -> bien Vuejs
-    //this.setWarehouses_By_ProductId();
 
   },
 
@@ -140,6 +138,7 @@ export default {
       } else {
         this.listColor = [];
       }
+      this.listColor = this.listColor.filter(color => color !== null);
     },
 
     handleIncrease(){
@@ -176,11 +175,32 @@ export default {
       }
     },
 
-    handleSizeChosen(size) {
-      this.sizeChoose = size;
-      console.log('Choose size event: ',this.sizeChoose);
+    handleClickImage_Color(wareHouseId){
+      const colorFind = this.listColor.find(l => l.wareHouseId === wareHouseId);
+      this.colorChoose = colorFind.color;
+      this.image_main = colorFind.image;
+    },
+
+    handleChooseSize(item){
+      //chọn sẽ set màu
+      this.sizeChoose = item;
       this.setListColorGroup(this.sizeChoose);
-      console.log('List color: ',this.listColor);
+    },
+
+    // handleChooseColor(color){
+    //   this.colorChoose = color.color;
+    //   const colorFind = this.listColor.filter(l => l.color === this.colorChoose);
+    //   console.log('Found: ',colorFind);
+    //   console.log('Image: ',colorFind.image);
+    //   this.image_main = colorFind ? colorFind.image : null;
+    // },
+
+    handleChooseColor(color) {
+      this.colorChoose = color.color;
+      const colorFind = this.listColor.find(l => l.color === this.colorChoose);
+      console.log('Found: ', colorFind);
+      // Check if colorFind is not undefined before accessing image
+      this.image_main = colorFind ? colorFind.image : null;
     }
   },
 
@@ -214,17 +234,18 @@ export default {
 <template>
   <div class="container-view-product" >
     <div class="view-image-product">
-      <div class="view-list-image-color" >
-        <div v-for="(w) in listImagesWithColor" style="margin-bottom: 10px;">
-          <img :src="w.image" alt="image color" class="style-image-color-list">
-        </div>
+      <div class="view-list-image-color" v-if="this.listColor.filter(l => l.color !==null).length > 0">
+          <img v-for="(w) in listColor"
+              :src="w.image" alt="image color" class="style-image-color-list"
+               @click="handleClickImage_Color(w.wareHouseId)"
+          >
       </div>
       <div class="view-image-init">
-        <img v-if="firstWarehouse" :src="firstWarehouse.image" alt="delivery" class="style-image-init">
+        <img :src="image_main" alt="delivery" class="style-image-init">
       </div>
     </div>
     <div class="view-information-product">
-      <div class="view-information-product-child" style="flex: 3; border-bottom: solid grey">
+      <div class="view-information-product-child" style="border-bottom: solid grey; height: auto; flex: 1">
         <div class="style-name-product" v-if="product">{{product.name}}</div>
         <div style="width: 80%; height: 25px; display: flex; margin-top: 5px;">
           <div style="flex: 1; display:inline-block;">
@@ -246,7 +267,7 @@ export default {
         <p class="style-price" v-if="firstWarehouse">${{firstWarehouse.price.toFixed(2)}}</p>
         <p class="style-description" v-if="product">{{product.description}}</p>
       </div>
-      <div class="view-information-product-child">
+      <div class="view-information-product-child" style="flex: 4">
         <div class="style-item-choose-quantity">
           <button @click="handleReduced()"
                   :disabled="countQuantityBuy <= 0"
@@ -263,32 +284,48 @@ export default {
             +
           </button>
         </div>
-        <div class="view-item-warehouse style-size-color" >
+        <div class="view-item-warehouse style-size-color"  v-if="listSize.length > 0">
           <div v-if="listSize.length > 0">Size:</div>
-          <CustomGroupItemSize v-if="listSize.length > 0"
-                               :list-size="listSize"
-                               :size-ware-house-first="this.firstWarehouse.size"
-                               @size-chosen="handleSizeChosen"
-          />
+          <div class="container-custom-group-item">
+            <button class="item-size"
+                    v-for="(item) in listSize"
+                    :key="item"
+                    :class="['item-size-width', item.length > 3 ?
+               'length-item-greater-3' : 'length-item-lower-equal-3',
+               'item-size-color', item === sizeChoose ? 'chose' : 'no-choose'
+              ]"
+                      @click="handleChooseSize(item)"
+              >
+                {{ item }}
+              </button>
+          </div>
         </div>
-        <div class="view-item-warehouse style-size-color" >
-          <div v-if="listColor.length > 0">Color:</div>
-          <CustomGroupItemColor v-if="listColor.length > 0"
-                                :size-ware-house-first="this.firstWarehouse.size"
-                                :color-ware-house-first="this.firstWarehouse.color"
-                                :list-color="listColor"
-                                :size-choose="sizeChoose"
-                                :list-size="listSize"
-          />
+        <div class="view-item-warehouse style-size-color" v-if="listColor.filter(l => l.color !== null).length > 0">
+          <div v-if="(listColor.filter(color => color !== null).length > 0 && listSize.length <= 0) ||
+              (sizeChoose !== null && listColor.filter(color => color !== null).length > 0)
+            "
+          >Color:</div>
+          <div class="container-custom-group-item"
+               v-if="(listColor.filter(color => color !== null).length > 0 && listSize.length <= 0) ||
+              (sizeChoose !== null && listColor.filter(color => color !== null).length > 0)"
+          >
+            <button class="item-color"
+                    v-for="(color) in listColor.filter(l => l.color !== null)"
+                    v-if="color !== null"
+                    :class="['item-color-border-color', color.color === colorChoose ? 'chose' : 'no-choose']"
+                    :style="{ backgroundColor: color.color }"
+                    @click="handleChooseColor(color)"
+            />
+          </div>
         </div>
         <div class="view-item-warehouse" >
           <button @click="" class="button-add-to-cart">Add To Cart</button>
         </div>
         <div class="view-item-warehouse">
-          <CustomButton @click="" style="width: 100%; height: 100%" text-button="Buy Now"/>
+          <CustomButton @click="" style="width: 100%; height: 50px;" text-button="Buy Now"/>
         </div>
       </div>
-      <div class="view-information-product-child style-service">
+      <div class="view-information-product-child style-service" style="margin-top: 30px;">
         <div class="view-delivery">
           <div class="view-image-delivery">
             <img src="@/assets/image-view-product-detail/icon-delivery.png" alt="delivery" class="style-image">
@@ -327,14 +364,13 @@ export default {
   display: flex;
   padding-right: 5%;
   border-radius: 4px;
+  height: 610px;
 }
 
 .view-list-image-color{
   width: 100%;
   height: 100%;
   flex: 1;
-  overflow-y: scroll;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -358,7 +394,6 @@ export default {
 }
 
 .view-information-product-child{
-  flex: 5;
   display: flex;
   flex-direction: column;
   padding-bottom: 3%;
@@ -376,6 +411,7 @@ export default {
 .style-description{
   font-size: 14px;
   width: 75%;
+  height: auto;
 }
 
 .style-service{
@@ -445,7 +481,6 @@ export default {
 
 .view-item-warehouse{
   margin-top: 2%;
-  flex: 1;
 }
 
 .button-add-to-cart{
@@ -456,7 +491,7 @@ export default {
   font-weight: 400;
   font-size: 16px;
   width: 100%;
-  height: 100%;
+  height: 50px;
 }
 
 .style-size-color{
@@ -464,6 +499,7 @@ export default {
   display: flex;
   align-items: center;
   height: 20px;
+  margin-bottom: 15px;
 }
 
 .style-button-quantity{
@@ -483,6 +519,7 @@ export default {
     align-items: center;
     background-color: #DB4444;
     color: white;
+    padding-bottom: 8px;
   }
 
   &.quantity-equal-zero{
@@ -491,26 +528,27 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-
+    padding-bottom: 8px;
   }
 }
 
 .style-button-quantity-reduce{
   &.quantity-greater-zero{
     font-size: 35px;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    padding-bottom: 8px;
   }
 
   &.quantity-equal-zero{
-
     font-size: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: gray;
+    background-color: #ccc;
+    padding-bottom: 8px;
   }
 }
 
@@ -520,7 +558,9 @@ export default {
   width: 35%;
   border-radius: 4px;
   display: flex;
-  margin-top: 4%
+  margin-top: 8%;
+  margin-bottom: 15px;
+
 }
 
 .style-button-minus{
@@ -543,11 +583,107 @@ export default {
 }
 
 .style-image-color-list{
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  /* Đảm bảo hình ảnh phủ đầy div mà không bị biến dạng */
-
+  width: 80%;
+  height: 25%;
   cursor: pointer;
+  margin-bottom: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #F5F5F5;
+  object-fit: contain;
 }
+
+//group item
+.container-custom-group-item{
+  width: 100%;
+  height: 100%;
+  margin-left: 2%;
+  display: flex;
+  align-items: center;
+}
+
+.item-size{
+  height: 40px;
+  border: solid grey;
+  margin-right: 2%;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  white-space: nowrap;
+}
+
+.item-size-color{
+  &.chose{
+    background-color: #DB4444;
+    border-color: #DB4444;
+    color: white;
+  }
+
+  &.no-choose{
+    background-color: transparent;
+  }
+}
+
+//.item-color{
+//  height: 100%;
+//  width: 15%;
+//  padding-left: 3%;
+//  padding-right: 3%;
+//  border: solid grey;
+//  margin-right: 4%;
+//  border-radius: 4px;
+//  background-color: transparent;
+//  cursor: pointer;
+//  justify-content: center;
+//  align-items: center;
+//  display: flex;
+//}
+
+.item-size-width{
+  &.length-item-greater-3{
+    width: auto;
+  }
+
+  &.length-item-lower-equal-3{
+    width: 40px;
+  }
+}
+
+.container-custom-group-item{
+  width: 100%;
+  height: 100%;
+  margin-left: 2%;
+  display: flex;
+}
+
+.item-color{
+  height: 40px;
+  width: 40px;
+  margin-right: 2%;
+  border-radius: 4px;
+  //border: #104888;
+  //background-color: #104888;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.item-color-border-color{
+  &.chose{
+    border: solid 4px #DB4444;
+  }
+
+  &.no-choose{
+    border: none;
+  }
+}
+
+
 </style>
