@@ -152,7 +152,6 @@ export default{
   }
 }
 
-
 function removeEmailPhoneNumber(){
   const routerDao = new RouterDao();
   localStorage.removeItem('emailPhoneNumber');
@@ -440,7 +439,7 @@ function removeEmailPhoneNumber(){
   width: 230px;
   height: 220px;
   border-radius: 4px;
-  background: #9c989c;
+  background-color: #9c989c;
   backdrop-filter: blur(10px);
   padding: 10px;
 }

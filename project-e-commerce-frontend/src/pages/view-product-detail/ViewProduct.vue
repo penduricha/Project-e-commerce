@@ -26,6 +26,7 @@ export default {
       firstWarehouse: null,
       product: null,
       groupedColorsBySize: null,
+      groupedSizeByColor: null,
       image_main: null,
 
       rating: "No Rating Selected",
@@ -42,6 +43,14 @@ export default {
 
       //error
       notifyChoose: null,
+
+      //block choose
+
+      //khi size và color có và khi click size
+      listColorAfterChooseSize: [],
+      listSizeAfterChooseColor: [],
+      disabledColors: [],
+      disabledSizes: [],
     }
   },
 
@@ -63,18 +72,22 @@ export default {
             return group;
           }, {});
 
-          this.listColor = [];
+          this.groupedSizeByColor= this.wareHouses_By_ProductId.reduce((group, wh) =>{
+            const { color } = wh;
+            group[color] = group[color] ?? [];
+            group[color].push(wh);
+            return group;
+          }, {});
         }
+
+
       }else{
         this.firstWarehouse = this.wareHouses_By_ProductId[0];
-        this.listColor = [...new Set(
-              this.wareHouses_By_ProductId
-                  .filter(color => color !== null)
-          )];
-        }
+      }
     }else{
       alert('No product Detail.');
     }
+    //this.listColor = this.listColor.concat(this.listColor);
 
     this.image_main = this.firstWarehouse.image;
 
@@ -90,28 +103,46 @@ export default {
     this.product = await this.getProduct_By_ProductId();
 
     //trich size ra
-    this.listSize = [...new Set(
-        this.wareHouses_By_ProductId
-            .map(w => w.size)
-            .filter(size => size !== null)
-    )];
+    this.listSize = this.wareHouses_By_ProductId.filter(item => item.size !== null)
 
-    if(this.listSize.filter(size => size !== null).length === 0){
-      this.listColor = [...new Set(
-          this.wareHouses_By_ProductId
-              .filter(color => color !== null)
-      )];
+    this.listColor = this.wareHouses_By_ProductId.filter(item => item.color !== null);
+
+    //set chi duoc dung trong mang ['A','B','C'] loc
+    this.listSize = this.listSize.filter((item, index, self) =>
+        index === self.findIndex((t) => (t.size === item.size))
+    );
+
+    this.listColor = this.listColor.filter((item, index, self) =>
+        index === self.findIndex((t) => (t.color === item.color))
+    );
+    //neu list size === 0
+    // if(this.listSize.length === 0){
+    //   this.listColor = this.listColor.filter(l => l.quantity > 0);
+    // }
+
+    //set chọn nếu có 1
+    if(this.listSize.length === 1){
+      this.sizeChoose = this.listSize[0].size;
+      this.handleChooseSize(this.sizeChoose);
     }
 
-    // this.listImagesWithColor = [... new Set(
-    //     this.wareHouses_By_ProductId.filter(warehouse =>
-    //         warehouse.color !== null
-    //     )
-    // )];
+    if(this.listColor.length === 1){
+      this.colorChoose = this.listColor[0].color;
+    }
+
+    if(this.listSize.filter(size => size !== null).length === 0){
+      this.listColor = this.wareHouses_By_ProductId.filter(color => color !== null);
+    }
+
+    this.listColor = this.listColor.filter((item, index, self) =>
+        index === self.findIndex((t) => (t.color === item.color))
+    );
+
+    //this.listColor = this.listColor.concat(this.listColor);
 
     console.log('List size: ',this.listSize);
     console.log('List color: ',this.listColor);
-    //console.log('List image with color: ',this.listImagesWithColor);
+
   },
 
   async mounted() {
@@ -131,14 +162,27 @@ export default {
     setListColorGroup(size) {
       if (this.groupedColorsBySize) {
         if (this.groupedColorsBySize[size]) {
-          this.listColor = this.groupedColorsBySize[size];
+          this.listColorAfterChooseSize = this.groupedColorsBySize[size];
         } else {
-          this.listColor = [];
+          this.listColorAfterChooseSize = [];
         }
       } else {
-        this.listColor = [];
+        this.listColorAfterChooseSize = [];
       }
-      this.listColor = this.listColor.filter(color => color !== null);
+      this.listColorAfterChooseSize = this.listColorAfterChooseSize.filter((l => l.color !== null) && (l => l.quantity > 0));
+    },
+
+    setListSizeGroup(color) {
+      if (this.groupedSizeByColor) {
+        if (this.groupedSizeByColor[color]) {
+          this.listSizeAfterChooseColor = this.groupedSizeByColor[color];
+        } else {
+          this.listSizeAfterChooseColor = [];
+        }
+      } else {
+        this.listSizeAfterChooseColor = [];
+      }
+      this.listSizeAfterChooseColor = this.listSizeAfterChooseColor.filter((l => l.color !== null) && (l => l.quantity > 0));
     },
 
     handleIncrease(){
@@ -176,33 +220,128 @@ export default {
     },
 
     handleClickImage_Color(wareHouseId){
-      const colorFind = this.listColor.find(l => l.wareHouseId === wareHouseId);
-      this.colorChoose = colorFind.color;
-      this.image_main = colorFind.image;
+      this.listColorAfterChooseSize = [];
+      //this.listColorAfterChooseSize = null;
+      if(this.listSize.length === 1){
+        this.sizeChoose = this.listSize[0].size;
+        const colorFind = this.listColor.find(l => l.wareHouseId === wareHouseId);
+        this.colorChoose = colorFind.color;
+        this.image_main = colorFind.image;
+      }else{
+        this.sizeChoose = null;
+        this.listSizeAfterChooseColor = null;
+        const colorFind = this.listColor.find(l => l.wareHouseId === wareHouseId);
+        this.colorChoose = colorFind.color;
+        this.image_main = colorFind.image;
+        this.setListSizeGroup(this.colorChoose);
+        console.log('List size after chose color: ',this.listSizeAfterChooseColor);
+      }
     },
 
-    handleChooseSize(item){
-      //chọn sẽ set màu
-      this.sizeChoose = item;
-      this.setListColorGroup(this.sizeChoose);
+    handleChooseSize(size){
+      if(this.listSize && !this.listColor){
+        this.sizeChoose = size;
+      }else{
+        if(this.listSize.length === 1){
+          this.listColorAfterChooseSize = null;
+          this.listColorAfterChooseSize = this.listColor;
+        }else{
+          if(this.listColor.length === 1){
+            this.colorChoose = this.listColor[0].color;
+          }else{
+            if(this.colorChoose !== null && this.sizeChoose === size){
+              //Đứng yên đó ko làm gì
+              // if(!this.listColor){
+              //   this.sizeChoose = null;
+              // }
+            }else{
+              this.sizeChoose = size;
+              this.listColorAfterChooseSize = null;
+              this.setListColorGroup(this.sizeChoose);
+              console.log('List color after chose size: ',this.listColorAfterChooseSize);
+              this.colorChoose = null;
+            }
+          }
+        }
+      }
     },
 
-    // handleChooseColor(color){
-    //   this.colorChoose = color.color;
-    //   const colorFind = this.listColor.filter(l => l.color === this.colorChoose);
-    //   console.log('Found: ',colorFind);
-    //   console.log('Image: ',colorFind.image);
-    //   this.image_main = colorFind ? colorFind.image : null;
-    // },
+    blockButtonColor(color) {
+      this.disabledColors = this.listColor.filter(colorItem =>
+            !this.listColorAfterChooseSize.some(item => item.color === colorItem.color)
+      );
+      let colorsThatQuantityZero = this.listColor.filter(l => l.quantity <=0);
+      this.disabledColors = this.disabledColors.concat(colorsThatQuantityZero);
+      console.log('List color disable: ', this.disabledColors);
+      return this.disabledColors.some(disabledColor => disabledColor.color === color);
+    },
+
+    blockButtonSize(size) {
+      this.disabledSizes = this.listColor.filter(colorItem =>
+          !this.listSizeAfterChooseColor.some(item => item.size === colorItem.size)
+      );
+      let sizesThatQuantityZero = this.listColor.filter(l => l.quantity <= 0);
+      this.disabledSizes = this.disabledSizes.concat(sizesThatQuantityZero);
+      console.log('List size disable: ', this.disabledSizes);
+      return this.disabledSizes.some(disabledSize => disabledSize.size === size);
+    },
 
     handleChooseColor(color) {
-      this.colorChoose = color.color;
+      this.colorChoose = color;
       const colorFind = this.listColor.find(l => l.color === this.colorChoose);
       console.log('Found: ', colorFind);
       // Check if colorFind is not undefined before accessing image
       this.image_main = colorFind ? colorFind.image : null;
+    },
+
+    isButtonChooseColorDisabled(color) {
+      if(this.listSize.length === 1 && this.listColor){
+        return false;
+      }else{
+        if(this.colorChoose === color){
+          return false;
+        }else{
+          const shouldDisable = this.listSize.length > 0 && this.listColor.length > 0;
+          if(this.listSize.length > 0 && this.listColor.length > 0){
+            if (this.listColorAfterChooseSize.length === 0) {
+              return shouldDisable;
+            }else{
+              return this.blockButtonColor(color);
+            }
+          }else{
+            if(this.listSize.length === 0 && this.listColor.length > 0){
+              const findQuantity = this.listColor.filter(l => l.color === color);
+              return findQuantity.quantity <= 0 || !findQuantity;
+            }
+          }
+        }
+      }
+    },
+
+    isButtonChooseSizeDisabled(size){
+      if(this.listSize && this.listColor.length === 1){
+        return false;
+      }else{
+        if(this.listSize.length > 0 && this.listColor.length > 0){
+          if(this.sizeChoose !== null){
+            return false;
+          }else{
+            if(this.listSizeAfterChooseColor.length === 0){
+              return false;
+            }else{
+              return this.blockButtonSize(size);
+            }
+          }
+        }else{
+          if(this.listSize.length > 0 && this.listColor.length === 0){
+            const findQuantity = this.listColor.filter(l => l.size === size);
+            return findQuantity.quantity <= 0 || !findQuantity;
+          }
+        }
+      }
     }
   },
+
 
   computed: {
     buttonIncreaseClass(){
@@ -216,6 +355,11 @@ export default {
           ? 'quantity-greater-zero'
           : 'quantity-equal-zero';
     },
+
+    viewListImageScroll(){
+      return (this.listColor.filter(l => l.color !== null).length > 4)
+        ? 'scroll' : 'no-scroll';
+    }
   }
 
 }
@@ -234,7 +378,9 @@ export default {
 <template>
   <div class="container-view-product" >
     <div class="view-image-product">
-      <div class="view-list-image-color" v-if="this.listColor.filter(l => l.color !==null).length > 0">
+      <div class="view-list-image-color" v-if="this.listColor.filter(l => l.color !==null).length > 0"
+           :class="['scroll-view-list-image', viewListImageScroll]"
+      >
           <img v-for="(w) in listColor"
               :src="w.image" alt="image color" class="style-image-color-list"
                @click="handleClickImage_Color(w.wareHouseId)"
@@ -284,37 +430,42 @@ export default {
             +
           </button>
         </div>
+        <!--Size Choose-->
         <div class="view-item-warehouse style-size-color"  v-if="listSize.length > 0">
           <div v-if="listSize.length > 0">Size:</div>
           <div class="container-custom-group-item">
             <button class="item-size"
-                    v-for="(item) in listSize"
-                    :key="item"
-                    :class="['item-size-width', item.length > 3 ?
-               'length-item-greater-3' : 'length-item-lower-equal-3',
-               'item-size-color', item === sizeChoose ? 'chose' : 'no-choose'
+                    v-for="(s) in listSize"
+                    :class="['item-size-width', s.size.length > 3 ?
+                    'length-item-greater-3' : 'length-item-lower-equal-3',
+                    'item-size-color', s.size === sizeChoose ? 'chose' : 'no-choose',
+                    'item-block-size-choose', isButtonChooseSizeDisabled(s.size) ? 'disabled' : 'enabled'
               ]"
-                      @click="handleChooseSize(item)"
+                      @click="handleChooseSize(s.size)"
+                      :disabled="isButtonChooseSizeDisabled(s.size)"
               >
-                {{ item }}
+                {{ s.size }}
               </button>
           </div>
         </div>
+        <!--Color Choose-->
         <div class="view-item-warehouse style-size-color" v-if="listColor.filter(l => l.color !== null).length > 0">
           <div v-if="(listColor.filter(color => color !== null).length > 0 && listSize.length <= 0) ||
-              (sizeChoose !== null && listColor.filter(color => color !== null).length > 0)
+              (listColor.filter(color => color !== null).length > 0)
             "
           >Color:</div>
           <div class="container-custom-group-item"
                v-if="(listColor.filter(color => color !== null).length > 0 && listSize.length <= 0) ||
-              (sizeChoose !== null && listColor.filter(color => color !== null).length > 0)"
+              (listColor.filter(color => color !== null).length > 0)"
           >
             <button class="item-color"
-                    v-for="(color) in listColor.filter(l => l.color !== null)"
-                    v-if="color !== null"
-                    :class="['item-color-border-color', color.color === colorChoose ? 'chose' : 'no-choose']"
-                    :style="{ backgroundColor: color.color }"
-                    @click="handleChooseColor(color)"
+                    v-for="(c) in listColor.filter(l => l.color !== null)"
+                    :class="['item-color-border-color', c.color === colorChoose ? 'chose' : 'no-choose',
+                            'item-block-color-choose', isButtonChooseColorDisabled(c.color) ? 'disabled' : 'enabled'
+                      ]"
+                    :style="{ backgroundColor: c.color }"
+                    @click="handleChooseColor(c.color)"
+                    :disabled="isButtonChooseColorDisabled(c.color)"
             />
           </div>
         </div>
@@ -371,9 +522,6 @@ export default {
   width: 100%;
   height: 100%;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .view-image-init{
@@ -549,6 +697,8 @@ export default {
     align-items: center;
     background-color: #ccc;
     padding-bottom: 8px;
+    //hien thi icon cam
+    cursor: not-allowed;
   }
 }
 
@@ -583,10 +733,10 @@ export default {
 }
 
 .style-image-color-list{
-  width: 80%;
-  height: 25%;
+  width: 90%;
+  height: 24%;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 4%;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -678,12 +828,52 @@ export default {
 .item-color-border-color{
   &.chose{
     border: solid 4px #DB4444;
+    color: red;
   }
 
   &.no-choose{
     border: none;
+    color: red;
   }
 }
 
+.item-block-color-choose{
+  &.enable {
+    opacity: 1;
+    // Fully visible
+    cursor: pointer;
+    // Indicate that it's clickable
+  }
+
+  &.disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+}
+
+.item-block-size-choose{
+  &.enable {
+    opacity: 1;
+    // Fully visible
+    cursor: pointer;
+    // Indicate that it's clickable
+  }
+
+  &.disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+}
+
+.scroll-view-list-image{
+  &.no-scroll {
+    overflow-y: hidden;
+  }
+
+  &.scroll{
+    overflow-y: scroll;
+    object-fit: contain;
+  }
+}
 
 </style>

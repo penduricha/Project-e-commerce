@@ -17,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
         "        w.price, " +
         "        e.name_event_purchasing, " +
         "        coalesce(d.number_of_discounts, 0) AS number_of_discounts, " +
-        "        row_number() OVER (partition by p.product_id order by w.ware_house_id) as rn " +
+        "        row_number() over (partition by p.product_id order by w.ware_house_id) as rn " +
         "    from " +
         "        Product p " +
         "        join mapping_event_purchasing_product mpe on p.product_id = mpe.product_id " +

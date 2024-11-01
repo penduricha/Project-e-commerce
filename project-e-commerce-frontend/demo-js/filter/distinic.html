@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        const items = [
+            { id: 1, name: 'Apple' },
+            { id: 2, name: 'Banana' },
+            { id: 3, name: 'Apple' },
+            { id: 4, name: 'Cherry' },
+
+        ];
+
+        // Get distinct items based on the 'id' property
+        const distinctItems = items.filter((item, index, self) =>
+            index === self.findIndex((t) => (t.name === item.name))
+        );
+        console.log(distinctItems);
+    </script>
+</body>
+</html>
