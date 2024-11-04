@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Input Number with Custom Arrows</title>
+    <style>
+        .input-container {
+            display: flex;
+            align-items: center;
+            position: relative; /* Để định vị các nút */
+        }
+
+        .style-input-number-quantity {
+            width: 100px; /* Thay đổi kích thước theo ý muốn */
+            height: 40px; /* Chiều cao của input */
+            border-radius: 4px;
+            border: 1px solid gray;
+            text-align: center;
+            font-size: 16px; /* Kích thước chữ */
+            margin: 0 5px; /* Khoảng cách giữa input và nút */
+            -moz-appearance: textfield; /* Tắt mũi tên mặc định trên Firefox */
+        }
+
+        /* Ẩn mũi tên mặc định */
+        .style-input-number-quantity::-webkit-inner-spin-button,
+        .style-input-number-quantity::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .button {
+            width: 30px; /* Kích thước của nút */
+            height: 30px; /* Chiều cao của nút */
+            border: none; /* Không có viền */
+            background-color: transparent; /* Nền trong suốt */
+            cursor: pointer; /* Hiển thị con trỏ khi hover */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button-up {
+            position: relative; /* Để định vị mũi tên */
+        }
+
+        .button-up::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent; /* Mũi tên trái */
+            border-right: 5px solid transparent; /* Mũi tên phải */
+            border-bottom: 7px solid gray; /* Mũi tên lên */
+            position: absolute;
+            bottom: 5px; /* Định vị mũi tên */
+        }
+
+        .button-down {
+            position: relative; /* Để định vị mũi tên */
+        }
+
+        .button-down::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent; /* Mũi tên trái */
+            border-right: 5px solid transparent; /* Mũi tên phải */
+            border-top: 7px solid gray; /* Mũi tên xuống */
+            position: absolute;
+            top: 5px; /* Định vị mũi tên */
+        }
+    </style>
+</head>
+<body>
+
+<div class="input-container">
+
+    <input type="number" class="style-input-number-quantity" value="1" min="1">
+    <button class="button button-up"></button>
+    <button class="button button-down"></button>
+</div>
+
+<script>
+    const input = document.querySelector('.style-input-number-quantity');
+    const buttonUp = document.querySelector('.button-up');
+    const buttonDown = document.querySelector('.button-down');
+
+    buttonUp.addEventListener('click', () => {
+        input.value = parseInt(input.value) + 1; // Tăng giá trị
+    });
+
+    buttonDown.addEventListener('click', () => {
+        if (input.value > 1) { // Đảm bảo giá trị không nhỏ hơn 1
+            input.value = parseInt(input.value) - 1; // Giảm giá trị
+        }
+    });
+</script>
+
+</body>
+</html>

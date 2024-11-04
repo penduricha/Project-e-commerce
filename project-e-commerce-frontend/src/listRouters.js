@@ -8,10 +8,11 @@ import ViewAll_FlashSales from "@/components/home-page/view-all-products/ViewAll
 import ViewAll_BestSellingProducts from "@/components/home-page/view-all-products/ViewAll_BestSellingProducts.vue";
 import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products/ViewAll_ExploreOurProducts.vue";
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
+import CartScreen from "@/pages/cart/CartScreen.vue";
 
 const routers = [
     // ProductDetail
-    { path: '/', component: HomePage},
+    { path: '/', component: CartScreen},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },
@@ -26,6 +27,7 @@ const routers = [
     { path: '/home-page-with-account', component: HomePageWithAccount,
         props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })
     },
+    { path: '/cart', component: CartScreen}
 ];
 export default routers;
 

@@ -22,6 +22,7 @@ import 'vuetify/dist/vuetify-labs.min.css';
 import ViewAll_BestSellingProducts from "@/components/home-page/view-all-products/ViewAll_BestSellingProducts.vue";
 import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products/ViewAll_ExploreOurProducts.vue";
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
+import CartScreen from "@/pages/cart/CartScreen.vue";
 
 const vuetify = createVuetify();
 
@@ -73,7 +74,8 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
             {
                 path: '/home-page-with-account', component: HomePageWithAccount,
                 props: () => ({ emailPhoneHomePage: emailPhoneNumber })
-            }
+            },
+            { path: '/cart', component: CartScreen}
         ],
     });
     const app = createApp(App)
