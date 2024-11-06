@@ -1,6 +1,6 @@
 use ecommerce_shop;
 
-select phone_number from user where id = 24;
+select * from user where id = 24;
 
 # delete from product_type;
 # select * from product;

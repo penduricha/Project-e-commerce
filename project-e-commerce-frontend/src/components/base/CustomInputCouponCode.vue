@@ -12,7 +12,7 @@ export default {
 
 <template>
   <!-- limit input coupon code 50 char-->
-  <input type="text" maxlength=50 class="style-input-coupon" :placeholder="textPlaceholder" v-model="couponCode">
+  <input type="text" maxlength=50 class="style-input-coupon" :placeholder="textPlaceholder" v-model="couponCode" >
 </template>
 
 <style lang="scss" scoped>

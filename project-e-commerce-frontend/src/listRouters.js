@@ -9,10 +9,11 @@ import ViewAll_BestSellingProducts from "@/components/home-page/view-all-product
 import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products/ViewAll_ExploreOurProducts.vue";
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 import CartScreen from "@/pages/cart/CartScreen.vue";
+import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
 
 const routers = [
     // ProductDetail
-    { path: '/', component: CartScreen},
+    { path: '/', component: ManageAccountScreen},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },
@@ -27,7 +28,8 @@ const routers = [
     { path: '/home-page-with-account', component: HomePageWithAccount,
         props: (route) => ({ emailPhoneHomePage: route.query.emailPhoneHomePage })
     },
-    { path: '/cart', component: CartScreen}
+    { path: '/cart', component: CartScreen},
+    { path: '/manage-account', component: ManageAccountScreen},
 ];
 export default routers;
 

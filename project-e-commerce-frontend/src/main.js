@@ -23,6 +23,7 @@ import ViewAll_BestSellingProducts from "@/components/home-page/view-all-product
 import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products/ViewAll_ExploreOurProducts.vue";
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 import CartScreen from "@/pages/cart/CartScreen.vue";
+import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
 
 const vuetify = createVuetify();
 
@@ -75,7 +76,8 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
                 path: '/home-page-with-account', component: HomePageWithAccount,
                 props: () => ({ emailPhoneHomePage: emailPhoneNumber })
             },
-            { path: '/cart', component: CartScreen}
+            { path: '/cart', component: CartScreen},
+            { path: '/manage-account', component: ManageAccountScreen},
         ],
     });
     const app = createApp(App)
