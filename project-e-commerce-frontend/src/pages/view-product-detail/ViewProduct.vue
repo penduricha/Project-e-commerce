@@ -45,7 +45,7 @@ export default {
       colorChoose: null,
 
       //error
-      notifyChoose: null,
+      notifyValidation: null,
 
       //block choose
 
@@ -145,7 +145,7 @@ export default {
 
     console.log('List size: ',this.listSize);
     console.log('List color: ',this.listColor);
-    this.price_view = this.firstWarehouse.price;
+    this.price_view = getPrice_By_Discount(this.firstWarehouse.price, this.firstWarehouse.numberOfDiscount);
   },
 
   async mounted() {
@@ -237,7 +237,7 @@ export default {
         this.colorChoose = colorFind.color;
 
         if(this.listColor.length > 0 && this.listSize.length === 0){
-          this.price_view = colorFind.price;
+          this.price_view = getPrice_By_Discount(colorFind.price, colorFind.numberOfDiscount);
         }
 
         this.image_main = colorFind.image;
@@ -256,7 +256,8 @@ export default {
     handleChooseSize(size){
       if(this.listSize && !this.listColor){
         this.sizeChoose = size;
-        this.price_view = this.listSize.filter(l =>  l.size === this.sizeChoose)[0].price;
+        let whFound = this.listSize.filter(l =>  l.size === this.sizeChoose)[0]
+        this.price_view = getPrice_By_Discount(whFound.price, whFound.numberOfDiscount);
       }else{
         if(this.listSize.length === 1){
           this.listColorAfterChooseSize = null;
@@ -272,16 +273,6 @@ export default {
               console.log('List color after chose size: ', this.listColorAfterChooseSize);
               this.colorChoose = null;
             }
-            // }else{
-            //   // if(this.sizeChoose){
-            //   //   if(this.listColor.length > 0 && this.listSize.length > 0){
-            //   //     this.price_view = this.listColor.filter(l =>
-            //   //         l.color === this.colorChoose &&
-            //   //         l.size === this.sizeChoose
-            //   //     )[0].price;
-            //   //   }
-            //   // }
-            // }
           }
         }
       }
@@ -313,24 +304,25 @@ export default {
       //this.price_view = colorFind.price;
       if(this.listColor.length > 0 && this.listSize.length === 0){
         const colorFind = this.listColor.filter(l => l.color === this.colorChoose);
-        this.price_view = colorFind[0].price;
+        this.price_view = getPrice_By_Discount(colorFind[0].price, colorFind[0].numberOfDiscount);
         this.image_main = colorFind[0] ? colorFind[0].image : null;
       }
 
       if(this.listColor.length > 0 && this.listSize.length > 0){
-        this.price_view = this.listColor.filter(l =>
+        let whFound = this.listColor.filter(l =>
             l.color === this.colorChoose &&
             l.size === this.sizeChoose
-        )[0].price;
+        );
+
+        this.price_view = getPrice_By_Discount(whFound[0].price, whFound[0].numberOfDiscount);
+
         this.image_main = this.listColor.filter(l =>
             l.color === this.colorChoose &&
             l.size === this.sizeChoose
         )[0].image;
       }
-
       // Check if colorFind is not undefined before accessing image
       //this.price_view = this.listSize.filter(l =>  l.size === this.sizeChoose)[0];
-
     },
 
     isButtonChooseColorDisabled(color) {
@@ -391,37 +383,63 @@ export default {
           if(this.sizeChoose){
             //chi có size
             //constructor(productId, size, color ,image, name, price, quantity)
-            const cart = new Cart(this.product.productId,
-                this.sizeChoose, this.colorChoose, this.image_main,
-                this.product.name, this.price_view, this.countQuantityBuy);
-            console.log('Product to add cart: ',cart);
+            let whFound = this.listSize.filter(warehouse => warehouse.size === this.sizeChoose);
+            if(this.countQuantityBuy > whFound[0].quantity){
+              this.notifyValidation = 'Selected products exceed products in stock.';
+            }else{
+              this.notifyValidation = '';
+              const cart = new Cart(this.product.productId,
+                  this.sizeChoose, this.colorChoose, this.image_main,
+                  this.product.name, this.price_view, this.countQuantityBuy);
+              console.log('Product to add cart: ',cart);
+            }
+          }else{
+            this.notifyValidation = 'Please choose size.';
           }
         }
 
         if(this.listSize.length === 0 && this.listColor.length > 0){
           if(this.colorChoose){
-            const cart = new Cart(this.product.productId,
-                this.sizeChoose, this.colorChoose, this.image_main,
-                this.product.name, this.price_view, this.countQuantityBuy);
-            console.log('Product to add cart: ',cart);
+            let whFound = this.listSize.filter(warehouse => warehouse.color === this.colorChoose);
+            if(this.countQuantityBuy > whFound[0].quantity){
+              this.notifyValidation = 'Selected products exceed products in stock.';
+            }else{
+              this.notifyValidation = '';
+              const cart = new Cart(this.product.productId,
+                  this.sizeChoose, this.colorChoose, this.image_main,
+                  this.product.name, this.price_view, this.countQuantityBuy);
+              console.log('Product to add cart: ',cart);
+            }
+          }else{
+            this.notifyValidation = 'Please choose size.';
           }
         }
 
         if(this.listSize.length > 0 && this.listColor.length > 0){
           if(!this.sizeChoose){
-
+            this.notifyValidation = 'Please choose size.';
           }
 
           if(!this.colorChoose){
-
+            this.notifyValidation = 'Please choose color.';
           }
 
           if(this.sizeChoose && this.colorChoose){
-            //add to cart
-            const cart = new Cart(this.product.productId,
-                this.sizeChoose, this.colorChoose, this.image_main,
-                this.product.name, this.price_view, this.countQuantityBuy);
-            console.log('Product to add cart: ',cart);
+            let whFound = this.listSize.filter(warehouse =>
+                warehouse.color === this.colorChoose &&
+                warehouse.size === this.sizeChoose
+            );
+
+            if(this.countQuantityBuy > whFound[0].quantity){
+              this.notifyValidation = 'Selected products exceed products in stock.';
+            }else{
+              //add to cart
+              this.notifyValidation = '';
+              const cart = new Cart(this.product.productId,
+                  this.sizeChoose, this.colorChoose, this.image_main,
+                  this.product.name, this.price_view, this.countQuantityBuy);
+              console.log('Product to add cart: ',cart);
+            }
           }
         }
 
@@ -434,7 +452,7 @@ export default {
 
         }
       }else{
-
+        this.notifyValidation = 'Please choose quantity.';
       }
     }
   },
@@ -470,6 +488,28 @@ export default {
 //     return null;
 //   }
 // }
+function getPrice_By_Discount(price, numberOfDiscount){
+  let priceView = price - price*(numberOfDiscount / 100);
+  if(isZero(getDecimalPart(priceView))){
+    return priceView.toFixed(2);
+  }else
+  {
+    return priceView.toFixed(2);
+  }
+  ///return  price - price*(numberOfDiscount / 100);
+}
+
+function getDecimalPart(num) {
+  num = num.toFixed(2);
+  const integerPart = Math.floor(num);
+  const decimalPart = num - integerPart;
+  const decimalAsInt = Math.round(decimalPart * 10000);
+  return decimalAsInt.toString().padStart(2, '0');
+}
+
+function isZero(number){
+  return Number(number) === 0;
+}
 </script>
 
 <template>
@@ -507,7 +547,7 @@ export default {
             In Stock
           </div>
         </div>
-        <p class="style-price" v-if="firstWarehouse">${{price_view.toFixed(2)}}</p>
+        <p class="style-price" v-if="firstWarehouse">${{price_view}}</p>
         <p class="style-description" v-if="product">{{product.description}}</p>
       </div>
       <div class="view-information-product-child" style="flex: 4">
@@ -566,6 +606,9 @@ export default {
             />
           </div>
         </div>
+        <div class="view-item-warehouse">
+          <span class="span-error" style="font-size: 18px;">{{notifyValidation}}</span>
+        </div>
         <div class="view-item-warehouse" >
           <button @click="handleAddToCart()" class="button-add-to-cart">Add To Cart</button>
         </div>
@@ -600,6 +643,7 @@ export default {
 </template>
 
 <style lang="scss">
+@import '@/assets/input-white';
 
 .container-view-product{
   width: 100%;
