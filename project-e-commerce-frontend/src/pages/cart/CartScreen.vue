@@ -7,6 +7,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomInputCouponCode from "@/components/base/CustomInputCouponCode.vue";
 import Screen404 from "@/pages/Screen404.vue";
 import CustomButtonWhite from "@/components/base/CustomButtonWhite.vue";
+import RouterDao from "@/daos/RouterDao.js";
 
 
 export default {
@@ -28,7 +29,7 @@ export default {
 
   created() {
     this.getDataCart_From_Data_Js();
-    this.getDataCart_From_LocalStorage();
+    this.getDataCart_From_LocalStorage_Or_API();
     this.get_Subtotal();
   },
 
@@ -43,8 +44,15 @@ export default {
       }, 0));
     },
 
-    getDataCart_From_LocalStorage(){
+    getDataCart_From_LocalStorage_Or_API(){
+      const routerDao = new RouterDao();
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+        //get from Local Storage
 
+      }else{
+        //get from database
+
+      }
     },
 
     //quantity
@@ -72,15 +80,34 @@ export default {
         console.log("Not found!");
       }
     },
-    // handleIncrease(){
-    //   this.quantityBuy++;
-    // },
-    //
-    // handleReduce(){
-    //   if(this.quantityBuy > 1){
-    //     this.quantityBuy--;
-    //   }
-    // },
+
+    handleReturnToShop(){
+      const routerDao = new RouterDao();
+
+      if(!routerDao.getEmailPhoneNumberFromLocalStorage()){
+
+        routerDao.saveRouterPathToSessionStorage("/home-page");
+
+        this.$router.push({
+          path: '/home-page',
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }else{
+        routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
+
+        this.$router.push({
+          path: '/home-page-with-account',
+          query: {
+            emailPhoneHomePage: routerDao.getEmailPhoneNumberFromLocalStorage().trim(),
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
+    },
 
   }
 }
@@ -155,7 +182,7 @@ export default {
             </tbody>
           </table>
           <div class="custom-return-update-button">
-            <CustomButtonWhite text-button="Return To Shop" style="width: 220px" />
+            <CustomButtonWhite @click="handleReturnToShop()" text-button="Return To Shop" style="width: 220px" />
             <CustomButtonWhite text-button="Update Cart" style="width: 200px" />
           </div>
         </div>

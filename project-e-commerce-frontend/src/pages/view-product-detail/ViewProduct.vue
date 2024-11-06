@@ -5,6 +5,8 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import StarRating from 'vue-star-rating';
 import WareHouseDao from "@/daos/WareHouseDao.js";
 import ProductDao from "@/daos/ProductDao.js";
+import Cart from "@/models/Cart.js";
+import RouterDao from "@/daos/RouterDao.js";
 
 
 //npm install vue-star-rating@next
@@ -28,6 +30,7 @@ export default {
       groupedColorsBySize: null,
       groupedSizeByColor: null,
       image_main: null,
+      price_view: 0,
 
       rating: "No Rating Selected",
       currentRating: "No Rating",
@@ -142,7 +145,7 @@ export default {
 
     console.log('List size: ',this.listSize);
     console.log('List color: ',this.listColor);
-
+    this.price_view = this.firstWarehouse.price;
   },
 
   async mounted() {
@@ -232,15 +235,28 @@ export default {
         this.listSizeAfterChooseColor = null;
         const colorFind = this.listColor.find(l => l.wareHouseId === wareHouseId);
         this.colorChoose = colorFind.color;
+
+        if(this.listColor.length > 0 && this.listSize.length === 0){
+          this.price_view = colorFind.price;
+        }
+
         this.image_main = colorFind.image;
         this.setListSizeGroup(this.colorChoose);
         console.log('List size after chose color: ',this.listSizeAfterChooseColor);
       }
     },
 
+//     if(this.listColor.length > 0 && this.listSize.length > 0){
+//   this.price_view = this.listColor.filter(l =>
+//       l.color === this.colorChoose &&
+//       l.size === this.sizeChoose
+//   )[0].price;
+// }
+
     handleChooseSize(size){
       if(this.listSize && !this.listColor){
         this.sizeChoose = size;
+        this.price_view = this.listSize.filter(l =>  l.size === this.sizeChoose)[0].price;
       }else{
         if(this.listSize.length === 1){
           this.listColorAfterChooseSize = null;
@@ -249,18 +265,23 @@ export default {
           if(this.listColor.length === 1){
             this.colorChoose = this.listColor[0].color;
           }else{
-            if(this.colorChoose !== null && this.sizeChoose === size){
-              //Đứng yên đó ko làm gì
-              // if(!this.listColor){
-              //   this.sizeChoose = null;
-              // }
-            }else{
+            if (this.colorChoose === null || this.sizeChoose !== size) {
               this.sizeChoose = size;
               this.listColorAfterChooseSize = null;
               this.setListColorGroup(this.sizeChoose);
-              console.log('List color after chose size: ',this.listColorAfterChooseSize);
+              console.log('List color after chose size: ', this.listColorAfterChooseSize);
               this.colorChoose = null;
             }
+            // }else{
+            //   // if(this.sizeChoose){
+            //   //   if(this.listColor.length > 0 && this.listSize.length > 0){
+            //   //     this.price_view = this.listColor.filter(l =>
+            //   //         l.color === this.colorChoose &&
+            //   //         l.size === this.sizeChoose
+            //   //     )[0].price;
+            //   //   }
+            //   // }
+            // }
           }
         }
       }
@@ -288,10 +309,28 @@ export default {
 
     handleChooseColor(color) {
       this.colorChoose = color;
-      const colorFind = this.listColor.find(l => l.color === this.colorChoose);
-      console.log('Found: ', colorFind);
+      //console.log('Found: ', colorFind);
+      //this.price_view = colorFind.price;
+      if(this.listColor.length > 0 && this.listSize.length === 0){
+        const colorFind = this.listColor.filter(l => l.color === this.colorChoose);
+        this.price_view = colorFind[0].price;
+        this.image_main = colorFind[0] ? colorFind[0].image : null;
+      }
+
+      if(this.listColor.length > 0 && this.listSize.length > 0){
+        this.price_view = this.listColor.filter(l =>
+            l.color === this.colorChoose &&
+            l.size === this.sizeChoose
+        )[0].price;
+        this.image_main = this.listColor.filter(l =>
+            l.color === this.colorChoose &&
+            l.size === this.sizeChoose
+        )[0].image;
+      }
+
       // Check if colorFind is not undefined before accessing image
-      this.image_main = colorFind ? colorFind.image : null;
+      //this.price_view = this.listSize.filter(l =>  l.size === this.sizeChoose)[0];
+
     },
 
     isButtonChooseColorDisabled(color) {
@@ -334,10 +373,68 @@ export default {
           }
         }else{
           if(this.listSize.length > 0 && this.listColor.length === 0){
-            const findQuantity = this.listColor.filter(l => l.size === size);
+            const findQuantity = this.listSize.filter(l => l.size === size);
             return findQuantity.quantity <= 0 || !findQuantity;
           }
         }
+      }
+    },
+
+    handleAddToCart(){
+      //let cartProduct = new Cart(this.product.productId, this.product.image, this.product.name, this.);
+      // listSize: [],
+      //listColor: [],
+      console.log(this.listSize);
+      console.log(this.listColor);
+      if(this.countQuantityBuy > 0){
+        if(this.listSize.length > 0 && this.listColor.length === 0){
+          if(this.sizeChoose){
+            //chi có size
+            //constructor(productId, size, color ,image, name, price, quantity)
+            const cart = new Cart(this.product.productId,
+                this.sizeChoose, this.colorChoose, this.image_main,
+                this.product.name, this.price_view, this.countQuantityBuy);
+            console.log('Product to add cart: ',cart);
+          }
+        }
+
+        if(this.listSize.length === 0 && this.listColor.length > 0){
+          if(this.colorChoose){
+            const cart = new Cart(this.product.productId,
+                this.sizeChoose, this.colorChoose, this.image_main,
+                this.product.name, this.price_view, this.countQuantityBuy);
+            console.log('Product to add cart: ',cart);
+          }
+        }
+
+        if(this.listSize.length > 0 && this.listColor.length > 0){
+          if(!this.sizeChoose){
+
+          }
+
+          if(!this.colorChoose){
+
+          }
+
+          if(this.sizeChoose && this.colorChoose){
+            //add to cart
+            const cart = new Cart(this.product.productId,
+                this.sizeChoose, this.colorChoose, this.image_main,
+                this.product.name, this.price_view, this.countQuantityBuy);
+            console.log('Product to add cart: ',cart);
+          }
+        }
+
+        const routerDao = new RouterDao();
+        if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+          //save from Local Storage
+
+        }else{
+          //save from database POST
+
+        }
+      }else{
+
       }
     }
   },
@@ -410,7 +507,7 @@ export default {
             In Stock
           </div>
         </div>
-        <p class="style-price" v-if="firstWarehouse">${{firstWarehouse.price.toFixed(2)}}</p>
+        <p class="style-price" v-if="firstWarehouse">${{price_view.toFixed(2)}}</p>
         <p class="style-description" v-if="product">{{product.description}}</p>
       </div>
       <div class="view-information-product-child" style="flex: 4">
@@ -470,7 +567,7 @@ export default {
           </div>
         </div>
         <div class="view-item-warehouse" >
-          <button @click="" class="button-add-to-cart">Add To Cart</button>
+          <button @click="handleAddToCart()" class="button-add-to-cart">Add To Cart</button>
         </div>
         <div class="view-item-warehouse">
           <CustomButton @click="" style="width: 100%; height: 50px;" text-button="Buy Now"/>
