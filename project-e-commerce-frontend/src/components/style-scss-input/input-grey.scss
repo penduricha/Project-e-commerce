@@ -1,0 +1,24 @@
+.style-input-grey{
+  background-color: #f4f4f4;
+  color: dimgrey;
+  padding-left: 15px;
+  border-radius: 4px;
+}
+
+.style-input-grey-enable-disable{
+  &.enable{
+    background-color: #f4f4f4;
+    color: dimgrey;
+    padding-left: 15px;
+    border-radius: 4px;
+  }
+
+  &.disabled{
+    background-color: #f4f4f4;
+    color: dimgrey;
+    padding-left: 15px;
+    border-radius: 4px;
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+}

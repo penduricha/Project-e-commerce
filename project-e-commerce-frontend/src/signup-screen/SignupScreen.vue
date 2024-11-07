@@ -38,6 +38,7 @@ export default {
     this.validatePassword();
     window.addEventListener('beforeunload', this.handleBeforeUnload);
   },
+
   beforeDestroy() {
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
   },

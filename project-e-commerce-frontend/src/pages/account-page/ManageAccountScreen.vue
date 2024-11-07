@@ -1,77 +1,4 @@
-<template>
-  <div class="container">
-    <Header style="height: 50px"/>
-    <Menu style="height: 200px"/>
-    <main class="style-manage-account">
-      <section class="container-manage-account">
-        <div class="view-home-account-welcome">
-          <label style="font-size: 17px;">
-            <span style="color: grey; cursor: pointer">Home /</span> My Account
-          </label>
-          <label style="font-size: 17px;">
-            Welcome! <span style="color: #DB4444">Md Rim</span>
-          </label>
-        </div>
-        <div class="view-body-manage-account">
-          <aside class="view-menu-manage-account">
-            <label class="style-title-menu">Manage My Account</label>
-            <label class="style-menu" style="color: #DB4444">My Profile</label>
-            <label class="style-title-menu">My Orders</label>
-            <label class="style-menu">My Returns</label>
-            <label class="style-menu">My Cancellations</label>
-          </aside>
-          <div class="view-form-manage-account">
-            <div class="view-input-button-manage-account">
-              <h4 style="color: #DB4444; font-size: 25px;">Edit Your Profile</h4>
-              <div class="style-row-form">
-                <div class="style-input">
-                  <label class="style-label-input">First Name</label>
-                  <CustomInputGrey type-input="text" maxlength=30 :text-input="firstName" class="style-input-form" :is-disable=false />
-                </div>
-                <div class="style-input">
-                  <label class="style-label-input">Last Name</label>
-                  <CustomInputGrey type-input="text" maxlength=60 :text-input="lastNameAndMiddleName" class="style-input-form" :is-disable=false />
-                </div>
-              </div>
-              <div class="style-row-form">
-                <div class="style-input">
-                  <label class="style-label-input">Email</label>
-                  <!-- scss no-->
-                  <CustomInputGrey type-input="text" maxlength=50 class="style-input-form" :is-disable=true />
-                </div>
-                <div class="style-input">
-                  <label class="style-label-input">Address</label>
-                  <CustomInputGrey type-input="text" maxlength=255 class="style-input-form" :is-disable=false />
-                </div>
-              </div>
-              <div class="style-row-form">
-                <div class="style-input">
-                  <!-- scss no-->
-                  <label class="style-label-input">Phone number</label>
-                  <CustomInputGrey type-input="text" maxlength=11 class="style-input-form" :is-disable=true />
-                </div>
-                <div class="style-input">
-                  <!--no tag-->
-                </div>
-              </div>
-              <div class="view-password-input">
-                <label class="style-label-input">Password Changes</label>
-                <!--                <input type="password" maxlength=20 placeholder="Current Passwod"-->
-                <CustomInputGrey type-input="password" maxlength=20 text-placeholder="Current Password" class="style-input-password" />
-                <CustomInputGrey type-input="password" maxlength=20 text-placeholder="New Password" class="style-input-password" />
-                <CustomInputGrey type-input="password" maxlength=20 text-placeholder="Confirm New Password" class="style-input-password" />
-              </div>
-              <div style="flex: 0.6; display: flex; justify-content: flex-end; align-items: center;">
-                <CustomButton text-button="Save Changes" class="style-button-save-changes" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-    <Footer style="height: 1500px;"/>
-  </div>
-</template>
+
 
 <script>
 import Header from "@/components/header-footer-menu/Header.vue";
@@ -79,7 +6,6 @@ import Menu from "@/components/menu/Menu.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import CustomInputGrey from "@/components/base/CustomInputGrey.vue";
-import User from "@/models/User.js";
 import UserDao from "@/daos/UserDao.js";
 
 export default{
@@ -89,47 +15,231 @@ export default{
 
   props: {},
 
-  async data() {
+  data() {
     return {
       userManageAccount: null,
       emailPhoneNumberModel: '02190739693',
+      nameWelcome: null,
+
+      //disable input,
+      disableInputEmail: false,
+      disableInputPhoneNumber: false,
 
       firstName: null,
       lastNameAndMiddleName: null,
       address: null,
+      email: null,
+      phoneNumber: null,
+      spanSuccessPassword: null,
+
+      //password
+      currentPassword: null,
+      newPassword: null,
+      confirmNewPassword: null,
+      disableInputCurrentPassword: false,
+
+      //error notify
+      errorFirstname: null,
+      errorLastname: null,
+      errorEmail: null,
+      errorPhoneNumber: null,
+      errorAddress: null,
+      errorPassword: null,
     }
   },
 
-  created() {
+  mounted() {
     this.getUserFromEmailOrPhoneNumber();
-    //this.getToFormInput();
+    this.validateFirstName();
+    this.validateLastName();
+    this.validateEmail();
+    this.validatePhoneNumber();
+    this.validateAddress();
+    this.validateFormatPassword();
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
   },
 
   methods: {
     async getUserFromEmailOrPhoneNumber(){
-      //gia dinh
-      const emailPhoneNumber = '02190739693';
-      const userDao = new UserDao();
-      let userManageAccount = await userDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
-      this.userManageAccount = userManageAccount;
-      console.log('User is: ',userManageAccount);
-      //console.log(this.userManageAccount._firstName);
-      // Gán giá trị từ userManageAccount vào các thuộc tính
-      this.firstName = this.userManageAccount.firstName || ''; // Sử dụng || để tránh null
-      this.lastNameAndMiddleName = (this.userManageAccount.lastName || '') + ' ' + (this.userManageAccount.middleName || '');
-      this.address = this.userManageAccount.address || '';
-      console.log(this.firstName);
-      console.log(this.lastNameAndMiddleName);
+      try{
+        //gia dinh
+        const emailPhoneNumber = '02190739693';
+        const userDao = new UserDao();
+        this.userManageAccount = await userDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
+        console.log('User is: ',this.userManageAccount);
+        //console.log(this.userManageAccount._firstName);
+        //Gán giá trị từ userManageAccount vào các thuộc tính
+        this.firstName = this.userManageAccount.firstName || ''; // Sử dụng || để tránh null
+        this.lastNameAndMiddleName = (this.userManageAccount.lastName || '') + ' ' + (this.userManageAccount.middleName || '');
+        this.address = this.userManageAccount.address || '';
+        this.email = this.userManageAccount.email;
+        this.phoneNumber = this.userManageAccount.phoneNumber;
+        this.nameWelcome = (this.userManageAccount.lastName || '') + ' '
+            + (this.userManageAccount.middleName || '')  + ' '
+            + (this.userManageAccount.firstName || '');
 
+        if(this.userManageAccount.email){
+          this.disableInputEmail = true;
+        }
+
+        if(this.phoneNumber){
+          this.disableInputPhoneNumber = true;
+        }
+      }catch(error){
+        alert(error);
+        console.error(error);
+      }
     },
+
+    preventPaste(event) {
+      event.preventDefault();
+    },
+
+    // async setToDataScreen(){
+    //   const userFromAPI = await this.getUserFromEmailOrPhoneNumber();
+    //   this.firstName = userFromAPI.firstName;
+    // }
 
     // async getToFormInput(){
     //   this.firstName = this.userManageAccount._firstName;
     // }
+
+    //validate
+    validateFirstName(){
+      if(!this.firstName){
+        this.errorFirstname='';
+      }else{
+        if (!isValidVietnameseName(this.firstName)) {
+          //!/^[a-zA-Z ]+$/.test(this.name) ||
+          this.errorFirstname = 'First name is invalid.';
+        } else {
+          this.errorFirstname = '';
+        }
+      }
+    },
+
+    validateLastName(){
+      if(!this.lastNameAndMiddleName){
+        this.errorLastname='';
+      }else{
+        if (!isValidVietnameseName(this.lastNameAndMiddleName)) {
+          //!/^[a-zA-Z ]+$/.test(this.name) ||
+          this.errorLastname = 'Last name is invalid.';
+        } else {
+          this.errorLastname = '';
+        }
+      }
+    },
+
+    validateEmail(){
+      if(!this.email){
+        this.errorEmail='';
+      }else{
+        if(isFullOfSpaces(this.email)){
+          this.errorEmail='';
+        }else{
+          if(!isValidEmail(this.email)){
+            this.errorEmail = 'Email is invalid.';
+          }else{
+            this.errorEmail='';
+          }
+        }
+      }
+    },
+
+    validatePhoneNumber(){
+      if(!this.phoneNumber){
+        this.errorPhoneNumber = '';
+      }else{
+        if(isFullOfSpaces(this.phoneNumber)){
+          this.errorPhoneNumber ='';
+        }else{
+          if(!isNumeric(this.phoneNumber)){
+            this.errorPhoneNumber = 'Phone number is invalid.';
+          }else{
+            //&& this.phoneNumber.length <= 11
+            if(this.phoneNumber.length < 10){
+              this.errorPhoneNumber = 'Phone number must be 10 or 11 digits.';
+            }else{
+              this.errorPhoneNumber ='';
+            }
+          }
+        }
+      }
+    },
+
+    validateAddress(){
+
+    },
+
+    async validateFormatPassword() {
+      if (!this.currentPassword && !this.newPassword && !this.confirmNewPassword) {
+        this.errorPassword = '';
+      } else {
+        if ((!this.currentPassword && (this.newPassword || this.confirmNewPassword))) {
+          this.errorPassword = 'Please enter current password.';
+        } else {
+          //ép user nhập mk hiện tại
+          if (!isValidPassword(this.currentPassword)) {
+            this.errorPassword = 'Current password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: ben123@.';
+          } else {
+            //hashing sha512
+            const passwordHashed = await sha512(this.currentPassword);
+            const passwordAccount = this.userManageAccount.password;
+            if (!comparePassword(passwordHashed, passwordAccount)) {
+              this.errorPassword = 'Password does not match with password account.';
+            } else {
+              //khi current password dung
+              this.disableInputCurrentPassword = true;
+              this.spanSuccessPassword = 'Correct Password.';
+              if(!this.newPassword && this.confirmNewPassword){
+                this.errorPassword = 'Please enter new password.';
+              }else{
+                if (!isValidPassword(this.newPassword) && this.newPassword){
+                  this.errorPassword = 'New password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: ben123@.';
+                }else{
+                  const newPasswordHashed = await sha512(this.newPassword);
+                  if (comparePassword(newPasswordHashed, passwordAccount) && this.newPassword) {
+                    this.errorPassword = 'New password does not match with current password.';
+                  }else{
+                    this.errorPassword = '';
+                    if (!isValidPassword(this.confirmNewPassword) && this.confirmNewPassword){
+                      this.errorPassword = 'Confirm new password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: ben123@.';
+                    }else{
+                      this.errorPassword = '';
+                      if((!comparePassword(this.newPassword, this.confirmNewPassword)) && this.newPassword && this.confirmNewPassword){
+                        this.errorPassword = 'Confirm new password does not match with new password.';
+                      }else{
+                        this.errorPassword = '';
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
   },
 
   computed: {
+    inputEmailClass(){
+      return (this.disableInputEmail)
+          ? 'disabled'
+          : 'enable';
+    },
 
+    inputButtonClass(){
+      return (this.disableInputPhoneNumber)
+          ? 'disabled'
+          : 'enable';
+    }
   },
 }
 
@@ -147,6 +257,9 @@ function isNumeric (str){
 //     return null;
 //   }
 // }
+function comparePassword(password1, password2){
+  return password1 === password2;
+}
 
 async function sha512(password) {
   let buf = await crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(password));
@@ -172,17 +285,153 @@ function isFullOfSpaces(s) {
   }
   return true;
 }
+
+function isValidEmail(email){
+  return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.trim());
+}
+
+function isValidPassword(password){
+  return /^(?=.*[0-9])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,20}$/.test(password);
+}
 </script>
 
+<template>
+  <div class="container">
+    <Header style="height: 50px"/>
+    <Menu style="height: 200px"/>
+    <main class="style-manage-account">
+      <section class="container-manage-account">
+        <div class="view-home-account-welcome">
+          <label style="font-size: 17px;">
+            <span style="color: grey; cursor: pointer">Home /</span> My Account
+          </label>
+          <label style="font-size: 17px;">
+            Welcome! <span style="color: #DB4444">{{nameWelcome}}</span>
+          </label>
+        </div>
+        <div class="view-body-manage-account">
+          <aside class="view-menu-manage-account">
+            <label class="style-title-menu">Manage My Account</label>
+            <label class="style-menu" style="color: #DB4444">My Profile</label>
+            <label class="style-title-menu">My Orders</label>
+            <label class="style-menu">My Returns</label>
+            <label class="style-menu">My Cancellations</label>
+          </aside>
+          <div class="view-form-manage-account">
+            <div class="view-input-button-manage-account">
+              <h4 style="color: #DB4444; font-size: 25px;">Edit Your Profile</h4>
+              <div class="style-row-form">
+                <div class="style-input">
+                  <label class="style-label-input">
+                    First Name
+                  </label>
+                  <!-- form-control is-invalid: do-->
+                  <input type="text"
+                         class="style-input-grey style-input-form form-control"
+                         v-model="firstName"
+                         maxlength=30
+                         :class="{ 'is-invalid': errorFirstname }"
+                         @input="validateFirstName"
+                         :disabled="false"
+                  />
+                  <span class="span-error">{{errorFirstname}}</span>
+                </div>
+                <div class="style-input">
+                  <label class="style-label-input">Last Name</label>
+                  <input type="text"
+                         class="style-input-grey style-input-form form-control"
+                         v-model="lastNameAndMiddleName"
+                         maxlength=30
+                         :class="{ 'is-invalid': errorLastname }"
+                         @input="validateLastName"
+                         :disabled="false"
+                  />
+                  <span class="span-error">{{errorLastname}}</span>
+                </div>
+              </div>
+              <div class="style-row-form">
+                <div class="style-input">
+                  <label class="style-label-input">Email</label>
+                  <!-- rang buoc disable va invalid-->
+                  <input type="text"
+                         class="style-input-form form-control"
+                         v-model="email"
+                         @input="validateEmail"
+                         maxlength=50
+                         :class="[
+                             'style-input-grey-enable-disable',inputEmailClass,
+                             { 'is-invalid': errorEmail }
+                         ]"
+                         :disabled="disableInputEmail"
+                  />
+                  <span class="span-error">{{errorEmail}}</span>
+                </div>
+                <div class="style-input">
+                  <label class="style-label-input">Address</label>
+                  <input type="text"
+                         class="style-input-grey style-input-form form-control"
+                         v-model="address"
+                         @input="validateAddress"
+                         :class="{ 'is-invalid': errorAddress }"
+                         maxlength=255
+                         :disabled="false"
+                  />
+                  <span class="span-error">{{errorAddress}}</span>
+                </div>
+              </div>
+              <div class="style-row-form">
+                <div class="style-input">
+                  <label class="style-label-input">Phone number</label>
+                  <input type="text"
+                         class="style-input-form form-control"
+                         :class="['style-input-grey-enable-disable', inputButtonClass,  { 'is-invalid': errorPhoneNumber }]"
+                         v-model="phoneNumber"
+                         @input="validatePhoneNumber"
+                         maxlength=11
+                         :disabled="phoneNumber !== null"
+                  />
+                  <!--:disabled="phoneNumber !== null"-->
+                  <span class="span-error">{{errorPhoneNumber}}</span>
+                </div>
+                <div class="style-input">
+                  <!--no tag-->
+                </div>
+              </div>
+              <div class="view-password-input">
+                <label class="style-label-input">Password Changes</label>
+                <!--is-valid-->
+                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="currentPassword" maxlength=20 placeholder="Current Password" class="style-input-password style-input-grey form-control"
+                      :disabled="disableInputCurrentPassword"
+                      :class="{ 'is-valid': disableInputCurrentPassword }"
+                />
+                <span class="text-success" style="margin-bottom: 5px;">{{spanSuccessPassword}}</span>
+                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="newPassword" maxlength=20 placeholder="New Password" class="style-input-password style-input-grey" />
+                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="confirmNewPassword" maxlength=20 placeholder="Confirm New Password" class="style-input-password style-input-grey" />
+                <span class="span-error">{{errorPassword}}</span>
 
+              </div>
+              <div class="style-view-button-save-change">
+                <CustomButton text-button="Save Changes" class="style-button-save-changes" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer style="height: 1500px;"/>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @import '@/assets/container';
+@import '@/components/style-scss-input/input-grey';
+@import '@/assets/input-white';
+
 .style-manage-account{
   //trên, phải, dưới, trái
   padding: 30px 100px 30px 100px;
   width: 1680px;
-  height: 900px;
+  height: 950px;
 }
 
 .container-manage-account{
@@ -235,11 +484,11 @@ function isFullOfSpaces(s) {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 17px;
+  gap: 10px;
 }
 
 .style-row-form{
-  flex: 1;
+  height: 100px;
   display: flex;
   gap: 7.5%;
 }
@@ -248,11 +497,10 @@ function isFullOfSpaces(s) {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .style-button-save-changes{
-  height: 100%;
+  height: 50px;
   width: 22.25%;
 }
 
@@ -262,19 +510,29 @@ function isFullOfSpaces(s) {
 }
 
 .style-input-form{
-  width: 95%;
-  height: 60%;
+  width: 100%;
+  height: 48px;
 }
 
 .view-password-input{
-  flex: 2.75;
+  height: 250px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .style-input-password{
   width: 100%;
-  height: 22%;
+  height: 48px;
+  margin-bottom: 10px;
 }
+
+.style-view-button-save-change{
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+
+
 </style>
