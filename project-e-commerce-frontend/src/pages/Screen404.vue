@@ -3,7 +3,7 @@ import Header from "@/components/header-footer-menu/Header.vue";
 import Menu from "@/components/menu/Menu.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
-import Router from "../../demo-js/localStorage/Router.js";
+import Router from "../routers/Router.js";
 
 export default {
   name: 'Screen404',

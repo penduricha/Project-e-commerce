@@ -7,6 +7,7 @@ import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import CustomInputGrey from "@/components/base/CustomInputGrey.vue";
 import UserDao from "@/daos/UserDao.js";
+import User from "@/models/User.js";
 
 export default{
   name: 'ManageAccountScreen',
@@ -45,6 +46,11 @@ export default{
       errorPhoneNumber: null,
       errorAddress: null,
       errorPassword: null,
+
+      //error input password,
+      errorInputCurrentPassword: false,
+      errorInputNewPassword: false,
+      errorInputConfirmNewPassword: false,
     }
   },
 
@@ -66,7 +72,7 @@ export default{
   methods: {
     async getUserFromEmailOrPhoneNumber(){
       try{
-        //gia dinh
+        //gia dinh email or phone number
         const emailPhoneNumber = '02190739693';
         const userDao = new UserDao();
         this.userManageAccount = await userDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
@@ -113,11 +119,15 @@ export default{
       if(!this.firstName){
         this.errorFirstname='';
       }else{
-        if (!isValidVietnameseName(this.firstName)) {
-          //!/^[a-zA-Z ]+$/.test(this.name) ||
-          this.errorFirstname = 'First name is invalid.';
-        } else {
+        if(isFullOfSpaces(this.firstName.trim())){
           this.errorFirstname = '';
+        }else{
+          if (!isValidVietnameseFirstName(this.firstName.trim())) {
+            //!/^[a-zA-Z ]+$/.test(this.name) ||
+            this.errorFirstname = 'First name is invalid,.';
+          } else {
+            this.errorFirstname = '';
+          }
         }
       }
     },
@@ -126,7 +136,7 @@ export default{
       if(!this.lastNameAndMiddleName){
         this.errorLastname='';
       }else{
-        if (!isValidVietnameseName(this.lastNameAndMiddleName)) {
+        if (!isValidVietnameseName(this.lastNameAndMiddleName.trim())) {
           //!/^[a-zA-Z ]+$/.test(this.name) ||
           this.errorLastname = 'Last name is invalid.';
         } else {
@@ -179,42 +189,62 @@ export default{
     async validateFormatPassword() {
       if (!this.currentPassword && !this.newPassword && !this.confirmNewPassword) {
         this.errorPassword = '';
+        this.errorInputCurrentPassword = false;
+        this.errorInputNewPassword = false;
+        this.errorInputCurrentPassword = false;
       } else {
         if ((!this.currentPassword && (this.newPassword || this.confirmNewPassword))) {
           this.errorPassword = 'Please enter current password.';
+          this.errorInputCurrentPassword = true;
         } else {
-          //ép user nhập mk hiện tại
+          //ép user nhập mk hiện tại\
+          this.errorInputCurrentPassword = false;
           if (!isValidPassword(this.currentPassword)) {
+            this.errorInputCurrentPassword = true;
             this.errorPassword = 'Current password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: ben123@.';
           } else {
+            this.errorInputCurrentPassword = false;
             //hashing sha512
             const passwordHashed = await sha512(this.currentPassword);
             const passwordAccount = this.userManageAccount.password;
             if (!comparePassword(passwordHashed, passwordAccount)) {
               this.errorPassword = 'Password does not match with password account.';
+              this.errorInputCurrentPassword = true;
             } else {
               //khi current password dung
+              this.errorInputCurrentPassword = false;
               this.disableInputCurrentPassword = true;
               this.spanSuccessPassword = 'Correct Password.';
               if(!this.newPassword && this.confirmNewPassword){
+                this.errorInputNewPassword = true;
                 this.errorPassword = 'Please enter new password.';
               }else{
+                this.errorInputNewPassword = false;
                 if (!isValidPassword(this.newPassword) && this.newPassword){
+                  this.errorInputNewPassword = true;
                   this.errorPassword = 'New password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: ben123@.';
                 }else{
+                  this.errorInputNewPassword = false;
                   const newPasswordHashed = await sha512(this.newPassword);
+
                   if (comparePassword(newPasswordHashed, passwordAccount) && this.newPassword) {
+                    this.errorInputNewPassword = true;
                     this.errorPassword = 'New password does not match with current password.';
                   }else{
+                    this.errorInputNewPassword = false;
                     this.errorPassword = '';
                     if (!isValidPassword(this.confirmNewPassword) && this.confirmNewPassword){
+                      this.errorInputConfirmNewPassword = true;
                       this.errorPassword = 'Confirm new password includes letter(s), digit(s), special character(s), no space, from 6-20 characters. Ex: ben123@.';
                     }else{
+                      this.errorInputConfirmNewPassword = false;
                       this.errorPassword = '';
                       if((!comparePassword(this.newPassword, this.confirmNewPassword)) && this.newPassword && this.confirmNewPassword){
+                        this.errorInputConfirmNewPassword = true;
                         this.errorPassword = 'Confirm new password does not match with new password.';
                       }else{
                         this.errorPassword = '';
+                        this.errorInputConfirmNewPassword = false;
                       }
                     }
                   }
@@ -225,6 +255,113 @@ export default{
         }
       }
     },
+
+    validateNullInput(){
+      if(!this.firstName){
+        this.errorFirstname = 'Please enter first name.';
+      }
+
+      if(!this.lastNameAndMiddleName){
+        this.errorLastname = 'Please enter last name.';
+      }
+
+      //email và address ko can
+
+      // if(!this.currentPassword){
+      //   this.errorPassword = 'Please enter current password.';
+      //   this.errorInputCurrentPassword = true;
+      // }
+      //
+      // if(this.disableInputCurrentPassword && !this.newPassword){
+      //   this.errorPassword = 'Please enter new password.';
+      //   this.errorInputNewPassword = true;
+      // }
+      //
+      // if(this.newPassword && !this.confirmNewPassword && !this.errorPassword){
+      //   this.errorPassword = 'Please enter confirm new password.';
+      //   this.errorInputConfirmNewPassword = true;
+      // }
+    },
+
+    async updateAccount() {
+      this.validateNullInput();
+      if (!this.errorFirstname && !this.errorLastname && !this.errorEmail && !this.errorPhoneNumber) {
+        //B1 xu li tk email tồn tại
+        if (this.email && this.email !== this.userManageAccount.email) {
+          try {
+            let userExist = await getUserByEmailOrPhoneNumber(this.email.trim());
+            //console.log('User by email to check exist: ', userExist);
+            //userExist la Object ko phai la Map
+            if(userExist._email){
+              this.errorEmail = 'Account already exist';
+            }
+          } catch (error) {
+            alert(error);
+            console.error(error);
+            this.$router.replace({path: '/screen-404'}).catch((error) => {
+              console.error('Error navigating :', error);
+            });
+          }
+        }
+
+        if (this.phoneNumber && this.phoneNumber !== this.userManageAccount.phoneNumber) {
+          try {
+            let userExist = await getUserByEmailOrPhoneNumber(this.phoneNumber.trim());
+            //console.log('User by email to check exist: ', userExist);
+            //userExist la Object ko phai la Map
+            if(userExist._phoneNumber){
+              this.errorPhoneNumber = 'Account already exist';
+            }
+          } catch (error) {
+            alert(error);
+            console.error(error);
+            this.$router.replace({path: '/screen-404'}).catch((error) => {
+              console.error('Error navigating :', error);
+            });
+          }
+        }
+
+        //constructor(email, phoneNumber, password, firstName, lastName, middleName, address)
+        const email = this.email ? this.email.trim() : null;
+        const phoneNumber = this.phoneNumber ? this.phoneNumber.trim() : null;
+        // const passwordHashed = await sha512(this.)
+        const firstName = this.firstName.trim().replace(/\s+/g, ' ')
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+
+        const lastNameAndMiddleName = this.lastNameAndMiddleName.trim().replace(/\s+/g, ' ')
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+        const nameParts = lastNameAndMiddleName.split(' ');
+
+        const lastName = nameParts[0];
+        const middleName = nameParts.slice(1).join(' ');
+
+        console.log('New email: ',email);
+        console.log('New phoneNumber: ',phoneNumber);
+        console.log('New first name: ',firstName);
+        console.log('New lastName: ', lastName);
+        console.log('New middleName: ', middleName);
+
+        if(!this.newPassword && !this.confirmNewPassword){
+          //ko doi mk
+          if(!this.currentPassword){
+            this.errorInputCurrentPassword = true;
+            this.errorPassword = 'Please enter your current password to confirm.';
+          }else{
+            if(!this.errorPassword && !this.newPassword && !this.confirmNewPassword){
+              //alert("Ok update no change password");
+            }
+          }
+        }else{
+          if(!this.errorPassword){
+            alert("Ok update and change password");
+          }
+        }
+      }
+    }
 
   },
 
@@ -249,14 +386,15 @@ function isNumeric (str){
   return /^\d+$/.test(str);
 }
 
-// async function getUserByEmailOrPhoneNumber(emailPhoneNumber){
-//   let user = await UserDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
-//   if(user!==null){
-//     return new User(user.email, user.phoneNumber, user.password, user.firstName, user.lastName, user.middleName, user.address);
-//   }else{
-//     return null;
-//   }
-// }
+async function getUserByEmailOrPhoneNumber(emailPhoneNumber){
+  let user = await UserDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
+  if(user!==null){
+    return new User(user.email, user.phoneNumber, user.password, user.firstName, user.lastName, user.middleName, user.address);
+  }else{
+    return null;
+  }
+}
+
 function comparePassword(password1, password2){
   return password1 === password2;
 }
@@ -264,6 +402,21 @@ function comparePassword(password1, password2){
 async function sha512(password) {
   let buf = await crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(password));
   return Array.prototype.map.call(new Uint8Array(buf), x => (('00' + x.toString(16)).slice(-2))).join('');
+}
+
+function isValidVietnameseFirstName(name) {
+  // Remove accents from Vietnamese characters
+  const removeAscent = (str) => {
+    if (str === null || str === undefined) return str;
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  };
+
+  // Regex pattern for Vietnamese names without spaces
+  const regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
+
+  // Check if name is valid and doesn't contain spaces
+  const processedName = removeAscent(name);
+  return regex.test(processedName) && !/\s/.test(processedName);
 }
 
 function isValidVietnameseName(name) {
@@ -341,7 +494,7 @@ function isValidPassword(password){
                   <input type="text"
                          class="style-input-grey style-input-form form-control"
                          v-model="lastNameAndMiddleName"
-                         maxlength=30
+                         maxlength=100
                          :class="{ 'is-invalid': errorLastname }"
                          @input="validateLastName"
                          :disabled="false"
@@ -402,16 +555,22 @@ function isValidPassword(password){
                 <!--is-valid-->
                 <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="currentPassword" maxlength=20 placeholder="Current Password" class="style-input-password style-input-grey form-control"
                       :disabled="disableInputCurrentPassword"
-                      :class="{ 'is-valid': disableInputCurrentPassword }"
+                      :class="[{ 'is-valid': disableInputCurrentPassword }, { 'is-invalid': errorInputCurrentPassword }]"
                 />
                 <span class="text-success" style="margin-bottom: 5px;">{{spanSuccessPassword}}</span>
-                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="newPassword" maxlength=20 placeholder="New Password" class="style-input-password style-input-grey" />
-                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="confirmNewPassword" maxlength=20 placeholder="Confirm New Password" class="style-input-password style-input-grey" />
+                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="newPassword" maxlength=20 placeholder="New Password"
+                       class="style-input-password style-input-grey form-control"
+                       :class="{ 'is-invalid': errorInputNewPassword }"
+                />
+                <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="confirmNewPassword" maxlength=20 placeholder="Confirm New Password"
+                       class="style-input-password style-input-grey form-control"
+                       :class="{ 'is-invalid': errorInputConfirmNewPassword }"
+                />
                 <span class="span-error">{{errorPassword}}</span>
 
               </div>
               <div class="style-view-button-save-change">
-                <CustomButton text-button="Save Changes" class="style-button-save-changes" />
+                <CustomButton @click="updateAccount()" text-button="Save Changes" class="style-button-save-changes" />
               </div>
             </div>
           </div>

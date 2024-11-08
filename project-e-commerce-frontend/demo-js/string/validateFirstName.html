@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+    <script>
+        function isValidVietnameseName(name) {
+            // Remove accents from Vietnamese characters
+            const removeAscent = (str) => {
+                if (str === null || str === undefined) return str;
+                return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            };
+
+            // Regex pattern for Vietnamese names without spaces
+            const regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
+
+            // Check if name is valid and doesn't contain spaces
+            const processedName = removeAscent(name);
+            return regex.test(processedName) && !/\s/.test(processedName);
+        }
+
+        // Example usage:
+        console.log(isValidVietnameseName('Nguyen')); // true
+        console.log(isValidVietnameseName('Nguyễn')); // true
+        console.log(isValidVietnameseName('Nguyễn Văn')); // false
+        console.log(isValidVietnameseName('')); // false
+        console.log(isValidVietnameseName(null)); // null
+    </script>
+</body>
+</html>

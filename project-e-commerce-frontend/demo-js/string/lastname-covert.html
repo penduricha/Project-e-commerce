@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        const fullName = 'Nguyễn Ngọc Anh';
+        console.log('Last name before: ', fullName);
+
+        // Tách chuỗi
+        const nameParts = fullName.split(' ');
+
+        // Gán lastName và middleName
+        const lastName = nameParts[0]; // Nguyễn
+        const middleName = nameParts.slice(1).join(' '); // Ngọc Anh
+
+        console.log('lastName: ', lastName);
+        console.log('middleName: ', middleName);
+    </script>
+</body>
+</html>

@@ -2,6 +2,12 @@ use ecommerce_shop;
 
 select * from user where id = 24;
 
+select email from user where email is not null;
+
+select phone_number from user where user.phone_number is not null;
+
+select first_name, middle_name, last_name from user;
+
 # delete from product_type;
 # select * from product;
 #
