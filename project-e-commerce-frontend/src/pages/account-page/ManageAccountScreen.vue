@@ -1,5 +1,3 @@
-
-
 <script>
 import Header from "@/components/header-footer-menu/Header.vue";
 import Menu from "@/components/menu/Menu.vue";
@@ -8,6 +6,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import CustomInputGrey from "@/components/base/CustomInputGrey.vue";
 import UserDao from "@/daos/UserDao.js";
 import User from "@/models/User.js";
+import RouterDao from "@/daos/RouterDao.js";
 
 export default{
   name: 'ManageAccountScreen',
@@ -19,7 +18,7 @@ export default{
   data() {
     return {
       userManageAccount: null,
-      emailPhoneNumberModel: '02190739693',
+      emailPhoneNumberPage: null,
       nameWelcome: null,
 
       //disable input,
@@ -71,11 +70,13 @@ export default{
 
   methods: {
     async getUserFromEmailOrPhoneNumber(){
+      const routerDao = new RouterDao();
+
       try{
         //gia dinh email or phone number
-        const emailPhoneNumber = '02190739693';
+        this.emailPhoneNumberPage = routerDao.getEmailPhoneNumberFromLocalStorage().trim();
         const userDao = new UserDao();
-        this.userManageAccount = await userDao.getUserByEmailOrPhoneNumber(emailPhoneNumber);
+        this.userManageAccount = await userDao.getUserByEmailOrPhoneNumber(this.emailPhoneNumberPage);
         console.log('User is: ',this.userManageAccount);
         //console.log(this.userManageAccount._firstName);
         //Gán giá trị từ userManageAccount vào các thuộc tính
@@ -283,8 +284,40 @@ export default{
       // }
     },
 
+    handleHomePage(){
+
+      const routerDao = new RouterDao();
+
+      if(!routerDao.getEmailPhoneNumberFromLocalStorage()){
+
+        routerDao.saveRouterPathToSessionStorage("/home-page");
+
+        this.$router.push({
+          path: '/home-page',
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }else{
+        routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
+
+        this.$router.push({
+          path: '/home-page-with-account',
+          query: {
+            emailPhoneHomePage: routerDao.getEmailPhoneNumberFromLocalStorage().trim(),
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
+    },
+
     async updateAccount() {
       this.validateNullInput();
+
+      const userDao = new UserDao();
+
       if (!this.errorFirstname && !this.errorLastname && !this.errorEmail && !this.errorPhoneNumber) {
         //B1 xu li tk email tồn tại
         if (this.email && this.email !== this.userManageAccount.email) {
@@ -322,22 +355,24 @@ export default{
         }
 
         //constructor(email, phoneNumber, password, firstName, lastName, middleName, address)
+        //neu input duoc rong ko ep nguoi dung nhap
         const email = this.email ? this.email.trim() : null;
         const phoneNumber = this.phoneNumber ? this.phoneNumber.trim() : null;
+        const address = this.address ? this.address.trim() : null;
         // const passwordHashed = await sha512(this.)
-        const firstName = this.firstName.trim().replace(/\s+/g, ' ')
+        let firstName = this.firstName.trim().replace(/\s+/g, ' ')
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
 
-        const lastNameAndMiddleName = this.lastNameAndMiddleName.trim().replace(/\s+/g, ' ')
+        let lastNameAndMiddleName = this.lastNameAndMiddleName.trim().replace(/\s+/g, ' ')
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
-        const nameParts = lastNameAndMiddleName.split(' ');
+        let nameParts = lastNameAndMiddleName.split(' ');
 
-        const lastName = nameParts[0];
-        const middleName = nameParts.slice(1).join(' ');
+        let lastName = nameParts[0];
+        let middleName = nameParts.slice(1).join(' ');
 
         console.log('New email: ',email);
         console.log('New phoneNumber: ',phoneNumber);
@@ -353,11 +388,113 @@ export default{
           }else{
             if(!this.errorPassword && !this.newPassword && !this.confirmNewPassword){
               //alert("Ok update no change password");
+              //compare Object
+              //constructor(email, phoneNumber, password, firstName, lastName, middleName, address)
+              const accountCurrent = new User(
+                  this.userManageAccount.email,
+                  this.userManageAccount.phoneNumber,
+                  this.userManageAccount.password,
+                  this.userManageAccount.firstName,
+                  this.userManageAccount.lastName,
+                  this.userManageAccount.middleName,
+                  this.userManageAccount.address
+              );
+
+              const accountNew =  new User(
+                  email,
+                  phoneNumber,
+                  this.userManageAccount.password.trim(),
+                  firstName,
+                  lastName,
+                  middleName,
+                  address
+              );
+
+              console.log('Account current: ',accountCurrent);
+              console.log('Account new: ',accountNew);
+
+              if(JSON.stringify(accountCurrent) !== JSON.stringify(accountNew)){
+                //alert("OK, let change account no password.")
+                let resultUpdate = await userDao.updateAccount(this.emailPhoneNumberPage, accountNew);
+                if(resultUpdate === 1){
+                  alert("Update account successfully!");
+                  this.handleHomePage();
+                }else{
+                  alert("Update account failed!");
+                }
+              }
             }
           }
         }else{
           if(!this.errorPassword){
-            alert("Ok update and change password");
+            //alert("Ok update and change password");
+            const accountCurrent = new User(
+                this.userManageAccount.email,
+                this.userManageAccount.phoneNumber,
+                this.userManageAccount.password,
+                this.userManageAccount.firstName,
+                this.userManageAccount.lastName,
+                this.userManageAccount.middleName,
+                this.userManageAccount.address
+            );
+
+            let hashedNewPassword = await sha512(this.newPassword.trim());
+
+            const accountNew =  new User(
+                email,
+                phoneNumber,
+                hashedNewPassword,
+                firstName,
+                lastName,
+                middleName,
+                address
+            );
+
+            console.log('Account current: ',accountCurrent);
+            console.log('Account new: ',accountNew);
+
+            if(JSON.stringify(accountCurrent) !== JSON.stringify(accountNew)){
+              //alert("OK, let change account with password.")
+              //alert("OK, let change account no password.")
+              if(!this.errorPassword && !this.newPassword && !this.confirmNewPassword){
+                //alert("Ok update no change password");
+                //compare Object
+                //constructor(email, phoneNumber, password, firstName, lastName, middleName, address)
+                const accountCurrent = new User(
+                    this.userManageAccount.email,
+                    this.userManageAccount.phoneNumber,
+                    this.userManageAccount.password,
+                    this.userManageAccount.firstName,
+                    this.userManageAccount.lastName,
+                    this.userManageAccount.middleName,
+                    this.userManageAccount.address
+                );
+
+                const accountNew =  new User(
+                    email,
+                    phoneNumber,
+                    this.userManageAccount.password.trim(),
+                    firstName,
+                    lastName,
+                    middleName,
+                    address
+                );
+
+                console.log('Account current: ',accountCurrent);
+                console.log('Account new: ',accountNew);
+
+                if(JSON.stringify(accountCurrent) !== JSON.stringify(accountNew)){
+                  let resultUpdate = await userDao.updateAccount(this.emailPhoneNumberPage, accountNew);
+                  if(resultUpdate === 1){
+                    alert("Update account successfully!");
+                    this.handleHomePage();
+                  }else{
+                    alert("Update account failed!");
+                  }
+                  //alert("OK, let change account no password.")
+                }
+              }
+            }
           }
         }
       }

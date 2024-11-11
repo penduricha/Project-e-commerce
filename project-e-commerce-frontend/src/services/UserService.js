@@ -15,6 +15,10 @@ export default class UserService{
     }
 
     static createAccount(user) {
-        return apiClient.post('/users',user, {});
+        return apiClient.post(`/users`,user, {});
+    }
+
+    static updateAccount(emailPhoneNumber,user){
+        return apiClient.put(`/users/updateUser/${emailPhoneNumber}`,user,{});
     }
 }

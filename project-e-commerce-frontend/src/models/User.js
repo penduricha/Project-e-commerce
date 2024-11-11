@@ -16,4 +16,6 @@ export default class User{
         this._middleName = middleName;
         this._address = address;
     }
+
+
 }

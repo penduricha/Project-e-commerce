@@ -50,4 +50,25 @@ export default class UserDao {
         });
         return user;
     }
+
+    async updateAccount(emailPhoneNumber, user){
+        const updateUser = {
+            "email": user._email,
+            "phoneNumber": user._phoneNumber,
+            "password": user._password,
+            "firstName": user._firstName,
+            "lastName": user._lastName,
+            "middleName": user._middleName,
+            "address": user._address
+        }
+
+        try {
+            //thực hiện POST
+            await UserService.updateAccount(emailPhoneNumber,updateUser);
+            return 1;
+        } catch (error) {
+            console.error('Error updating :', error);
+            return 0;
+        }
+    }
 }

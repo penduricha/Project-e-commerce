@@ -13,7 +13,7 @@ import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
 
 const routers = [
     // ProductDetail
-    { path: '/', component: ManageAccountScreen},
+    { path: '/', component: HomePage},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },

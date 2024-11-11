@@ -7,6 +7,7 @@ import WareHouseDao from "@/daos/WareHouseDao.js";
 import ProductDao from "@/daos/ProductDao.js";
 import Cart from "@/models/Cart.js";
 import RouterDao from "@/daos/RouterDao.js";
+import CartDao from "@/daos/CartDao.js";
 
 
 //npm install vue-star-rating@next
@@ -188,8 +189,9 @@ export default {
       this.listSizeAfterChooseColor = this.listSizeAfterChooseColor.filter((l => l.color !== null) && (l => l.quantity > 0));
     },
 
-    handleIncrease(){
+    handleIncrease() {
       this.countQuantityBuy += 1;
+      this.notifyValidation = '';
     },
 
     handleReduced(){
@@ -201,6 +203,7 @@ export default {
       try {
         let wareHouses_By_ProductId = await wareHouseDao.getListWareHouseBy_ProductId(this.productId);
         console.log('List Warehouse: ', wareHouses_By_ProductId);
+        this.warehouses_By_ProductId = wareHouses_By_ProductId;
         return wareHouses_By_ProductId;
       } catch (e) {
         console.error(e);
@@ -276,6 +279,7 @@ export default {
           }
         }
       }
+      this.notifyValidation = '';
     },
 
     blockButtonColor(color) {
@@ -323,6 +327,7 @@ export default {
       }
       // Check if colorFind is not undefined before accessing image
       //this.price_view = this.listSize.filter(l =>  l.size === this.sizeChoose)[0];
+      this.notifyValidation = '';
     },
 
     isButtonChooseColorDisabled(color) {
@@ -347,6 +352,17 @@ export default {
           }
         }
       }
+    },
+
+    handleCartScreen(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/cart");
+      this.$router.push({
+        path: '/cart',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
     },
 
     isButtonChooseSizeDisabled(size){
@@ -384,6 +400,7 @@ export default {
             //chi có size
             //constructor(productId, size, color ,image, name, price, quantity)
             let whFound = this.listSize.filter(warehouse => warehouse.size === this.sizeChoose);
+
             if(this.countQuantityBuy > whFound[0].quantity){
               this.notifyValidation = 'Selected products exceed products in stock.';
             }else{
@@ -392,6 +409,33 @@ export default {
                   this.sizeChoose, this.colorChoose, this.image_main,
                   this.product.name, this.price_view, this.countQuantityBuy);
               console.log('Product to add cart: ',cart);
+              const routerDao = new RouterDao();
+              if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+                const cartDao = new CartDao();
+                //save from Local Storage
+                //cartDao.removeLocalStorage();
+
+                const newProductAddCart = {
+                  "productId": cart._productId,
+                  "size": cart._size,
+                  "color": cart._color,
+                  "image": cart._image,
+                  "name": cart._name,
+                  "price": cart._price,
+                  "quantityBuy": cart._quantity
+                }
+
+                console.log('Product added to cart: ', newProductAddCart);
+                let listCarts = cartDao.getListCartLocalStorage();
+
+                cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
+                //this.handleCartScreen();
+              }else{
+                //save from database POST
+
+              }
+              //window.location.reload();
+              this.handleCartScreen();
             }
           }else{
             this.notifyValidation = 'Please choose size.';
@@ -400,7 +444,9 @@ export default {
 
         if(this.listSize.length === 0 && this.listColor.length > 0){
           if(this.colorChoose){
-            let whFound = this.listSize.filter(warehouse => warehouse.color === this.colorChoose);
+
+            let whFound = this.listColor.filter(warehouse => warehouse.color === this.colorChoose);
+
             if(this.countQuantityBuy > whFound[0].quantity){
               this.notifyValidation = 'Selected products exceed products in stock.';
             }else{
@@ -409,6 +455,33 @@ export default {
                   this.sizeChoose, this.colorChoose, this.image_main,
                   this.product.name, this.price_view, this.countQuantityBuy);
               console.log('Product to add cart: ',cart);
+              const routerDao = new RouterDao();
+              if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+                const cartDao = new CartDao();
+                //save from Local Storage
+                //cartDao.removeLocalStorage();
+
+                const newProductAddCart = {
+                  "productId": cart._productId,
+                  "size": cart._size,
+                  "color": cart._color,
+                  "image": cart._image,
+                  "name": cart._name,
+                  "price": cart._price,
+                  "quantityBuy": cart._quantity
+                }
+
+                console.log('Product added to cart: ', newProductAddCart);
+                let listCarts = cartDao.getListCartLocalStorage();
+
+                cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
+
+              }else{
+                //save from database POST
+
+              }
+              //window.location.reload();
+              this.handleCartScreen();
             }
           }else{
             this.notifyValidation = 'Please choose size.';
@@ -425,10 +498,12 @@ export default {
           }
 
           if(this.sizeChoose && this.colorChoose){
-            let whFound = this.listSize.filter(warehouse =>
+            let whFound = this.warehouses_By_ProductId.filter(warehouse =>
                 warehouse.color === this.colorChoose &&
                 warehouse.size === this.sizeChoose
             );
+
+            console.log(whFound);
 
             if(this.countQuantityBuy > whFound[0].quantity){
               this.notifyValidation = 'Selected products exceed products in stock.';
@@ -439,18 +514,38 @@ export default {
                   this.sizeChoose, this.colorChoose, this.image_main,
                   this.product.name, this.price_view, this.countQuantityBuy);
               console.log('Product to add cart: ',cart);
+
+              const routerDao = new RouterDao();
+              if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+                const cartDao = new CartDao();
+                //save from Local Storage
+                //cartDao.removeLocalStorage();
+
+                const newProductAddCart = {
+                  "productId": cart._productId,
+                  "size": cart._size,
+                  "color": cart._color,
+                  "image": cart._image,
+                  "name": cart._name,
+                  "price": cart._price,
+                  "quantityBuy": cart._quantity
+                }
+
+                console.log('Product added to cart: ', newProductAddCart);
+                let listCarts = cartDao.getListCartLocalStorage();
+
+                cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
+                //this.handleCartScreen();
+              }else{
+                //save from database POST
+
+              }
+              this.handleCartScreen();
             }
           }
         }
 
-        const routerDao = new RouterDao();
-        if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-          //save from Local Storage
 
-        }else{
-          //save from database POST
-
-        }
       }else{
         this.notifyValidation = 'Please choose quantity.';
       }

@@ -4,6 +4,7 @@ import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
 
 
 import RouterDao from "@/daos/RouterDao.js";
+import CartDao from "@/daos/CartDao.js";
 export default{
   name:'Menu',
 
@@ -131,6 +132,33 @@ export default{
         alert(error);
       });
     },
+
+    handleManageAccount(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/manage-account");
+      this.$router.push({
+        path: '/manage-account',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
+    getLengthCart(){
+      const routerDao = new RouterDao();
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+        //get from Local Storage
+        const cartDao = new CartDao();
+        if(cartDao.getListCartLocalStorage()){
+          return cartDao.getListCartLocalStorage().length;
+        }else{
+          return 0;
+        }
+      }else{
+        //get from database
+        return 0;
+      }
+    },
   },
 
   computed: {
@@ -222,8 +250,8 @@ function removeEmailPhoneNumber(){
           </button>
 
           <div class="button-icon">
-            <button class="style-icon-notification">
-              3
+            <button class="style-icon-notification" v-if="getLengthCart() > 0">
+              {{getLengthCart()}}
             </button>
             <svg fill="currentColor" class="bi bi-cart3 style-icon-menu" viewBox="0 0 16 16" @click="handleCartScreen()">
               <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -254,7 +282,7 @@ function removeEmailPhoneNumber(){
                     </svg>
                   </div>
                   <div class="item-menu-content">
-                    <button class="style-item-menu-account">Manage My Account</button>
+                    <button class="style-item-menu-account" @click="handleManageAccount()">Manage My Account</button>
                   </div>
                 </div>
                 <div class="item-menu">

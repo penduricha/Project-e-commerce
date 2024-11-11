@@ -8,6 +8,7 @@ import CustomInputCouponCode from "@/components/base/CustomInputCouponCode.vue";
 import Screen404 from "@/pages/Screen404.vue";
 import CustomButtonWhite from "@/components/base/CustomButtonWhite.vue";
 import RouterDao from "@/daos/RouterDao.js";
+import CartDao from "@/daos/CartDao.js";
 
 
 export default {
@@ -35,7 +36,7 @@ export default {
 
   methods: {
     getDataCart_From_Data_Js(){
-      this.carts = dataCart;
+      //this.carts = dataCart;
     },
 
     get_Subtotal(){
@@ -48,6 +49,13 @@ export default {
       const routerDao = new RouterDao();
       if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
         //get from Local Storage
+        const cartDao = new CartDao();
+        if(cartDao.getListCartLocalStorage()){
+          this.carts = cartDao.getListCartLocalStorage();
+          // this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
+          //   return accumulator + (item.price * item.quantityBuy);
+          // }, 0));
+        }
 
       }else{
         //get from database
@@ -138,7 +146,7 @@ export default {
                            alt="image product" class="style-image-product-cart">
                     </div>
                     <p style="flex: 4; height: 100%; align-content: center; font-size: 16px;">
-                      {{c.name}}
+                      {{c.name}} {{c.size}}
                     </p>
                   </div>
                 </td>
@@ -181,6 +189,16 @@ export default {
               </tr>
             </tbody>
           </table>
+          <div class="style-view-empty-item-cart" v-if="carts.length === 0">
+            <svg width="159" height="175" viewBox="0 0 159 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 46.3692L2.50023 172.5H156.5V46.3692M2.5 46.3692H156.5M2.5 46.3692L13.5 28.8511H20.032M156.5 46.3692L144.278 28.8511H137.755" stroke="black" stroke-width="4"></path>
+              <path d="M55.4375 72.6129V97.1685H103.562V72.6129" stroke="black" stroke-width="4"></path>
+              <path d="M93.918 23.1935V9.22327L139.234 12.5849L136.688 46.6809" stroke="black" stroke-width="4"></path>
+              <path d="M53.5456 46.6808L51.5576 28.9124L101.653 21.709L106.725 46.6808" stroke="black" stroke-width="4"></path>
+              <path d="M21.5691 45.7204L18.0596 7.04951L71.8723 2.5L74.2119 25.2476" stroke="black" stroke-width="4"></path>
+            </svg>
+            <h4>Cart is empty</h4>
+          </div>
           <div class="custom-return-update-button">
             <CustomButtonWhite @click="handleReturnToShop()" text-button="Return To Shop" style="width: 220px" />
             <CustomButtonWhite text-button="Update Cart" style="width: 200px" />
@@ -189,7 +207,8 @@ export default {
         <div class="custom-amount-paid">
           <div class="custom-input-discount">
             <div class="input-code-coupon">
-              <CustomInputCouponCode :text-coupon-code="couponCode" text-placeholder="Coupon Code"/>
+<!--              <CustomInputCouponCode :text-coupon-code="couponCode" text-placeholder="Coupon Code"/>-->
+              <input type="text" maxlength=50 class="style-input-coupon" placeholder="Coupon Code" v-model="couponCode" >
             </div>
             <div class="button-code-coupon">
               <CustomButton class="style-button-discount" text-button="Apply Coupon"/>
@@ -355,7 +374,7 @@ td{
 
 .style-input-number-quantity{
   width: 20%;
-  height: 40%;
+  height: 40px;
   border-radius: 4px;
   border: solid gray;
   margin-left: 135px;
@@ -386,8 +405,24 @@ td{
 
 .style-image-product-cart{
   width: 100%;
-  height: 100%;
+  height: 50px;
   object-fit: contain;
 }
 
+.style-input-coupon{
+  width: 100%;
+  height: 100%;
+  border: solid 1.5px;
+  border-radius: 4px;
+  font-size: 16px;
+  padding-left: 20px;
+}
+
+.style-view-empty-item-cart{
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 </style>

@@ -2,6 +2,8 @@ use ecommerce_shop;
 
 select * from user where id = 24;
 
+select * from user where email = 'thang@123.com' or phone_number ='02190739693';
+
 select email from user where email is not null;
 
 select phone_number from user where user.phone_number is not null;

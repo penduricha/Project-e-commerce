@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Object</title>
+</head>
+<body>
+    <script>
+        // const classA = {
+        //     firstName: "Tom",
+        //     age: 10,
+        // }
+        //
+        // const classB = {
+        //     firstName: "Tom",
+        //     age: 10,
+        // }
+        //
+        // function objectsEqual(obj1, obj2) {
+        //     return JSON.stringify(obj1) === JSON.stringify(obj2);
+        // }
+        // console.log(objectsEqual(classA, classB));
+        // Kết quả sẽ là true
+        class Person {
+            constructor(firstName, age) {
+                this.firstName = firstName;
+                this.age = age;
+            }
+        }
+
+        const personA = new Person('Tom', 10);
+        const personB = new Person('Tom', 10);
+        const personC = personA;
+        // Tham chiếu tới cùng một đối tượng
+
+        console.log(JSON.stringify(personA) === JSON.stringify(personB));
+        // Kết quả: false
+        console.log(personA === personC);
+        // Kết quả: true
+    </script>
+</body>
+</html>
