@@ -59,6 +59,9 @@ export default {
   },
 
   async created() {
+    // const cartDao = new CartDao();
+    // cartDao.removeLocalStorage();
+
     await this.getWareHousesBy_ProductId();
 
     this.wareHouses_By_ProductId = await this.getWareHousesBy_ProductId();

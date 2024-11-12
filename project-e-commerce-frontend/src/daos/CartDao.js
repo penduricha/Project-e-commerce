@@ -20,6 +20,28 @@ export default class CartDao {
         }
     }
 
+    updateQuantityLocalStorage_In_Cart(listCarts, newProductAddCart){
+        const itemCart = listCarts.filter(l =>
+            l.productId === newProductAddCart.productId &&
+            l.size === newProductAddCart.size &&
+            l.color === newProductAddCart.color
+        )
+        console.log('Found in local storage: ',itemCart);
+
+        if(itemCart.length > 0) {
+            itemCart[0].quantityBuy = newProductAddCart.quantityBuy;
+            console.log(itemCart[0]);
+            //listCarts.push(itemCart[0]);
+            this.saveToCartLocalStorage(listCarts);
+        }
+    }
+
+    deleteCartItemLocalStorage(listCarts, index){
+        listCarts.splice(index, 1);
+        this.removeLocalStorage();
+        this.saveToCartLocalStorage(listCarts);
+    }
+
     updateQuantityLocalStorage(listCarts, newProductAddCart) {
         // Duyệt qua từng sản phẩm trong listCarts
         // for (let i = 0; i < listCarts.length; i++) {
@@ -51,12 +73,12 @@ export default class CartDao {
             console.log(itemCart[0]);
             //listCarts.push(itemCart[0]);
             this.saveToCartLocalStorage(listCarts);
-            alert("Updated quantity product to cart.");
+            //alert("Updated quantity product to cart.");
         }else{
             //add new
             listCarts.push(newProductAddCart);
             this.saveToCartLocalStorage(listCarts);
-            alert("Added product to cart.");
+            //alert("Added product to cart.");
         }
         //lam xong get lai
     }

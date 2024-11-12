@@ -1,5 +1,5 @@
 <script>
-import dataCart from "@/pages/cart/dataCart.js";
+// import dataCart from "@/pages/cart/dataCart.js";
 import Header from "@/components/header-footer-menu/Header.vue";
 import Menu from "@/components/menu/Menu.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
@@ -52,9 +52,6 @@ export default {
         const cartDao = new CartDao();
         if(cartDao.getListCartLocalStorage()){
           this.carts = cartDao.getListCartLocalStorage();
-          // this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
-          //   return accumulator + (item.price * item.quantityBuy);
-          // }, 0));
         }
 
       }else{
@@ -64,28 +61,39 @@ export default {
     },
 
     //quantity
-    handleIncrease(productId){
-      const cartIndex = this.carts.findIndex(item => item.productId === productId);
-      //findIndex giúp đồng bộ data
-      // Item exists, update its quantity
+    handleIncrease(cartIndex){
+      const cartDao = new CartDao();
       if (cartIndex !== -1) {
         this.carts[cartIndex].quantityBuy += 1;
-        //tang xong get lai
+        //tang xong get lai\
+        let listCarts = cartDao.getListCartLocalStorage();
+        cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
         this.get_Subtotal();
       } else {
         console.log("Not found!");
       }
     },
 
-    handleReduce(productId){
-      const cartIndex = this.carts.findIndex(item => item.productId === productId);
+    handleReduce(cartIndex){
+      const cartDao = new CartDao();
       if (cartIndex !== null) {
-        if(this.carts[cartIndex].quantityBuy > 1)
+        if(this.carts[cartIndex].quantityBuy > 1){
           this.carts[cartIndex].quantityBuy -= 1;
           //giam xong get lai
+          let listCarts = cartDao.getListCartLocalStorage();
+          cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
           this.get_Subtotal();
+        }
       } else {
         console.log("Not found!");
+      }
+    },
+
+    handleDeleteItemCart(index){
+      const cartDao = new CartDao();
+      if(this.carts.length > 0){
+        cartDao.deleteCartItemLocalStorage(this.carts,index);
+        window.location.reload();
       }
     },
 
@@ -134,11 +142,12 @@ export default {
                 <th style="padding-left: 3%">Product</th>
                 <th style="text-align: center">Price</th>
                 <th style="text-align: center">Quantity</th>
-                <th style="text-align: right; padding-right: 3%">Subtotal</th>
+                <th style="text-align: center">Subtotal</th>
+                <th style="text-align: right; padding-right: 3%">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(c) in carts">
+              <tr v-for="(c, index) in carts">
                 <td style="padding-left: 3%;">
                   <div style=" display: flex; gap: 20px; height: 50%; width: 100%;">
                     <div style="flex: 1;">
@@ -166,7 +175,7 @@ export default {
                            clip-rule="evenodd"
                            style="transform: rotate(180deg); margin-top: 3px;"
                            class="style-arrow-quantity"
-                           @click="handleIncrease(c.productId)"
+                           @click="handleIncrease(index)"
                            viewBox="0 0 512.02 319.26">
                         <path d="M5.9 48.96 48.97 5.89c7.86-7.86 20.73-7.84 28.56 0l178.48 178.48L434.5 5.89c7.86-7.86 20.74-7.82 28.56 0l43.07 43.07c7.83 7.84 7.83 20.72 0 28.56l-192.41 192.4-.36.37-43.07 43.07c-7.83 7.82-20.7 7.86-28.56 0l-43.07-43.07-.36-.37L5.9 77.52c-7.87-7.86-7.87-20.7 0-28.56z"/>
                       </svg>
@@ -178,14 +187,20 @@ export default {
                            clip-rule="evenodd"
                            class="style-arrow-quantity"
                            style="margin-bottom: 3px;"
-                           @click="handleReduce(c.productId)"
+                           @click="handleReduce(index)"
                            viewBox="0 0 512.02 319.26">
                         <path d="M5.9 48.96 48.97 5.89c7.86-7.86 20.73-7.84 28.56 0l178.48 178.48L434.5 5.89c7.86-7.86 20.74-7.82 28.56 0l43.07 43.07c7.83 7.84 7.83 20.72 0 28.56l-192.41 192.4-.36.37-43.07 43.07c-7.83 7.82-20.7 7.86-28.56 0l-43.07-43.07-.36-.37L5.9 77.52c-7.87-7.86-7.87-20.7 0-28.56z"/>
                       </svg>
                     </div>
                   </div>
                 </td>
-                <td style="text-align: right; padding-right: 4.75%">${{c.price*c.quantityBuy}}</td>
+                <td style="text-align: center">${{Math.round(c.price*c.quantityBuy)}}</td>
+                <td style="text-align: right; padding-right: 3.75%" class="style-trash-delete">
+                  <svg @click="handleDeleteItemCart(index)" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                  </svg>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -197,7 +212,8 @@ export default {
               <path d="M53.5456 46.6808L51.5576 28.9124L101.653 21.709L106.725 46.6808" stroke="black" stroke-width="4"></path>
               <path d="M21.5691 45.7204L18.0596 7.04951L71.8723 2.5L74.2119 25.2476" stroke="black" stroke-width="4"></path>
             </svg>
-            <h4>Cart is empty</h4>
+            <h5>Cart is empty</h5>
+            <CustomButton @click="handleReturnToShop()" class="style-button-continue-buy" text-button="Continue buy"/>
           </div>
           <div class="custom-return-update-button">
             <CustomButtonWhite @click="handleReturnToShop()" text-button="Return To Shop" style="width: 220px" />
@@ -207,7 +223,6 @@ export default {
         <div class="custom-amount-paid">
           <div class="custom-input-discount">
             <div class="input-code-coupon">
-<!--              <CustomInputCouponCode :text-coupon-code="couponCode" text-placeholder="Coupon Code"/>-->
               <input type="text" maxlength=50 class="style-input-coupon" placeholder="Coupon Code" v-model="couponCode" >
             </div>
             <div class="button-code-coupon">
@@ -251,6 +266,7 @@ export default {
 .style-main-cart{
   padding: 80px 170px 80px 170px;
   width: 1680px;
+
 }
 
 .custom-section{
@@ -374,10 +390,10 @@ td{
 
 .style-input-number-quantity{
   width: 20%;
-  height: 40px;
+  height: 35px;
   border-radius: 4px;
   border: solid gray;
-  margin-left: 135px;
+  margin-left: 105px;
   display: flex;
   padding-right: 1px;
 }
@@ -424,5 +440,15 @@ td{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.style-button-continue-buy{
+  height: 50px;
+  width: 300px;
+}
+
+.style-trash-delete{
+  color: red;
+  cursor: pointer;
 }
 </style>

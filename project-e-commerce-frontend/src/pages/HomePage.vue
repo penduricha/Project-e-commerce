@@ -191,7 +191,7 @@ export default {
 
 <template>
   <div class="container">
-    <Header style="height: 50px"/>
+    <Header/>
     <Menu style="height: 200px"/>
     <main class="main">
       <div class="container-menu-image">

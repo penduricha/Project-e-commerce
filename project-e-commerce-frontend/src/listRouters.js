@@ -10,10 +10,11 @@ import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 import CartScreen from "@/pages/cart/CartScreen.vue";
 import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
+import BillingDetail from "@/pages/billing/BillingDetail.vue";
 
 const routers = [
     // ProductDetail
-    { path: '/', component: HomePage},
+    { path: '/', component: BillingDetail},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },
@@ -30,6 +31,7 @@ const routers = [
     },
     { path: '/cart', component: CartScreen},
     { path: '/manage-account', component: ManageAccountScreen},
+    { path: '/billing-details', component: BillingDetail},
 ];
 export default routers;
 
