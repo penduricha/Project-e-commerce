@@ -4,20 +4,23 @@ import {defineComponent} from "vue";
 import Header from "@/components/header-footer-menu/Header.vue";
 import Menu from "@/components/menu/Menu.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
+import CustomButton from "@/components/base/CustomButton.vue";
 
 export default defineComponent({
-  components: {Footer, Menu, Header},
+  components: {CustomButton, Footer, Menu, Header},
   name: 'BillingDetail,',
 
   created() {
     this.getDataOrder_From_Data_Js();
+    this.get_Total_Price();
   },
 
   data(){
     return{
       orderDetail: [],
-
-
+      couponCode: null,
+      methodPayment: null,
+      totalPrice: 0,
     }
   },
 
@@ -26,6 +29,14 @@ export default defineComponent({
       this.orderDetail = dataCart;
       console.log('Order Details: ', this.orderDetail);
     },
+
+    get_Total_Price(){
+      if(this.orderDetail.length > 0){
+        this.totalPrice = Math.round(this.orderDetail.reduce((accumulator, item) => {
+          return accumulator + (item.price * item.quantityBuy);
+        }, 0));
+      }
+    }
   }
 
 })
@@ -80,10 +91,23 @@ export default defineComponent({
           </div>
         </div>
         <div class="container-order-detail">
+          <div class="container-view-order-detail">
+            <div class="view-order-detail" v-for="(o) in orderDetail">
+              <div class="view-image-product-order-detail">
+                <img :src="o.image" alt="Image Product" class="style-image-product-order-detail"/>
+              </div>
+              <div class="view-name-product">
+                <label class="style-label-price">{{o.name}} {{o.size}}</label>
+              </div>
+              <div class="view-subtotal-product">
+                <label class="style-label-price">${{Math.round(o.price*o.quantityBuy)}}</label>
+              </div>
+            </div>
+          </div>
           <div class="container-subtotal">
             <div class="view-price" style="border-bottom: solid gray;">
               <label class="style-label-price">Subtotal:</label>
-              <label class="style-label-price">$30</label>
+              <label class="style-label-price">${{totalPrice}}</label>
             </div>
             <div class="view-price" style="border-bottom: solid gray;">
               <label class="style-label-price">Shipping:</label>
@@ -91,13 +115,40 @@ export default defineComponent({
             </div>
             <div class="view-price">
               <label class="style-label-price">Total:</label>
-              <label class="style-label-price">$30</label>
+              <label class="style-label-price">${{totalPrice}}</label>
             </div>
           </div>
           <div class="container-method-payment">
-
+            <div class="style-custom-choose-payment">
+              <div class="view-radio-label-payment">
+                <input type="radio" value="Bank" v-model="methodPayment" class="style-radio-choose-payment" id="changeColor">
+                <label class="style-label-payment" style="margin-left: 15px;" for="changeColor">Bank</label>
+              </div>
+              <div class="view-image-bank">
+                <img src="./image-bank/b-kas.png" alt="bank bk" class="style-image-bank">
+                <img src="./image-bank/visa.png" alt="bank visa" class="style-image-bank">
+                <img src="./image-bank/master-card.png" alt="bank master card" class="style-image-bank">
+                <img src="./image-bank/bank-india.png" alt="bank india" class="style-image-bank">
+              </div>
+            </div>
+            <div class="style-custom-choose-payment">
+              <div class="view-radio-label-payment-cash-on-delivery">
+                <input type="radio" value="Cash on delivery" v-model="methodPayment" class="style-radio-choose-payment" id="changeColor">
+                <label class="style-label-payment" style="margin-left: 15px;" for="changeColor">Cash on delivery</label>
+              </div>
+            </div>
           </div>
+          <div class="custom-input-discount" style="height: 50px; width: 540px; margin-top: 25px;">
+            <div class="input-code-coupon">
+              <input type="text" maxlength=50 class="style-input-coupon style-input-coupon-billing" placeholder="Coupon Code" v-model="couponCode">
+            </div>
+            <div class="button-code-coupon">
+              <CustomButton class="style-button-discount" text-button="Apply Coupon"/>
+            </div>
+          </div>
+          <CustomButton class="style-button-play-order" text-button="Play Order"/>
         </div>
+
       </section>
     </main>
     <Footer style="height: 1500px; margin-top: 100px;"/>
@@ -107,6 +158,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/container';
 @import '@/components/style-scss-input/input-grey';
+@import '@/components/style-scss-input/coupon-style';
+
 .style-main-billing-detail{
   padding: 70px 180px 70px 180px;
   width: 1680px;
@@ -130,7 +183,6 @@ export default defineComponent({
 
 .container-order-detail{
   flex: 1.5;
-  border: solid;
 }
 
 .custom-label-and-input{
@@ -201,10 +253,46 @@ input[type='checkbox']:checked:before{
 }
 
 .container-subtotal{
-  width: 75%;
+  width: 65%;
   height: 150px;
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
+}
+
+.container-view-order-detail{
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.view-order-detail{
+  width: 100%;
+  height: 55px;
+  display: flex;
+}
+
+.view-image-product-order-detail{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-name-product{
+  flex: 5;
+  display: flex;
+  padding-left: 5%;
+  align-items: center;
+}
+
+.view-subtotal-product{
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding-right: 5px;
 }
 
 .view-price{
@@ -221,11 +309,83 @@ input[type='checkbox']:checked:before{
 }
 
 .container-method-payment{
-  width: 80%;
-  border: solid;
-  height: 80px;
-  margin-top: 35px;
+  width: 65%;
+  height: 70px;
+  margin-top: 25px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+.style-custom-choose-payment{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.style-radio-choose-payment{
+  width: 20px;
+  height: 20px;
+}
+
+#changeColor {
+  accent-color: black;
+}
+
+.style-label-payment{
+  font-size: 16px;
+}
+
+.view-image-bank{
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.view-radio-label-payment{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.view-radio-label-payment-cash-on-delivery{
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.style-image-bank{
+  cursor: pointer;
+  width: 40px;
+  height: 25px;
+  object-fit: contain;
+}
+
+.style-image-bank:hover{
+  border: solid 1px black;
+}
+
+.style-input-coupon-billing{
+  height: 100%;
+  width: 95%;
+  border: solid black;
+  border-radius: 4px;
+  padding-left: 5%;
+}
+
+.style-button-play-order{
+  margin-top: 25px;
+  height: 50px;
+  width: 25%;
+}
+
+.style-image-product-order-detail{
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
 }
 </style>

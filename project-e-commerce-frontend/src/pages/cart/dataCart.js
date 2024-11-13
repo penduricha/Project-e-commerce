@@ -3,7 +3,9 @@ const cart =[
         productId: 1,
         image: "https://raw.githubusercontent.com/penduricha/Image_E_Commerce/refs/heads/master/electric/electrical/tv_dragon.png",
         name: "LCD Monitor",
-        price: 100,
+        price: 200,
+        size: null,
+        color: null,
         quantityBuy: 2,
     },
     {
@@ -11,6 +13,8 @@ const cart =[
         image: "https://raw.githubusercontent.com/penduricha/Image_E_Commerce/refs/heads/master/electric/electrical/game_pad.png",
         name: "H1 Gamepad",
         price: 100,
+        size: null,
+        color: null,
         quantityBuy: 2,
     }
 ]

@@ -263,6 +263,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/container';
+@import '@/components/style-scss-input/coupon-style';
+
 .style-main-cart{
   padding: 80px 170px 80px 170px;
   width: 1680px;
@@ -319,25 +321,25 @@ export default {
   padding: 0 100px 0 100px;
 }
 
-.custom-input-discount{
-  width: 560px;
-  height: 15%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.input-code-coupon{
-  width: 310px;
-}
-
-.button-code-coupon{
-  width: 220px;
-}
-
-.style-button-discount{
-  width: 100%;
-  height: 100%;
-}
+//.custom-input-discount{
+//  width: 560px;
+//  height: 15%;
+//  display: flex;
+//  justify-content: space-between;
+//}
+//
+//.input-code-coupon{
+//  width: 310px;
+//}
+//
+//.button-code-coupon{
+//  width: 220px;
+//}
+//
+//.style-button-discount{
+//  width: 100%;
+//  height: 100%;
+//}
 
 .style-text-total-price{
   font-weight: 495;
