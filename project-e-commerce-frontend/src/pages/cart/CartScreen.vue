@@ -112,7 +112,6 @@ export default {
         });
       }else{
         routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
-
         this.$router.push({
           path: '/home-page-with-account',
           query: {

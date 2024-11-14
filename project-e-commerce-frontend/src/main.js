@@ -24,6 +24,8 @@ import ViewAll_ExploreOurProducts from "@/components/home-page/view-all-products
 import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 import CartScreen from "@/pages/cart/CartScreen.vue";
 import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
+import BillingDetail from "@/pages/billing/BillingDetail.vue";
+import ContactScreen from "@/pages/contact/ContactScreen.vue";
 
 const vuetify = createVuetify();
 
@@ -78,6 +80,8 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
             },
             { path: '/cart', component: CartScreen},
             { path: '/manage-account', component: ManageAccountScreen},
+            { path: '/billing-details', component: BillingDetail},
+            { path: '/contact-screen', component: ContactScreen },
         ],
     });
     const app = createApp(App)

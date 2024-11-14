@@ -16,6 +16,15 @@ const cart =[
         size: null,
         color: null,
         quantityBuy: 2,
+    },
+    {
+        productId: 3,
+        image: "https://raw.githubusercontent.com/penduricha/Image_E_Commerce/refs/heads/master/electric/electrical/game_pad.png",
+        name: "H1 Gamepad",
+        price: 200,
+        size: 'Big',
+        color: 'Red',
+        quantityBuy: 2,
     }
 ]
 export default cart;

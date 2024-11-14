@@ -124,6 +124,17 @@ export default{
       }
     },
 
+    handleContactScreen(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/contact-screen");
+      this.$router.push({
+        path: '/contact-screen',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
     handleCartScreen(){
       const routerDao = new RouterDao();
       routerDao.saveRouterPathToSessionStorage("/cart");
@@ -193,6 +204,12 @@ export default{
             ? 'have-margin-left'
             : 'none-margin-left';
 
+    },
+
+    contactClass(){
+      return (this.isActiveRoute('/contact-screen'))
+          ? 'have-border-bottom'
+          : 'none-border-bottom';
     }
   }
 }
@@ -219,8 +236,10 @@ function removeEmailPhoneNumber(){
             >
               <button class="btn btn-light nav-link" @click.prevent="handleHomePage()">Home</button>
             </li>
-            <li class="nav-item">
-              <button class="btn btn-light nav-link" @click.prevent="">Contact</button>
+            <li class="nav-item"
+                :class="['menu-border-bottom',contactClass]"
+            >
+              <button class="btn btn-light nav-link" @click.prevent="handleContactScreen()">Contact</button>
             </li>
             <li class="nav-item"
                 :class="['menu-border-bottom',aboutPageClass]"

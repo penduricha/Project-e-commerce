@@ -137,11 +137,15 @@ export default{
       if(!this.lastNameAndMiddleName){
         this.errorLastname='';
       }else{
-        if (!isValidVietnameseName(this.lastNameAndMiddleName.trim())) {
-          //!/^[a-zA-Z ]+$/.test(this.name) ||
-          this.errorLastname = 'Last name is invalid.';
-        } else {
+        if(isFullOfSpaces(this.lastNameAndMiddleName.trim())){
           this.errorLastname = '';
+        }else{
+          if (!isValidVietnameseName(this.lastNameAndMiddleName.trim())) {
+            //!/^[a-zA-Z ]+$/.test(this.name) ||
+            this.errorLastname = 'Last name is invalid.';
+          } else {
+            this.errorLastname = '';
+          }
         }
       }
     },
@@ -176,7 +180,7 @@ export default{
             if(this.phoneNumber.length < 10){
               this.errorPhoneNumber = 'Phone number must be 10 or 11 digits.';
             }else{
-              this.errorPhoneNumber ='';
+              this.errorPhoneNumber = '';
             }
           }
         }
@@ -680,16 +684,16 @@ function isValidPassword(password){
                          maxlength=11
                          :disabled="phoneNumber !== null"
                   />
-                  <!--:disabled="phoneNumber !== null"-->
+
                   <span class="span-error">{{errorPhoneNumber}}</span>
                 </div>
                 <div class="style-input">
-                  <!--no tag-->
+
                 </div>
               </div>
               <div class="view-password-input">
                 <label class="style-label-input">Password Changes</label>
-                <!--is-valid-->
+
                 <input type="password" @input="validateFormatPassword" @paste="preventPaste($event)" v-model="currentPassword" maxlength=20 placeholder="Current Password" class="style-input-password style-input-grey form-control"
                       :disabled="disableInputCurrentPassword"
                       :class="[{ 'is-valid': disableInputCurrentPassword }, { 'is-invalid': errorInputCurrentPassword }]"

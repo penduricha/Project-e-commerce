@@ -11,6 +11,7 @@ import ProductDetail from "@/pages/view-product-detail/ProductDetail.vue";
 import CartScreen from "@/pages/cart/CartScreen.vue";
 import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
 import BillingDetail from "@/pages/billing/BillingDetail.vue";
+import ContactScreen from "@/pages/contact/ContactScreen.vue";
 
 const routers = [
     // ProductDetail
@@ -32,6 +33,7 @@ const routers = [
     { path: '/cart', component: CartScreen},
     { path: '/manage-account', component: ManageAccountScreen},
     { path: '/billing-details', component: BillingDetail},
+    { path: '/contact-screen', component: ContactScreen },
 ];
 export default routers;
 

@@ -1,7 +1,9 @@
 package com.example.project_e_commerce_backend.controllers;
 
+import com.example.project_e_commerce_backend.dtos.CartDto;
 import com.example.project_e_commerce_backend.dtos.WareHouseDto;
 import com.example.project_e_commerce_backend.models.WareHouse;
+import com.example.project_e_commerce_backend.repositories.WareHouseRepository;
 import com.example.project_e_commerce_backend.services.imp.WareHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -17,13 +19,33 @@ import java.util.List;
 public class WareHouseController {
     private final WareHouseService wareHouseService;
 
+    private final WareHouseRepository wareHouseRepository;
+
     @Autowired
-    public WareHouseController(WareHouseService wareHouseService) {
+    public WareHouseController(WareHouseService wareHouseService, WareHouseRepository wareHouseRepository) {
         this.wareHouseService = wareHouseService;
+        this.wareHouseRepository = wareHouseRepository;
     }
 
     @GetMapping("/warehouses/productId/{productId}")
     public List<WareHouseDto> getWareHousesByProduct_ProductId(@PathVariable Long productId) throws JpaSystemException {
         return wareHouseService.getWareHousesByProduct_ProductId(productId);
+    }
+
+    @GetMapping("/cart/productId-size-color/{productId}/{size}/{color}")
+    public CartDto getCart_By_ProductId_Size_Color(@PathVariable Long productId,@PathVariable String size,@PathVariable String color) throws JpaSystemException {
+        String colorCode = '#' + color;
+        return wareHouseRepository.getCart_By_ProductId_Size_Color(productId, size, colorCode);
+    }
+
+    @GetMapping("/cart/productId-size-color/{productId}/{size}")
+    public CartDto getCart_By_ProductId_Size(@PathVariable Long productId,@PathVariable String size) throws JpaSystemException {
+        return wareHouseRepository.getCart_By_ProductId_Size(productId, size);
+    }
+
+    @GetMapping("/cart/productId-size-color/{productId}/{color}")
+    public CartDto getCart_By_ProductId_Size_Color(@PathVariable Long productId,@PathVariable String color) throws JpaSystemException {
+        String colorCode = '#' + color;
+        return wareHouseRepository.getCart_By_ProductId_Color(productId, colorCode);
     }
 }

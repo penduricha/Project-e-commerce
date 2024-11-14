@@ -5,6 +5,7 @@ import Header from "@/components/header-footer-menu/Header.vue";
 import Menu from "@/components/menu/Menu.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
+import ValidateForm from "@/validate/ValidateForm.js";
 
 export default defineComponent({
   components: {CustomButton, Footer, Menu, Header},
@@ -15,12 +16,26 @@ export default defineComponent({
     this.get_Total_Price();
   },
 
+  mounted() {
+    this.validateFirstName();
+    this.validateEmail();
+  },
+
   data(){
     return{
       orderDetail: [],
       couponCode: null,
       methodPayment: null,
       totalPrice: 0,
+
+      firstName: null,
+      email: null,
+      phoneNumber: null,
+
+      //error notification
+      errorFirstName: null,
+      errorEmail: null,
+      errorPhoneNumber: null,
     }
   },
 
@@ -35,6 +50,64 @@ export default defineComponent({
         this.totalPrice = Math.round(this.orderDetail.reduce((accumulator, item) => {
           return accumulator + (item.price * item.quantityBuy);
         }, 0));
+      }
+    },
+
+    //validate
+    validateFirstName(){
+      const validate = new ValidateForm();
+      if(!this.firstName){
+        this.errorFirstName = '';
+      }else{
+        if(validate.isFullOfSpaces(this.firstName.trim())){
+          this.errorFirstName = '';
+        }else{
+          if (!validate.isValidVietnameseName(this.firstName.trim())) {
+            //!/^[a-zA-Z ]+$/.test(this.name) ||
+            this.errorFirstName = 'First name is invalid.';
+          } else {
+            this.errorFirstName = '';
+          }
+        }
+      }
+    },
+
+    validateEmail(){
+      const validate = new ValidateForm();
+      if(!this.email){
+        this.errorEmail = '';
+      }else{
+        if(validate.isFullOfSpaces(this.email)){
+          this.errorEmail = '';
+        }else{
+          if(!validate.isValidEmail(this.email)){
+            this.errorEmail = 'Email is invalid.';
+          }else{
+            this.errorEmail = '';
+          }
+        }
+      }
+    },
+
+    validatePhoneNumber(){
+      const validate = new ValidateForm();
+      if(!this.phoneNumber){
+        this.errorPhoneNumber = '';
+      }else{
+        if(validate.isFullOfSpaces(this.phoneNumber)){
+          this.errorPhoneNumber ='';
+        }else{
+          if(!validate.isNumeric(this.phoneNumber)){
+            this.errorPhoneNumber = 'Phone number is invalid.';
+          }else{
+            //&& this.phoneNumber.length <= 11
+            if(this.phoneNumber.length < 10){
+              this.errorPhoneNumber = 'Phone number must be 10 or 11 digits.';
+            }else{
+              this.errorPhoneNumber ='';
+            }
+          }
+        }
       }
     }
   }
@@ -52,8 +125,12 @@ export default defineComponent({
         <div class="container-input-bill">
           <div class="custom-label-and-input">
             <label class="style-label">First name<span class="style-star-required">*</span></label>
-            <input type="text" maxlength=90 class="style-input-grey form-control style-input-bill">
-
+            <input type="text" maxlength=90 class="style-input-grey form-control style-input-bill"
+                   @input="validateFirstName"
+                   v-model="firstName"
+                   :class="{ 'is-invalid': errorFirstName }"
+            >
+            <span class="span-error">{{errorFirstName}}</span>
           </div>
           <div class="custom-label-and-input">
             <label class="style-label">Company Name</label>
@@ -77,13 +154,21 @@ export default defineComponent({
           </div>
           <div class="custom-label-and-input">
             <label class="style-label">Phone Number<span class="style-star-required">*</span></label>
-            <input type="text" maxlength=11 class="style-input-grey form-control style-input-bill">
-            <span class="span-error"></span>
+            <input type="text" maxlength=11 class="style-input-grey form-control style-input-bill"
+                   @input="validatePhoneNumber"
+                   v-model="phoneNumber"
+                   :class="{ 'is-invalid': errorPhoneNumber }"
+            >
+            <span class="span-error">{{errorPhoneNumber}}</span>
           </div>
           <div class="custom-label-and-input">
             <label class="style-label">Email<span class="style-star-required">*</span></label>
-            <input type="text" maxlength=50 class="style-input-grey form-control style-input-bill">
-            <span class="span-error"></span>
+            <input type="text" maxlength=50 class="style-input-grey form-control style-input-bill"
+                   @input="validateEmail"
+                   v-model="email"
+                   :class="{ 'is-invalid': errorEmail }"
+            >
+            <span class="span-error">{{errorEmail}}</span>
           </div>
           <div class="custom-label-and-input container-check-box-save" style="height: 50px;">
             <input type="checkbox" value="save" class="style-checkbox-save">
@@ -175,7 +260,7 @@ export default defineComponent({
 }
 
 .container-input-bill{
-  flex: 1;
+  flex: 0.9;
   display: flex;
   flex-direction: column;
   gap: 10px;
