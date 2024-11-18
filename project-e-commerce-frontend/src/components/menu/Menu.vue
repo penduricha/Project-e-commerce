@@ -2,7 +2,6 @@
 import ModalConfirmLogout from "@/components/modal/ModalConfirmLogout.vue";
 import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
 
-
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
 export default{
@@ -13,6 +12,8 @@ export default{
       searchText: null,
 
       isItemDrop: false,
+
+      lengthCart: 0,
     }
   },
 
@@ -22,7 +23,7 @@ export default{
   },
 
   created() {
-
+    this.getLengthCart();
   },
 
   methods:{
@@ -163,13 +164,13 @@ export default{
         //get from Local Storage
         const cartDao = new CartDao();
         if(cartDao.getListCartLocalStorage()){
-          return cartDao.getListCartLocalStorage().length;
+          this.lengthCart = cartDao.getListCartLocalStorage().length;
         }else{
-          return 0;
+          this.lengthCart = 0;
         }
       }else{
         //get from database
-        return 0;
+        this.lengthCart = 0;
       }
     },
 
@@ -275,8 +276,8 @@ function removeEmailPhoneNumber(){
           </button>
 
           <div class="button-icon">
-            <button class="style-icon-notification" v-if="getLengthCart() > 0">
-              {{getLengthCart()}}
+            <button class="style-icon-notification" v-if="lengthCart > 0">
+              {{lengthCart}}
             </button>
             <svg fill="currentColor" class="bi bi-cart3 style-icon-menu" viewBox="0 0 16 16" @click="handleCartScreen()">
               <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
@@ -299,6 +300,7 @@ function removeEmailPhoneNumber(){
 <!--              <li><a class="dropdown-item" href="#">Another action</a></li>-->
 <!--              <li><a class="dropdown-item" href="#">Something else here</a></li>-->
 <!--            </ul>-->
+
             <ul class="menu-account-drop dropdown-menu">
                 <li class="item-menu dropdown-item">
                   <div class="item-menu-image">
@@ -347,14 +349,13 @@ function removeEmailPhoneNumber(){
                     </svg>
                   </div>
                   <div class="item-menu-content">
-                    <button @click="openModalLogout()" style="margin-left: 1px;" class="style-item-menu-account">Logout</button>
+                    <button @click="openModalLogout" style="margin-left: 1px;" class="style-item-menu-account">Logout</button>
                   </div>
                 </li>
             </ul>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -375,7 +376,6 @@ function removeEmailPhoneNumber(){
   <ModalConfirmLogout ref="logoutModal" @handleLogout="handleLogout()" />
 
   <ModalNotifyToLogout ref="logoutNotifyModal" @handleLogout="handleLogout()" />
-
 
 </template>
 

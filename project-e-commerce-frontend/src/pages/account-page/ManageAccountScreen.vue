@@ -456,48 +456,12 @@ export default{
 
             console.log('Account current: ',accountCurrent);
             console.log('Account new: ',accountNew);
-
-            if(JSON.stringify(accountCurrent) !== JSON.stringify(accountNew)){
-              //alert("OK, let change account with password.")
-              //alert("OK, let change account no password.")
-              if(!this.errorPassword && !this.newPassword && !this.confirmNewPassword){
-                //alert("Ok update no change password");
-                //compare Object
-                //constructor(email, phoneNumber, password, firstName, lastName, middleName, address)
-                const accountCurrent = new User(
-                    this.userManageAccount.email,
-                    this.userManageAccount.phoneNumber,
-                    this.userManageAccount.password,
-                    this.userManageAccount.firstName,
-                    this.userManageAccount.lastName,
-                    this.userManageAccount.middleName,
-                    this.userManageAccount.address
-                );
-
-                const accountNew =  new User(
-                    email,
-                    phoneNumber,
-                    this.userManageAccount.password.trim(),
-                    firstName,
-                    lastName,
-                    middleName,
-                    address
-                );
-
-                console.log('Account current: ',accountCurrent);
-                console.log('Account new: ',accountNew);
-
-                if(JSON.stringify(accountCurrent) !== JSON.stringify(accountNew)){
-                  let resultUpdate = await userDao.updateAccount(this.emailPhoneNumberPage, accountNew);
-                  if(resultUpdate === 1){
-                    alert("Update account successfully!");
-                    this.handleHomePage();
-                  }else{
-                    alert("Update account failed!");
-                  }
-                  //alert("OK, let change account no password.")
-                }
-              }
+            let resultUpdate = await userDao.updateAccount(this.emailPhoneNumberPage, accountNew);
+            if(resultUpdate === 1){
+              alert("Update account successfully!");
+              this.handleHomePage();
+            }else{
+              alert("Update account failed!");
             }
           }
         }

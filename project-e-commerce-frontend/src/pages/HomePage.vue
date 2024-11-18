@@ -256,7 +256,7 @@ export default {
         <CustomService/>
       </div>
       <div class="view-arrow-up">
-        <a class="view-circle-arrow-up" href="">
+        <a class="view-circle-arrow-up" href="#">
           <img src="@/assets/images/icons_arrow-up.png" alt="icon" style="width: 24px; height: 24px;">
         </a>
       </div>

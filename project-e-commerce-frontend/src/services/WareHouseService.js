@@ -16,5 +16,15 @@ export default class WareHouseService{
         return apiClient.get(`/warehouses/productId/${productId}`);
     }
 
+    static fetchItemCart_By_ProductId_Size_Color(productId, size, color){
+        return apiClient.get(`/cart/productId-size-color/${productId}/${size}/${color}`);
+    }
 
+    static fetchItemCart_By_ProductId_Size(productId, size){
+        return apiClient.get(`/cart/productId-size/${productId}/${size}`);
+    }
+
+    static fetchItemCart_By_ProductId_Color(productId, color){
+        return apiClient.get(`/cart/productId-color/${productId}/${color}`);
+    }
 }

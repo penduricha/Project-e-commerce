@@ -530,7 +530,7 @@ export default {
                   "color": cart._color,
                   "image": cart._image,
                   "name": cart._name,
-                  "price": cart._price,
+                  "price": Number(cart._price),
                   "quantityBuy": cart._quantity
                 }
 

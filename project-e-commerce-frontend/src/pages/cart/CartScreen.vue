@@ -9,6 +9,7 @@ import Screen404 from "@/pages/Screen404.vue";
 import CustomButtonWhite from "@/components/base/CustomButtonWhite.vue";
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
+import CartDtoDao from "@/daos/CartDtoDao.js";
 
 
 export default {
@@ -52,6 +53,7 @@ export default {
         const cartDao = new CartDao();
         if(cartDao.getListCartLocalStorage()){
           this.carts = cartDao.getListCartLocalStorage();
+
         }
 
       }else{
@@ -93,7 +95,27 @@ export default {
       const cartDao = new CartDao();
       if(this.carts.length > 0){
         cartDao.deleteCartItemLocalStorage(this.carts,index);
-        window.location.reload();
+        this.$refs.menuComponent.getLengthCart();
+        this.getDataCart_From_LocalStorage_Or_API();
+      }
+    },
+
+    async checkQuantity(productId, size, color){
+      const cartDtoDao = new CartDtoDao();
+      console.log('Product Id:', productId);
+      console.log('Product Size:', size);
+      console.log('Product Color:', color);
+
+      let cartItemChecked = await cartDtoDao.getItemCart_FromAPI_ProductId_Size_Color(productId, size, color);
+      console.log('Result check quantity items in cart:', cartItemChecked);
+    },
+
+    async handleCheckout(){
+      console.log('Item in carts:', this.carts);
+      if(this.carts.length > 0){
+        for (const item of this.carts) {
+          await this.checkQuantity(item.productId, item.size, item.color);
+        }
       }
     },
 
@@ -123,7 +145,6 @@ export default {
         });
       }
     },
-
   }
 }
 </script>
@@ -131,7 +152,7 @@ export default {
 <template>
   <div class="container">
     <Header style="height: 50px"/>
-    <Menu style="height: 200px"/>
+    <Menu style="height: 200px" ref="menuComponent"/>
     <main class="style-main-cart">
       <section class="custom-section">
         <div class="custom-list-cart">
@@ -211,7 +232,7 @@ export default {
               <path d="M53.5456 46.6808L51.5576 28.9124L101.653 21.709L106.725 46.6808" stroke="black" stroke-width="4"></path>
               <path d="M21.5691 45.7204L18.0596 7.04951L71.8723 2.5L74.2119 25.2476" stroke="black" stroke-width="4"></path>
             </svg>
-            <h5>Cart is empty</h5>
+            <h5 style="margin-top: 10px">Cart is empty</h5>
             <CustomButton @click="handleReturnToShop()" class="style-button-continue-buy" text-button="Continue buy"/>
           </div>
           <div class="custom-return-update-button">
@@ -249,7 +270,7 @@ export default {
                 </div>
               </div>
               <div class="view-button-checkout">
-                <CustomButton style="width: 100%; height: 75%;" text-button="Process to checkout"/>
+                <CustomButton @click="handleCheckout()" style="width: 100%; height: 75%;" text-button="Process to checkout"/>
               </div>
             </div>
           </div>
@@ -267,7 +288,6 @@ export default {
 .style-main-cart{
   padding: 80px 170px 80px 170px;
   width: 1680px;
-
 }
 
 .custom-section{

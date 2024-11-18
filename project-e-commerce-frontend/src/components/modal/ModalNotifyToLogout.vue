@@ -25,13 +25,13 @@ export default {
 </script>
 
 <template>
-  <div class="modal" v-if="show" @click.self="closeModal">
-    <div class="modal-content" style="width: 25%; border-style: solid;">
+  <div class="modal" v-if="show" @click.self="closeModal" style="position: absolute">
+    <div class="modal-content" style="width: 25%;">
       <div class="style-title">
         <h5 style="text-align: center">You are required to log out of your account before creating a new account.</h5>
       </div>
       <div class="buttons">
-        <CustomButton style="border-radius: 1px" @click="confirmLogout" text-button="Yes, Log out"/>
+        <CustomButton class="btn-accept" @click="confirmLogout" text-button="Yes, Log out"/>
         <button class="btn-cancel btn" @click="closeModal">Cancel</button>
       </div>
     </div>

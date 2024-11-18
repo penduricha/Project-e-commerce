@@ -38,13 +38,13 @@ public class WareHouseController {
         return wareHouseRepository.getCart_By_ProductId_Size_Color(productId, size, colorCode);
     }
 
-    @GetMapping("/cart/productId-size-color/{productId}/{size}")
+    @GetMapping("/cart/productId-size/{productId}/{size}")
     public CartDto getCart_By_ProductId_Size(@PathVariable Long productId,@PathVariable String size) throws JpaSystemException {
         return wareHouseRepository.getCart_By_ProductId_Size(productId, size);
     }
 
-    @GetMapping("/cart/productId-size-color/{productId}/{color}")
-    public CartDto getCart_By_ProductId_Size_Color(@PathVariable Long productId,@PathVariable String color) throws JpaSystemException {
+    @GetMapping("/cart/productId-color/{productId}/{color}")
+    public CartDto getCart_By_ProductId_Color(@PathVariable Long productId,@PathVariable String color) throws JpaSystemException {
         String colorCode = '#' + color;
         return wareHouseRepository.getCart_By_ProductId_Color(productId, colorCode);
     }

@@ -31,7 +31,7 @@ export default {
     <div class="modal-content" style="width: 21%; border-style: solid">
       <h5 style="text-align: center">Are you sure you want to log out ?</h5>
       <div class="buttons">
-        <CustomButton style="border-radius: 4px" @click="confirmLogout" text-button="Yes, Log out"/>
+        <CustomButton class="btn-accept" @click="confirmLogout" text-button="Yes, Log out"/>
         <button class="btn-cancel btn" @click="closeModal">Cancel</button>
       </div>
     </div>
