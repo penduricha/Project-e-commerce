@@ -12,6 +12,7 @@ where name is not null;
 select * from mapping_event_purchasing_product;
 
 
+
 select p.product_id, p.name
 from Product p
 join mapping_event_purchasing_product mpe

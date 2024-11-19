@@ -28,7 +28,7 @@ export default {
 
 <template>
   <div class="modal" v-if="show" @click.self="closeModal">
-    <div class="modal-content" style="width: 21%; border-style: solid">
+    <div class="modal-content">
       <h5 style="text-align: center">Are you sure you want to log out ?</h5>
       <div class="buttons">
         <CustomButton class="btn-accept" @click="confirmLogout" text-button="Yes, Log out"/>

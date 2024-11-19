@@ -43,4 +43,11 @@ public interface WareHouseRepository extends JpaRepository<WareHouse,Long> {
             @Param("productId") Long productId,
             @Param("color") String color
     );
+
+    @Query("select new com.example.project_e_commerce_backend.dtos.CartDto(p.productId, p.name, wh.size, wh.color, wh.quantity) " +
+            "from Product p left join p.wareHouseList wh " +
+            "where p.productId = :productId and wh.color is null and wh.size is null")
+    CartDto getCart_By_ProductId_If_Size_And_Color_Null(
+            @Param("productId") Long productId
+    );
 }

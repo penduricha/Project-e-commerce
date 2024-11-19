@@ -48,5 +48,17 @@ export default class CartDtoDao {
                 return {};
             }
         }
+
+        if(!color && !size){
+            try{
+                const response = await WareHouseService.fetchItemCart_By_ProductId_Size_And_Color_Null(productId);
+                cartDto = response.data;
+                return cartDto;
+            }catch(error){
+                console.error(error);
+                alert(error);
+                return {};
+            }
+        }
     }
 }

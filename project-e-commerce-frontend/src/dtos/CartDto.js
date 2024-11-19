@@ -13,4 +13,8 @@ export default class CartDto {
         this._color = color;
         this._quantity = quantity;
     }
+
+    setQuantity(quantity){
+        this._quantity = quantity;
+    }
 }

@@ -27,4 +27,8 @@ export default class WareHouseService{
     static fetchItemCart_By_ProductId_Color(productId, color){
         return apiClient.get(`/cart/productId-color/${productId}/${color}`);
     }
+
+    static fetchItemCart_By_ProductId_Size_And_Color_Null(productId){
+        return apiClient.get(`/cart/productId-size-and-color-null/${productId}`);
+    }
 }

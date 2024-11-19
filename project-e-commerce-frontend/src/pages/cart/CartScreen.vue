@@ -10,6 +10,7 @@ import CustomButtonWhite from "@/components/base/CustomButtonWhite.vue";
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
 import CartDtoDao from "@/daos/CartDtoDao.js";
+import CartDto from "@/dtos/CartDto.js";
 
 
 export default {
@@ -20,12 +21,14 @@ export default {
     return {
       carts: [],
       couponCode: null,
+      notifications: [],
 
       //cartToCheckOut: [],
-
       //data gia
       //quantityBuy: 1,
+
       subtotal: 0,
+      //error
     }
   },
 
@@ -53,7 +56,7 @@ export default {
         const cartDao = new CartDao();
         if(cartDao.getListCartLocalStorage()){
           this.carts = cartDao.getListCartLocalStorage();
-
+          console.log('Carts: ',this.carts);
         }
 
       }else{
@@ -67,10 +70,12 @@ export default {
       const cartDao = new CartDao();
       if (cartIndex !== -1) {
         this.carts[cartIndex].quantityBuy += 1;
-        //tang xong get lai\
+        //tang xong get lai
         let listCarts = cartDao.getListCartLocalStorage();
         cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
         this.get_Subtotal();
+        //xoa dong thong bao
+        this.notifications[cartIndex] = '';
       } else {
         console.log("Not found!");
       }
@@ -85,6 +90,8 @@ export default {
           let listCarts = cartDao.getListCartLocalStorage();
           cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
           this.get_Subtotal();
+          //xoa dong thong bao
+          this.notifications[cartIndex] = '';
         }
       } else {
         console.log("Not found!");
@@ -100,21 +107,36 @@ export default {
       }
     },
 
-    async checkQuantity(productId, size, color){
+    updateNotificationQuantity(quantityBuy, quantityInWareHouse, index) {
+      if (quantityBuy > quantityInWareHouse) {
+        this.notifications[index] = 'Quantity exceeds warehouse.';
+      } else {
+        this.notifications[index] = '';
+      }
+    },
+
+    async checkQuantity(productId, size, color, quantityBuy, index){
       const cartDtoDao = new CartDtoDao();
       console.log('Product Id:', productId);
       console.log('Product Size:', size);
       console.log('Product Color:', color);
+      console.log('Product Quantity:', quantityBuy);
 
       let cartItemChecked = await cartDtoDao.getItemCart_FromAPI_ProductId_Size_Color(productId, size, color);
       console.log('Result check quantity items in cart:', cartItemChecked);
+      const cartDtoChecked = new CartDto();
+      cartDtoChecked.setQuantity(cartItemChecked.quantity);
+      console.log('Product Quantity in warehouse:', cartDtoChecked._quantity);
+      this.updateNotificationQuantity(quantityBuy, cartDtoChecked._quantity,index);
     },
 
     async handleCheckout(){
       console.log('Item in carts:', this.carts);
       if(this.carts.length > 0){
-        for (const item of this.carts) {
-          await this.checkQuantity(item.productId, item.size, item.color);
+        //Duyet bang cart
+        for (let index = 0; index < this.carts.length; index++) {
+          const item = this.carts[index];
+          await this.checkQuantity(item.productId, item.size, item.color, item.quantityBuy, index);
         }
       }
     },
@@ -123,9 +145,7 @@ export default {
       const routerDao = new RouterDao();
 
       if(!routerDao.getEmailPhoneNumberFromLocalStorage()){
-
         routerDao.saveRouterPathToSessionStorage("/home-page");
-
         this.$router.push({
           path: '/home-page',
         }).catch((error) => {
@@ -178,6 +198,7 @@ export default {
                       {{c.name}} {{c.size}}
                     </p>
                   </div>
+                  <span class="span-error" style="font-size: 15px">{{ notifications[index] }}</span>
                 </td>
                 <td style="text-align: center">${{c.price}}</td>
                 <td style="text-align: center;">

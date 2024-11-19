@@ -48,4 +48,9 @@ public class WareHouseController {
         String colorCode = '#' + color;
         return wareHouseRepository.getCart_By_ProductId_Color(productId, colorCode);
     }
+
+    @GetMapping("/cart/productId-size-and-color-null/{productId}")
+    public CartDto getCart_By_ProductId_If_Size_And_Color_NullCartDto(@PathVariable Long productId){
+        return wareHouseRepository.getCart_By_ProductId_If_Size_And_Color_Null(productId);
+    }
 }
