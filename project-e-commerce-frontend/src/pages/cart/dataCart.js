@@ -2,7 +2,7 @@ const cart =[
     {
         productId: 1,
         image: "https://raw.githubusercontent.com/penduricha/Image_E_Commerce/refs/heads/master/electric/electrical/tv_dragon.png",
-        name: "LCD Monitor",
+        name: "LCD Monitor Television",
         price: 200,
         size: null,
         color: null,

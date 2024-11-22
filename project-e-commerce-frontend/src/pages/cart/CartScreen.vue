@@ -102,8 +102,10 @@ export default {
       const cartDao = new CartDao();
       if(this.carts.length > 0){
         cartDao.deleteCartItemLocalStorage(this.carts,index);
+        //sau khi xoa xong get lai
         this.$refs.menuComponent.getLengthCart();
         this.getDataCart_From_LocalStorage_Or_API();
+        this.get_Subtotal();
       }
     },
 
@@ -113,6 +115,17 @@ export default {
       } else {
         this.notifications[index] = '';
       }
+    },
+
+    handleToBillingDetailScreen(){
+      const routerDao = new RouterDao();
+      routerDao.saveRouterPathToSessionStorage("/billing-details");
+      this.$router.push({
+        path: '/billing-details',
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
     },
 
     async checkQuantity(productId, size, color, quantityBuy, index){
@@ -137,6 +150,13 @@ export default {
         for (let index = 0; index < this.carts.length; index++) {
           const item = this.carts[index];
           await this.checkQuantity(item.productId, item.size, item.color, item.quantityBuy, index);
+        }
+
+        const allNotificationsEmpty = this.notifications.every(notification => notification === '');
+
+        if (allNotificationsEmpty) {
+          this.handleToBillingDetailScreen();
+          // Gọi hàm chuyển tới màn hình thanh toán
         }
       }
     },
@@ -290,7 +310,7 @@ export default {
                   <p class="style-text-total-price" style="margin-right: 1px">${{subtotal}}</p>
                 </div>
               </div>
-              <div class="view-button-checkout">
+              <div class="view-button-checkout" v-if="carts.length > 0">
                 <CustomButton @click="handleCheckout()" style="width: 100%; height: 75%;" text-button="Process to checkout"/>
               </div>
             </div>

@@ -1,6 +1,8 @@
 package com.example.project_e_commerce_backend.services.imp;
 
+import com.example.project_e_commerce_backend.models.Cart;
 import com.example.project_e_commerce_backend.models.User;
+import com.example.project_e_commerce_backend.repositories.CartRepository;
 import com.example.project_e_commerce_backend.repositories.UserRepository;
 import com.example.project_e_commerce_backend.services.I_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,23 @@ import java.util.List;
 public class UserService implements I_UserService {
     private final UserRepository userRepository;
 
+    private final CartRepository cartRepository;
+
+
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CartRepository cartRepository) {
         this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
     public User saveUser(User user) throws JpaSystemException {
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        //Sau khi save xong sẽ save them cái Cart
+        Cart cart = new Cart(savedUser);
+        cart.getUser().setId(savedUser.getId());
+        cartRepository.save(cart);
+        return savedUser;
     }
 
     @Override

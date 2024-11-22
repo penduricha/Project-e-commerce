@@ -6,6 +6,8 @@ import Menu from "@/components/menu/Menu.vue";
 import Footer from "@/components/header-footer-menu/Footer.vue";
 import CustomButton from "@/components/base/CustomButton.vue";
 import ValidateForm from "@/validate/ValidateForm.js";
+import RouterDao from "@/daos/RouterDao.js";
+import CartDao from "@/daos/CartDao.js";
 
 export default defineComponent({
   components: {CustomButton, Footer, Menu, Header},
@@ -13,6 +15,7 @@ export default defineComponent({
 
   created() {
     this.getDataOrder_From_Data_Js();
+    this.getDataCart_From_LocalStorage_Or_API();
     this.get_Total_Price();
   },
 
@@ -23,12 +26,13 @@ export default defineComponent({
 
   data(){
     return{
-      orderDetail: [],
+      carts: [],
       couponCode: null,
       methodPayment: null,
       totalPrice: 0,
 
       firstName: null,
+      streetAddress: null,
       email: null,
       phoneNumber: null,
 
@@ -36,20 +40,38 @@ export default defineComponent({
       errorFirstName: null,
       errorEmail: null,
       errorPhoneNumber: null,
+      errorStreetAddress: null,
+      errorChooseMethodPayment: null,
     }
   },
 
   methods: {
     getDataOrder_From_Data_Js(){
-      this.orderDetail = dataCart;
-      console.log('Order Details: ', this.orderDetail);
+      // this.carts = dataCart;
+      // console.log('Order Details: ', this.carts);
     },
 
     get_Total_Price(){
-      if(this.orderDetail.length > 0){
-        this.totalPrice = Math.round(this.orderDetail.reduce((accumulator, item) => {
+      if(this.carts.length > 0){
+        this.totalPrice = Math.round(this.carts.reduce((accumulator, item) => {
           return accumulator + (item.price * item.quantityBuy);
         }, 0));
+      }
+    },
+
+    getDataCart_From_LocalStorage_Or_API(){
+      const routerDao = new RouterDao();
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+        //get from Local Storage
+        const cartDao = new CartDao();
+        if(cartDao.getListCartLocalStorage()){
+          this.carts = cartDao.getListCartLocalStorage();
+          console.log('Carts: ',this.carts);
+        }
+
+      }else{
+        //get from database
+
       }
     },
 
@@ -109,7 +131,39 @@ export default defineComponent({
           }
         }
       }
-    }
+    },
+
+    validateStreetAddress(){
+      if(!this.streetAddress){
+        this.errorStreetAddress = '';
+      }else{
+        this.errorStreetAddress = '';
+      }
+    },
+
+    checkEmptyInput(){
+      if(!this.firstName){
+        this.errorFirstName = 'Please enter first name.';
+      }
+
+      if(!this.streetAddress){
+        this.errorStreetAddress = 'Please enter street address.';
+      }
+
+      if(!this.phoneNumber){
+        this.errorPhoneNumber = 'Please enter phone number.';
+      }
+
+      if(!this.methodPayment){
+        this.errorChooseMethodPayment = 'Please enter method payment.';
+      }else{
+        this.errorChooseMethodPayment = '';
+      }
+    },
+
+    handlePlayOrder(){
+      this.checkEmptyInput();
+    },
   }
 
 })
@@ -139,8 +193,11 @@ export default defineComponent({
           </div>
           <div class="custom-label-and-input">
             <label class="style-label">Street Address<span class="style-star-required">*</span></label>
-            <input type="text" maxlength=255 class="style-input-grey form-control style-input-bill">
-            <span class="span-error"></span>
+            <input type="text" maxlength=255 class="style-input-grey form-control style-input-bill" v-model="streetAddress"
+                   @input="validateStreetAddress"
+                   :class="{ 'is-invalid': errorStreetAddress }"
+            >
+            <span class="span-error">{{errorStreetAddress}}</span>
           </div>
           <div class="custom-label-and-input">
             <label class="style-label">Apartment, floor, etc. (optional)</label>
@@ -177,15 +234,15 @@ export default defineComponent({
         </div>
         <div class="container-order-detail">
           <div class="container-view-order-detail">
-            <div class="view-order-detail" v-for="(o) in orderDetail">
+            <div class="view-order-detail" v-for="(c, index) in carts">
               <div class="view-image-product-order-detail">
-                <img :src="o.image" alt="Image Product" class="style-image-product-order-detail"/>
+                <img :src="c.image" alt="Image Product" class="style-image-product-order-detail"/>
               </div>
               <div class="view-name-product">
-                <label class="style-label-price">{{o.name}} {{o.size}}</label>
+                <label class="style-label-price">{{c.name.split(" ").slice(0, 5).join(" ")}} {{c.size}}</label>
               </div>
               <div class="view-subtotal-product">
-                <label class="style-label-price">${{Math.round(o.price*o.quantityBuy)}}</label>
+                <label class="style-label-price">${{Math.round(c.price * c.quantityBuy)}}</label>
               </div>
             </div>
           </div>
@@ -216,13 +273,15 @@ export default defineComponent({
                 <img src="./image-bank/bank-india.png" alt="bank india" class="style-image-bank">
               </div>
             </div>
-            <div class="style-custom-choose-payment">
+            <div class="style-custom-choose-payment" style="margin-top: 20px;">
               <div class="view-radio-label-payment-cash-on-delivery">
                 <input type="radio" value="Cash on delivery" v-model="methodPayment" class="style-radio-choose-payment" id="changeColor">
                 <label class="style-label-payment" style="margin-left: 15px;" for="changeColor">Cash on delivery</label>
               </div>
             </div>
+            <span class="span-error" style="margin-top: 10px;" v-if="errorChooseMethodPayment">{{errorChooseMethodPayment}}</span>
           </div>
+
           <div class="custom-input-discount" style="height: 50px; width: 540px; margin-top: 25px;">
             <div class="input-code-coupon">
               <input type="text" maxlength=50 class="style-input-coupon style-input-coupon-billing" placeholder="Coupon Code" v-model="couponCode">
@@ -231,7 +290,7 @@ export default defineComponent({
               <CustomButton class="style-button-discount" text-button="Apply Coupon"/>
             </div>
           </div>
-          <CustomButton class="style-button-play-order" text-button="Play Order"/>
+          <CustomButton class="style-button-play-order" text-button="Play Order" @click="handlePlayOrder()"/>
         </div>
 
       </section>
@@ -395,11 +454,10 @@ input[type='checkbox']:checked:before{
 
 .container-method-payment{
   width: 65%;
-  height: 70px;
+  height: 95px;
   margin-top: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .style-custom-choose-payment{
@@ -473,4 +531,6 @@ input[type='checkbox']:checked:before{
   height: 80%;
   object-fit: contain;
 }
+
+
 </style>

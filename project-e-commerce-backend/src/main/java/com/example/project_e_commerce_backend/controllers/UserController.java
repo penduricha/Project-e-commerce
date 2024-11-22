@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/users/emailOrPhoneNumber/{emailOrPhoneNumber}")
-    public ResponseEntity<User> findUserByEmailOrPhoneNumber(@PathVariable String emailOrPhoneNumber) {
+    public ResponseEntity<User> findUserByEmailOrPhoneNumber(@PathVariable String emailOrPhoneNumber) throws JpaSystemException {
         try {
             User user = userService.findUserByEmailOrPhoneNumber(emailOrPhoneNumber);
             if (user != null) {
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/users/updateUser/{emailOrPhoneNumber}")
-    public ResponseEntity<User> updateUserById(@PathVariable String emailOrPhoneNumber,@RequestBody User user){
+    public ResponseEntity<User> updateUserById(@PathVariable String emailOrPhoneNumber,@RequestBody User user) throws JpaSystemException {
         try{
             userService.updateUserById(emailOrPhoneNumber,user);
             return ResponseEntity.ok(user);

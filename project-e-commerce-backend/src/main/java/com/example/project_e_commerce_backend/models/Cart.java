@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 import java.io.Serializable;
 
 @Getter
@@ -20,6 +21,12 @@ public class Cart implements Serializable {
     @Column(nullable = false)
     private Long cartId;
 
+    @OneToOne
+    @JoinColumn(name = "id")
+    //one to one mapping with id in table User
+    private User user;
 
-
+    public Cart(User user) {
+        this.user = user;
+    }
 }

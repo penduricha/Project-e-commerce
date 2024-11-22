@@ -15,7 +15,7 @@ import ContactScreen from "@/pages/contact/ContactScreen.vue";
 
 const routers = [
     // ProductDetail
-    { path: '/', component: BillingDetail},
+    { path: '/', component: HomePage},
     { path: '/login-screen', component: LoginScreen },
     { path: '/signup-screen', component: SignupScreen },
     { path: '/home-page', component: HomePage },

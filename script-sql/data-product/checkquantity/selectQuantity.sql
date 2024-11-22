@@ -2,6 +2,8 @@ select * from product;
 
 select * from ware_house;
 
+select * from user where id = 24;
+
 select * from product_type where product_type_id = 73;
 
 select * from product_type where product_type_id = 7;
