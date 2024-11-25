@@ -11,9 +11,12 @@ VALUES
     (29), (30), (31), (32), (33), (34), (35), (36),
     (37), (38), (39), (40), (41);
 
+#Cart by user
 select u.id, u.first_name, u.middle_name, u.last_name,u.phone_number, c.cart_id
 from user u
 left join cart c on u.id = c.id order by u.id;
+
+show columns from user;
 
 update cart set cart_id = 77 where id = 42;
 update cart set cart_id = 78 where id = 43;
@@ -21,3 +24,15 @@ update cart set cart_id = 78 where id = 43;
 delete from user where id = 42 or id = 43;
 
 select * from user where id = 42 or id = 43;
+
+select * from cart;
+
+select * from cart_item;
+
+delete from cart_item where cart_item_id = 3;
+
+# update cart_item set subtotal = 200*2 where cart_item_id = 3;
+# update cart_item set subtotal = 300*1 where cart_item_id = 4;
+# update cart_item set subtotal = 400*1 where cart_item_id = 5;
+
+show columns from cart_item;

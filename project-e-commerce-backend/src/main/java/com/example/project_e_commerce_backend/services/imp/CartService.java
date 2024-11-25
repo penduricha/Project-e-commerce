@@ -16,9 +16,7 @@ public class CartService implements I_CartService {
     }
 
     @Override
-    public Cart saveCart(Long id) throws JpaSystemException {
-        Cart cart = new Cart();
-        cart.getUser().setId(id);
-        return cartRepository.save(cart);
+    public Cart getCartByUserId(Long id) throws JpaSystemException{
+        return cartRepository.findByUser_Id(id);
     }
 }
