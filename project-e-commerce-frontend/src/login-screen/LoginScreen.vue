@@ -91,6 +91,7 @@ export default {
           if((userExist._email === null && userExist._phoneNumber === null) || (userExist._password !== passwordHashed)){
             //this.errorEmailPhoneNumber='';
             this.errorPassword = 'Email or phone or password is incorrect.';
+            this.password = '';
           }else{
             //this.errorEmailPhoneNumber = 'Account already exists.';
             this.errorPassword = '';

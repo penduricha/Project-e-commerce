@@ -80,7 +80,6 @@ public class UserService implements I_UserService {
             foundUser.setLastName(user.getLastName());
             foundUser.setMiddleName(user.getMiddleName());
             foundUser.setAddress(user.getAddress());
-
             userRepository.save(foundUser);
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");

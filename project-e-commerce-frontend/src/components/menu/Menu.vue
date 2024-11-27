@@ -4,6 +4,7 @@ import ModalNotifyToLogout from "@/components/modal/ModalNotifyToLogout.vue";
 
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
+import CartAPIDao from "@/daos/CartAPIDao.js";
 export default{
   name:'Menu',
 
@@ -158,7 +159,7 @@ export default{
       });
     },
 
-    getLengthCart(){
+    async getLengthCart(){
       const routerDao = new RouterDao();
       if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
         //get from Local Storage
@@ -170,7 +171,13 @@ export default{
         }
       }else{
         //get from database
-        this.lengthCart = 0;
+        const cartAPIDao = new CartAPIDao();
+        let carts = await cartAPIDao.getCartItemsBy_Email_Or_PhoneNumber(routerDao.getEmailPhoneNumberFromLocalStorage());
+        if(carts){
+          this.lengthCart = carts.length;
+        }else{
+          this.lengthCart = 0;
+        }
       }
     },
 

@@ -43,24 +43,6 @@ export default class CartDao {
     }
 
     updateQuantityLocalStorage(listCarts, newProductAddCart) {
-        // Duyệt qua từng sản phẩm trong listCarts
-        // for (let i = 0; i < listCarts.length; i++) {
-        //     const cartItem = listCarts[i];
-        //     // So sánh cartItem với newProductAddCart bằng JSON.stringify
-        //     if (
-        //         JSON.stringify(cartItem) === JSON.stringify({
-        //             productId: newProductAddCart.productId,
-        //             sizeChoose: newProductAddCart.sizeChoose,
-        //             colorChoose: newProductAddCart.colorChoose
-        //         })
-        //     ) {
-        //         // Cập nhật số lượng nếu tìm thấy sản phẩm giống
-        //         cartItem.countQuantityBuy += newProductAddCart.countQuantityBuy;
-        //         this.saveToCartLocalStorage(listCarts);
-        //         alert("Updated quantity product to cart.");
-        //         return;
-        //     }
-        // }
         const itemCart = listCarts.filter(l =>
             l.productId === newProductAddCart.productId &&
             l.size === newProductAddCart.size &&

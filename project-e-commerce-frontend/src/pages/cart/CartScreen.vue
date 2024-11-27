@@ -11,6 +11,7 @@ import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
 import CartDtoDao from "@/daos/CartDtoDao.js";
 import CartDto from "@/dtos/CartDto.js";
+import CartAPIDao from "@/daos/CartAPIDao.js";
 
 
 export default {
@@ -49,7 +50,7 @@ export default {
       }, 0));
     },
 
-    getDataCart_From_LocalStorage_Or_API(){
+    async getDataCart_From_LocalStorage_Or_API(){
       const routerDao = new RouterDao();
       if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
         //get from Local Storage
@@ -61,7 +62,15 @@ export default {
 
       }else{
         //get from database
-
+        const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+        const cartAPIDao = new CartAPIDao();
+        try{
+          this.carts = await cartAPIDao.getCartItemsBy_Email_Or_PhoneNumber(emailPhoneNumber);
+          console.log('Carts: ',this.carts);
+        }catch(err){
+          console.log(err);
+          alert(err);
+        }
       }
     },
 
@@ -98,15 +107,46 @@ export default {
       }
     },
 
-    handleDeleteItemCart(index){
+    renderPage_After_Changed(){
+      this.$refs.menuComponent.getLengthCart();
+      this.getDataCart_From_LocalStorage_Or_API();
+      this.get_Subtotal();
+    },
+
+    async handleDeleteItemCart(index){
       const cartDao = new CartDao();
+      const cartAPIDao = new CartAPIDao();
+      const routerDao = new RouterDao();
       if(this.carts.length > 0){
-        cartDao.deleteCartItemLocalStorage(this.carts,index);
-        //sau khi xoa xong get lai
-        this.$refs.menuComponent.getLengthCart();
-        this.getDataCart_From_LocalStorage_Or_API();
-        this.get_Subtotal();
+        if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+          //get from Local Storage
+          cartDao.deleteCartItemLocalStorage(this.carts,index);
+          //sau khi xoa xong get lai
+          this.renderPage_After_Changed();
+
+        }else{
+          //get from database
+          //const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+          const cartFind = this.carts[index];
+          //console.log('Cart Item id is: ',cartFind.cartItemId);
+          try{
+            let result = await cartAPIDao.deleteCartItem_By_CartItemId( cartFind.cartItemId );
+            if(result !== 0){
+              this.renderPage_After_Changed();
+            } else {
+              alert('Error while deleting cart.');
+            }
+          }catch(err){
+            alert(err);
+          }
+
+        }
       }
+        // const cartFind = this.carts.findIndex(item => item.id === index);
+        // console.log('Cart Item id is: ',cartFind)
+        // const cartFind = this.carts[index];
+        // console.log('Cart Item id is: ', cartFind);
+
     },
 
     updateNotificationQuantity(quantityBuy, quantityInWareHouse, index) {

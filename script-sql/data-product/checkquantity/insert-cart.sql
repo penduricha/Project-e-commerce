@@ -36,3 +36,7 @@ delete from cart_item where cart_item_id = 3;
 # update cart_item set subtotal = 400*1 where cart_item_id = 5;
 
 show columns from cart_item;
+
+select u.id, u.first_name, u.middle_name, u.last_name,u.phone_number, c.cart_id
+from user u
+left join cart c on u.id = c.id where c.cart_id = 149 order by u.id;

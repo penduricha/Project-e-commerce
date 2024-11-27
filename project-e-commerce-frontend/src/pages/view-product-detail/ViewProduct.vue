@@ -8,6 +8,7 @@ import ProductDao from "@/daos/ProductDao.js";
 import Cart from "@/models/Cart.js";
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
+import CartAPIDao from "@/daos/CartAPIDao.js";
 
 
 //npm install vue-star-rating@next
@@ -391,7 +392,7 @@ export default {
       }
     },
 
-    handleAddToCart(){
+    async handleAddToCart(){
       //let cartProduct = new Cart(this.product.productId, this.product.image, this.product.name, this.);
       // listSize: [],
       //listColor: [],
@@ -539,11 +540,35 @@ export default {
 
                 cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
                 //this.handleCartScreen();
+                this.handleCartScreen();
               }else{
                 //save from database POST
+                const carAPIDao = new CartAPIDao();
+                const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+                const newProductAddCart = {
+                  "productId": cart._productId,
+                  "size": cart._size,
+                  "color": cart._color,
+                  "image": cart._image,
+                  "name": cart._name,
+                  "price": Number(cart._price),
+                  "quantityBuy": cart._quantity,
+                  "subtotal": cart._price * cart._quantity
+                }
 
+                try {
+                  let result = await carAPIDao.addCartItem_By_Email_Or_PhoneNumber(emailPhoneNumber, newProductAddCart);
+                  if(result === 1){
+                    this.handleCartScreen();
+                  } else {
+                    alert("Can't add cart.");
+                  }
+                }catch(e){
+                  alert(e);
+                  console.error(e);
+                }
               }
-              this.handleCartScreen();
+
             }
           }
         }
