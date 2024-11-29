@@ -44,10 +44,10 @@ export default {
       //this.carts = dataCart;
     },
 
-    get_Subtotal(){
-      this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
-        return accumulator + (item.price * item.quantityBuy);
-      }, 0));
+    async get_Subtotal(){
+      // this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
+      //   return accumulator + (item.price * item.quantityBuy);
+      // }, 0));
     },
 
     async getDataCart_From_LocalStorage_Or_API(){
@@ -72,6 +72,9 @@ export default {
           alert(err);
         }
       }
+      this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
+        return accumulator + (item.price * item.quantityBuy);
+      }, 0));
     },
 
     //quantity

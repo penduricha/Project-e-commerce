@@ -514,25 +514,19 @@ export default {
             }else{
               //add to cart
               this.notifyValidation = '';
-              const cart = new Cart(this.product.productId,
-                  this.sizeChoose, this.colorChoose, this.image_main,
-                  this.product.name, this.price_view, this.countQuantityBuy);
-              console.log('Product to add cart: ',cart);
 
               const routerDao = new RouterDao();
               if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
                 const cartDao = new CartDao();
-                //save from Local Storage
-                //cartDao.removeLocalStorage();
 
                 const newProductAddCart = {
-                  "productId": cart._productId,
-                  "size": cart._size,
-                  "color": cart._color,
-                  "image": cart._image,
-                  "name": cart._name,
-                  "price": Number(cart._price),
-                  "quantityBuy": cart._quantity
+                  "productId": this.product.productId,
+                  "size":  this.sizeChoose,
+                  "color": this.colorChoose,
+                  "image": this.image_main,
+                  "name": this.product.name,
+                  "price": Number(this.price_view),
+                  "quantityBuy": this.countQuantityBuy,
                 }
 
                 console.log('Product added to cart: ', newProductAddCart);
@@ -545,16 +539,27 @@ export default {
                 //save from database POST
                 const carAPIDao = new CartAPIDao();
                 const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+
+                // if(!cart._size){
+                //   cart.setSize(null);
+                // }
+                //
+                // if(!cart._color){
+                //   cart.setColor(null);
+                // }
+
                 const newProductAddCart = {
-                  "productId": cart._productId,
-                  "size": cart._size,
-                  "color": cart._color,
-                  "image": cart._image,
-                  "name": cart._name,
-                  "price": Number(cart._price),
-                  "quantityBuy": cart._quantity,
-                  "subtotal": cart._price * cart._quantity
+                  "productId": this.product.productId,
+                  "size":  this.sizeChoose,
+                  "color": null,
+                  "image": this.image_main,
+                  "name": this.product.name,
+                  "price": Number(this.price_view),
+                  "quantityBuy": this.countQuantityBuy,
+                  "subtotal": Number(this.price_view) * this.countQuantityBuy
                 }
+
+                console.log('Item to add cart with account: ',newProductAddCart);
 
                 try {
                   let result = await carAPIDao.addCartItem_By_Email_Or_PhoneNumber(emailPhoneNumber, newProductAddCart);

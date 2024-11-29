@@ -16,4 +16,13 @@ export default class Cart{
         this._price = price;
         this._quantity = quantity;
     }
+
+
+    setSize(value) {
+        this._size = value;
+    }
+
+    setColor(value) {
+        this._color = value;
+    }
 }
