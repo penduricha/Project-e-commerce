@@ -29,6 +29,8 @@ select * from cart;
 
 select * from cart_item;
 
+# alter table cart_item drop column subtotal;
+
 delete from cart_item where cart_item_id = 3;
 
 # update cart_item set subtotal = 200*2 where cart_item_id = 3;

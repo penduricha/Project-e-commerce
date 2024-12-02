@@ -26,4 +26,10 @@ public interface I_CartItemService {
     public void updateQuantityBuy_By_CartItemId(Long cartItemId, int quantityBuy);
 
     public CartItem findCartItemBy_ProductId_Size_Color(String emailOrPhoneNumber,Long productId, String size, String color);
+
+    public CartItem findCartItemBy_ProductId_Size(String emailOrPhoneNumber,Long productId, String size);
+
+    public CartItem findCartItemBy_ProductId_Color(String emailOrPhoneNumber,Long productId, String color);
+
+    public CartItem findCartItemBy_ProductId_If_Size_And_Color_Null(String emailOrPhoneNumber,Long productId);
 }

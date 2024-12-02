@@ -8,6 +8,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import ValidateForm from "@/validate/ValidateForm.js";
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
+import CartAPIDao from "@/daos/CartAPIDao.js";
 
 export default defineComponent({
   components: {CustomButton, Footer, Menu, Header},
@@ -52,14 +53,14 @@ export default defineComponent({
     },
 
     get_Total_Price(){
-      if(this.carts.length > 0){
-        this.totalPrice = Math.round(this.carts.reduce((accumulator, item) => {
-          return accumulator + (item.price * item.quantityBuy);
-        }, 0));
-      }
+      // if(this.carts.length > 0){
+      //   this.totalPrice = Math.round(this.carts.reduce((accumulator, item) => {
+      //     return accumulator + (item.price * item.quantityBuy);
+      //   }, 0));
+      // }
     },
 
-    getDataCart_From_LocalStorage_Or_API(){
+    async getDataCart_From_LocalStorage_Or_API(){
       const routerDao = new RouterDao();
       if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
         //get from Local Storage
@@ -68,10 +69,23 @@ export default defineComponent({
           this.carts = cartDao.getListCartLocalStorage();
           console.log('Carts: ',this.carts);
         }
-
       }else{
         //get from database
+        const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+        const cartAPIDao = new CartAPIDao();
+        try{
+          this.carts = await cartAPIDao.getCartItemsBy_Email_Or_PhoneNumber(emailPhoneNumber);
+          console.log('Carts: ',this.carts);
+        }catch(err){
+          console.log(err);
+          alert(err);
+        }
+      }
 
+      if(this.carts.length > 0){
+        this.totalPrice = Math.round(this.carts.reduce((accumulator, item) => {
+          return accumulator + (item.price * item.quantityBuy);
+        }, 0));
       }
     },
 

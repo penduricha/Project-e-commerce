@@ -36,9 +36,7 @@ public class CartItemService implements I_CartItemService {
     @Transactional
     @Override
     public CartItem saveCartItem(Long id, CartItem cartItem) throws JpaSystemException {
-
         Cart cartFound = cartService.getCartByUserId(id);
-
         if(cartFound != null){
             cartItem.setCart(cartFound);
             return cartItemRepository.save(cartItem);
@@ -130,6 +128,48 @@ public class CartItemService implements I_CartItemService {
               cartItem.getColor().equalsIgnoreCase(color)
             ){
                 return cartItem;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public CartItem findCartItemBy_ProductId_Size(String emailOrPhoneNumber, Long productId, String size) {
+        List<CartItem> cartItems = getListCartItem_By_Email_Or_PhoneNumber(emailOrPhoneNumber.trim());
+        for(CartItem cartItem: cartItems){
+            if(Objects.equals(cartItem.getProductId(), productId) &&
+                    cartItem.getSize().equalsIgnoreCase(size)
+            ){
+                return cartItem;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public CartItem findCartItemBy_ProductId_Color(String emailOrPhoneNumber, Long productId, String color) {
+        List<CartItem> cartItems = getListCartItem_By_Email_Or_PhoneNumber(emailOrPhoneNumber.trim());
+        if(!cartItems.isEmpty()){
+            for(CartItem cartItem: cartItems){
+                if(Objects.equals(cartItem.getProductId(), productId) &&
+                        cartItem.getColor().equalsIgnoreCase(color)
+                ){
+                    return cartItem;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public CartItem findCartItemBy_ProductId_If_Size_And_Color_Null(String emailOrPhoneNumber, Long productId) {
+        List<CartItem> cartItems = getListCartItem_By_Email_Or_PhoneNumber(emailOrPhoneNumber.trim());
+        if(!cartItems.isEmpty()){
+            for(CartItem cartItem: cartItems){
+                if(Objects.equals(cartItem.getProductId(), productId)
+                ){
+                    return cartItem;
+                }
             }
         }
         return null;

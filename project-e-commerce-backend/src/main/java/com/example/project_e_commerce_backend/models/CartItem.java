@@ -43,8 +43,8 @@ public class CartItem implements Serializable {
     @Column(columnDefinition = "bigint", nullable=false)
     private int quantityBuy;
 
-    @Column(columnDefinition = "double", nullable=false)
-    private double subtotal;
+//    @Column(columnDefinition = "double", nullable=false)
+//    private double subtotal;
 
     @ManyToOne
     @JoinColumn(name = "cartId")

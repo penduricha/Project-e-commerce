@@ -5,7 +5,7 @@ import CustomButton from "@/components/base/CustomButton.vue";
 import StarRating from 'vue-star-rating';
 import WareHouseDao from "@/daos/WareHouseDao.js";
 import ProductDao from "@/daos/ProductDao.js";
-import Cart from "@/models/Cart.js";
+
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
 import CartAPIDao from "@/daos/CartAPIDao.js";
@@ -392,13 +392,91 @@ export default {
       }
     },
 
+    async addToCart(){
+      const routerDao = new RouterDao();
+      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+        const cartDao = new CartDao();
+
+        const newProductAddCart = {
+          "productId": this.product.productId,
+          "size":  this.sizeChoose,
+          "color": this.colorChoose,
+          "image": this.image_main,
+          "name": this.product.name,
+          "price": Number(this.price_view),
+          "quantityBuy": this.countQuantityBuy,
+        }
+
+        console.log('Product added to cart: ', newProductAddCart);
+        let listCarts = cartDao.getListCartLocalStorage();
+
+        cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
+        //this.handleCartScreen();
+        this.handleCartScreen();
+      }else{
+        //save from database POST
+        const carAPIDao = new CartAPIDao();
+        const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+
+        const newProductAddCart = {
+          "productId": this.product.productId,
+          "size":  this.sizeChoose,
+          "color": this.colorChoose,
+          "image": this.image_main,
+          "name": this.product.name,
+          "price": Number(this.price_view),
+          "quantityBuy": this.countQuantityBuy,
+        }
+
+        console.log('Item to add cart with account: ',newProductAddCart);
+
+        let cartItemFound = await this.getCartItems_By_ProductId_Size_Color( emailPhoneNumber.trim(),
+            newProductAddCart.productId,
+            newProductAddCart.size,
+            newProductAddCart.color);
+
+        console.log('Cart item found: ',cartItemFound);
+
+        if(!cartItemFound){
+          try {
+            let result = await carAPIDao.addCartItem_By_Email_Or_PhoneNumber(emailPhoneNumber, newProductAddCart);
+            if(result === 1){
+              this.handleCartScreen();
+            } else {
+              alert("Can't add cart.");
+            }
+          }catch(e){
+            alert(e);
+            console.error(e);
+          }
+        } else {
+          //console.log("Had this item in cart.");
+          let quantityBuyUpdated = cartItemFound.quantityBuy +  this.countQuantityBuy;
+          const resultUpdate = await carAPIDao.updateQuantityBuy_By_CartItemId(cartItemFound.cartItemId,quantityBuyUpdated);
+          if(resultUpdate === 1){
+            this.handleCartScreen();
+          }else {
+            alert("Can't update cart.");
+          }
+        }
+      }
+    },
+
+    async getCartItems_By_ProductId_Size_Color( emailPhoneNumber, productId, size, color ) {
+      const cartAPIDao = new CartAPIDao();
+      try{
+        return await cartAPIDao.getCartItem_By_Email_Or_PhoneNumber_Size_Color( emailPhoneNumber, productId, size, color );
+      }catch(error){
+        alert(error);
+        return {};
+      }
+    },
+
     async handleAddToCart(){
-      //let cartProduct = new Cart(this.product.productId, this.product.image, this.product.name, this.);
-      // listSize: [],
-      //listColor: [],
       console.log(this.listSize);
       console.log(this.listColor);
       if(this.countQuantityBuy > 0){
+        // co size ko color
         if(this.listSize.length > 0 && this.listColor.length === 0){
           if(this.sizeChoose){
             //chi có size
@@ -409,37 +487,7 @@ export default {
               this.notifyValidation = 'Selected products exceed products in stock.';
             }else{
               this.notifyValidation = '';
-              const cart = new Cart(this.product.productId,
-                  this.sizeChoose, this.colorChoose, this.image_main,
-                  this.product.name, this.price_view, this.countQuantityBuy);
-              console.log('Product to add cart: ',cart);
-              const routerDao = new RouterDao();
-              if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-                const cartDao = new CartDao();
-                //save from Local Storage
-                //cartDao.removeLocalStorage();
-
-                const newProductAddCart = {
-                  "productId": cart._productId,
-                  "size": cart._size,
-                  "color": cart._color,
-                  "image": cart._image,
-                  "name": cart._name,
-                  "price": cart._price,
-                  "quantityBuy": cart._quantity
-                }
-
-                console.log('Product added to cart: ', newProductAddCart);
-                let listCarts = cartDao.getListCartLocalStorage();
-
-                cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
-                //this.handleCartScreen();
-              }else{
-                //save from database POST
-
-              }
-              //window.location.reload();
-              this.handleCartScreen();
+              await this.addToCart();
             }
           }else{
             this.notifyValidation = 'Please choose size.';
@@ -448,137 +496,42 @@ export default {
 
         if(this.listSize.length === 0 && this.listColor.length > 0){
           if(this.colorChoose){
-
             let whFound = this.listColor.filter(warehouse => warehouse.color === this.colorChoose);
-
             if(this.countQuantityBuy > whFound[0].quantity){
               this.notifyValidation = 'Selected products exceed products in stock.';
             }else{
               this.notifyValidation = '';
-              const cart = new Cart(this.product.productId,
-                  this.sizeChoose, this.colorChoose, this.image_main,
-                  this.product.name, this.price_view, this.countQuantityBuy);
-              console.log('Product to add cart: ',cart);
-              const routerDao = new RouterDao();
-              if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-                const cartDao = new CartDao();
-                //save from Local Storage
-                //cartDao.removeLocalStorage();
-
-                const newProductAddCart = {
-                  "productId": cart._productId,
-                  "size": cart._size,
-                  "color": cart._color,
-                  "image": cart._image,
-                  "name": cart._name,
-                  "price": cart._price,
-                  "quantityBuy": cart._quantity
-                }
-
-                console.log('Product added to cart: ', newProductAddCart);
-                let listCarts = cartDao.getListCartLocalStorage();
-
-                cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
-
-              }else{
-                //save from database POST
-
-              }
-              //window.location.reload();
-              this.handleCartScreen();
+              await this.addToCart();
             }
           }else{
             this.notifyValidation = 'Please choose size.';
           }
         }
 
+        //co size, co color
+
         if(this.listSize.length > 0 && this.listColor.length > 0){
           if(!this.sizeChoose){
             this.notifyValidation = 'Please choose size.';
           }
-
           if(!this.colorChoose){
             this.notifyValidation = 'Please choose color.';
           }
-
           if(this.sizeChoose && this.colorChoose){
             let whFound = this.warehouses_By_ProductId.filter(warehouse =>
                 warehouse.color === this.colorChoose &&
                 warehouse.size === this.sizeChoose
             );
-
             console.log(whFound);
-
             if(this.countQuantityBuy > whFound[0].quantity){
               this.notifyValidation = 'Selected products exceed products in stock.';
             }else{
               //add to cart
               this.notifyValidation = '';
-
-              const routerDao = new RouterDao();
-              if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-                const cartDao = new CartDao();
-
-                const newProductAddCart = {
-                  "productId": this.product.productId,
-                  "size":  this.sizeChoose,
-                  "color": this.colorChoose,
-                  "image": this.image_main,
-                  "name": this.product.name,
-                  "price": Number(this.price_view),
-                  "quantityBuy": this.countQuantityBuy,
-                }
-
-                console.log('Product added to cart: ', newProductAddCart);
-                let listCarts = cartDao.getListCartLocalStorage();
-
-                cartDao.updateQuantityLocalStorage(listCarts, newProductAddCart);
-                //this.handleCartScreen();
-                this.handleCartScreen();
-              }else{
-                //save from database POST
-                const carAPIDao = new CartAPIDao();
-                const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
-
-                // if(!cart._size){
-                //   cart.setSize(null);
-                // }
-                //
-                // if(!cart._color){
-                //   cart.setColor(null);
-                // }
-
-                const newProductAddCart = {
-                  "productId": this.product.productId,
-                  "size":  this.sizeChoose,
-                  "color": null,
-                  "image": this.image_main,
-                  "name": this.product.name,
-                  "price": Number(this.price_view),
-                  "quantityBuy": this.countQuantityBuy,
-                  "subtotal": Number(this.price_view) * this.countQuantityBuy
-                }
-
-                console.log('Item to add cart with account: ',newProductAddCart);
-
-                try {
-                  let result = await carAPIDao.addCartItem_By_Email_Or_PhoneNumber(emailPhoneNumber, newProductAddCart);
-                  if(result === 1){
-                    this.handleCartScreen();
-                  } else {
-                    alert("Can't add cart.");
-                  }
-                }catch(e){
-                  alert(e);
-                  console.error(e);
-                }
-              }
-
+              await this.addToCart();
             }
           }
         }
-
-
       }else{
         this.notifyValidation = 'Please choose quantity.';
       }
@@ -624,7 +577,6 @@ function getPrice_By_Discount(price, numberOfDiscount){
   {
     return priceView.toFixed(2);
   }
-  ///return  price - price*(numberOfDiscount / 100);
 }
 
 function getDecimalPart(num) {

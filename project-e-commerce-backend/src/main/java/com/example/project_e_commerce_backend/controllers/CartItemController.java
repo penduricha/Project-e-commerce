@@ -23,13 +23,6 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
-//    private final CartItemRepository cartItemRepository;
-//
-//    public CartItemController(CartItemService cartItemService, CartItemRepository cartItemRepository) {
-//        this.cartItemService = cartItemService;
-//        this.cartItemRepository = cartItemRepository;
-//    }
-
     @PostMapping("/cart-item/{id}")
     public CartItem saveCartItem(@PathVariable Long id,@RequestBody CartItem cartItem) throws JpaSystemException {
         return cartItemService.saveCartItem(id, cartItem);
@@ -95,6 +88,15 @@ public class CartItemController {
     @GetMapping("/find-cart-item-by-productId-size-color/{emailOrPhoneNumber}/{productId}/{size}/{color}")
     public CartItem findCartItemBy_ProductId_Size_Color(@PathVariable String emailOrPhoneNumber,@PathVariable Long productId,@PathVariable String size,@PathVariable String color) throws JpaSystemException {
         String colorCode = "#" + color;
-        return cartItemService.findCartItemBy_ProductId_Size_Color(emailOrPhoneNumber, productId, size, colorCode);
+        if(size.trim().equalsIgnoreCase("null-size") && !color.trim().equalsIgnoreCase("null-color")){
+            return cartItemService.findCartItemBy_ProductId_Color(emailOrPhoneNumber.trim(), productId, colorCode.trim());
+        } else if(color.trim().equalsIgnoreCase("null-color") && !size.trim().equalsIgnoreCase("null-size")){
+            return cartItemService.findCartItemBy_ProductId_Size(emailOrPhoneNumber.trim(), productId, size.trim());
+        } else if(color.trim().equalsIgnoreCase("null-color") && size.trim().equalsIgnoreCase("null-size")){
+            return cartItemService.findCartItemBy_ProductId_If_Size_And_Color_Null(emailOrPhoneNumber.trim(), productId);
+        } else if(!color.trim().equalsIgnoreCase("null-color") && !size.trim().equalsIgnoreCase("null-size")) {
+            return cartItemService.findCartItemBy_ProductId_Size_Color(emailOrPhoneNumber.trim(), productId, size.trim(), colorCode.trim());
+        }
+        return null;
     }
 }
