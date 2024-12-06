@@ -9,6 +9,7 @@ import ValidateForm from "@/validate/ValidateForm.js";
 import RouterDao from "@/daos/RouterDao.js";
 import CartDao from "@/daos/CartDao.js";
 import CartAPIDao from "@/daos/CartAPIDao.js";
+import UserDao from "@/daos/UserDao.js";
 
 export default defineComponent({
   components: {CustomButton, Footer, Menu, Header},
@@ -18,6 +19,7 @@ export default defineComponent({
     this.getDataOrder_From_Data_Js();
     this.getDataCart_From_LocalStorage_Or_API();
     this.get_Total_Price();
+    this.get_User_Information();
   },
 
   mounted() {
@@ -27,6 +29,8 @@ export default defineComponent({
 
   data(){
     return{
+      userAccount: null,
+
       carts: [],
       couponCode: null,
       methodPayment: null,
@@ -58,6 +62,33 @@ export default defineComponent({
       //     return accumulator + (item.price * item.quantityBuy);
       //   }, 0));
       // }
+    },
+
+    async get_User_Information(){
+      const routerDao = new RouterDao();
+      const userDao = new UserDao();
+      const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+      if(emailPhoneNumber){
+        try {
+          this.userAccount = await userDao.getUserByEmailOrPhoneNumber(emailPhoneNumber.trim());
+          console.log(this.userAccount);
+
+        }catch(err){
+          console.log(err);
+          alert(err);
+        }
+
+        if(this.userAccount){
+          this.firstName =
+              this.userAccount.lastName + " " +
+              this.userAccount.middleName + " "  +
+              this.userAccount.firstName;
+
+          this.email = this.userAccount.email;
+          this.phoneNumber = this.userAccount.phoneNumber;
+          this.streetAddress = this.userAccount.address;
+        }
+      }
     },
 
     async getDataCart_From_LocalStorage_Or_API(){
@@ -177,6 +208,13 @@ export default defineComponent({
 
     handlePlayOrder(){
       this.checkEmptyInput();
+      if(!this.errorFirstName &&
+          !this.errorStreetAddress &&
+          !this.errorPhoneNumber &&
+          !this.errorChooseMethodPayment)
+      {
+        //place order
+      }
     },
   }
 
@@ -248,7 +286,7 @@ export default defineComponent({
         </div>
         <div class="container-order-detail">
           <div class="container-view-order-detail">
-            <div class="view-order-detail" v-for="(c, index) in carts">
+            <div class="view-order-detail" v-for="(c) in carts">
               <div class="view-image-product-order-detail">
                 <img :src="c.image" alt="Image Product" class="style-image-product-order-detail"/>
               </div>
@@ -545,6 +583,4 @@ input[type='checkbox']:checked:before{
   height: 80%;
   object-fit: contain;
 }
-
-
 </style>

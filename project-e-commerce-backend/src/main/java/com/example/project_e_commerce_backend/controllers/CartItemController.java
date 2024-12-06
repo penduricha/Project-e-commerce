@@ -75,7 +75,7 @@ public class CartItemController {
         if(cartItemFound != null){
             cartItemService.updateQuantityBuy_By_CartItemId(cartItemId,quantityBuy);
             return ResponseEntity.ok().build();
-        }else {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

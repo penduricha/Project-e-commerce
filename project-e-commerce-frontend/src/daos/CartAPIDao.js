@@ -1,5 +1,5 @@
 import CartService from "@/services/CartService.js";
-import UserService from "@/services/UserService.js";
+
 
 
 export default class CartAPIDao {
@@ -50,8 +50,6 @@ export default class CartAPIDao {
         if(!color){
             color = 'null-color';
         }
-
-        console.log('Input is: ',emailPhoneNumber,productId,size,color);
 
         try{
             color = color.slice(1);

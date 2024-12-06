@@ -34,20 +34,19 @@ export default {
   },
 
   created() {
-    this.getDataCart_From_Data_Js();
+    //this.getDataCart_From_Data_Js();
     this.getDataCart_From_LocalStorage_Or_API();
-    this.get_Subtotal();
   },
 
   methods: {
-    getDataCart_From_Data_Js(){
-      //this.carts = dataCart;
-    },
+    // getDataCart_From_Data_Js(){
+    //   //this.carts = dataCart;
+    // },
 
-    async get_Subtotal(){
-      // this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
-      //   return accumulator + (item.price * item.quantityBuy);
-      // }, 0));
+    get_Subtotal(){
+      this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
+        return accumulator + (item.price * item.quantityBuy);
+      }, 0));
     },
 
     async getDataCart_From_LocalStorage_Or_API(){
@@ -59,7 +58,6 @@ export default {
           this.carts = cartDao.getListCartLocalStorage();
           console.log('Carts: ',this.carts);
         }
-
       }else{
         //get from database
         const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
@@ -72,19 +70,34 @@ export default {
           alert(err);
         }
       }
+      //lay tong gia
       this.subtotal = Math.round(this.carts.reduce((accumulator, item) => {
         return accumulator + (item.price * item.quantityBuy);
       }, 0));
     },
 
     //quantity
-    handleIncrease(cartIndex){
+    async handleIncrease(cartIndex){
       const cartDao = new CartDao();
+      const cartAPIDao = new CartAPIDao();
+      const routerDao = new RouterDao();
+      const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
       if (cartIndex !== -1) {
         this.carts[cartIndex].quantityBuy += 1;
         //tang xong get lai
-        let listCarts = cartDao.getListCartLocalStorage();
-        cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
+        if(!emailPhoneNumber){
+          let listCarts = cartDao.getListCartLocalStorage();
+          cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
+        }else{
+          const resultUpdate = await cartAPIDao.updateQuantityBuy_By_CartItemId(this.carts[cartIndex].cartItemId,this.carts[cartIndex].quantityBuy);
+          if(resultUpdate === 1){
+            //this.handleCartScreen();
+            await this.getDataCart_From_LocalStorage_Or_API();
+          } else {
+            alert("Can't update quantity cart.");
+          }
+        }
+
         this.get_Subtotal();
         //xoa dong thong bao
         this.notifications[cartIndex] = '';
@@ -93,14 +106,27 @@ export default {
       }
     },
 
-    handleReduce(cartIndex){
+    async handleReduce(cartIndex){
       const cartDao = new CartDao();
+      const cartAPIDao = new CartAPIDao();
+      const routerDao = new RouterDao();
+      const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
       if (cartIndex !== null) {
         if(this.carts[cartIndex].quantityBuy > 1){
           this.carts[cartIndex].quantityBuy -= 1;
           //giam xong get lai
-          let listCarts = cartDao.getListCartLocalStorage();
-          cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
+          if(!emailPhoneNumber){
+            let listCarts = cartDao.getListCartLocalStorage();
+            cartDao.updateQuantityLocalStorage_In_Cart(listCarts,this.carts[cartIndex]);
+          }else{
+            const resultUpdate = await cartAPIDao.updateQuantityBuy_By_CartItemId(this.carts[cartIndex].cartItemId,this.carts[cartIndex].quantityBuy);
+            if(resultUpdate === 1){
+              //this.handleCartScreen();
+              await this.getDataCart_From_LocalStorage_Or_API();
+            } else {
+              alert("Can't update quantity cart.");
+            }
+          }
           this.get_Subtotal();
           //xoa dong thong bao
           this.notifications[cartIndex] = '';
@@ -250,7 +276,7 @@ export default {
             <tbody>
               <tr v-for="(c, index) in carts">
                 <td style="padding-left: 3%;">
-                  <div style=" display: flex; gap: 20px; height: 50%; width: 100%;">
+                  <div style="display: flex; gap: 20px; height: 50%; width: 100%;">
                     <div style="flex: 1;">
                       <img :src="c.image"
                            alt="image product" class="style-image-product-cart">

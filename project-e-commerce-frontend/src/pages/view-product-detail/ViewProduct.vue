@@ -415,7 +415,7 @@ export default {
         this.handleCartScreen();
       }else{
         //save from database POST
-        const carAPIDao = new CartAPIDao();
+        const cartAPIDao = new CartAPIDao();
         const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
 
         const newProductAddCart = {
@@ -439,7 +439,7 @@ export default {
 
         if(!cartItemFound){
           try {
-            let result = await carAPIDao.addCartItem_By_Email_Or_PhoneNumber(emailPhoneNumber, newProductAddCart);
+            let result = await cartAPIDao.addCartItem_By_Email_Or_PhoneNumber(emailPhoneNumber, newProductAddCart);
             if(result === 1){
               this.handleCartScreen();
             } else {
@@ -452,7 +452,7 @@ export default {
         } else {
           //console.log("Had this item in cart.");
           let quantityBuyUpdated = cartItemFound.quantityBuy +  this.countQuantityBuy;
-          const resultUpdate = await carAPIDao.updateQuantityBuy_By_CartItemId(cartItemFound.cartItemId,quantityBuyUpdated);
+          const resultUpdate = await cartAPIDao.updateQuantityBuy_By_CartItemId(cartItemFound.cartItemId,quantityBuyUpdated);
           if(resultUpdate === 1){
             this.handleCartScreen();
           }else {

@@ -27,6 +27,7 @@ import CartScreen from "@/pages/cart/CartScreen.vue";
 import ManageAccountScreen from "@/pages/account-page/ManageAccountScreen.vue";
 import BillingDetail from "@/pages/billing/BillingDetail.vue";
 import ContactScreen from "@/pages/contact/ContactScreen.vue";
+import AuthService from "@/services/AuthService.js";
 
 const vuetify = createVuetify();
 
@@ -102,14 +103,20 @@ function initHomePageAccount(emailPhoneNumber, routerPath){
 
 //run
 function execute(){
-    if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
-        let routerPath = routerDao.getRouterPathFromSessionStorage();
-        initRouter(routers,routerPath);
-    }else{
-        let routerPath = routerDao.getRouterPathFromSessionStorage();
-        let emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
-        initHomePageAccount(emailPhoneNumber, routerPath);
-    }
+    //try {
+        // Đăng nhập và thiết lập thông tin xác thực
+        //await AuthService.login('user', 'user1234');
+        if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+            let routerPath = routerDao.getRouterPathFromSessionStorage();
+            initRouter(routers,routerPath);
+        }else{
+            let routerPath = routerDao.getRouterPathFromSessionStorage();
+            let emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+            initHomePageAccount(emailPhoneNumber, routerPath);
+        }
+    // } catch (err) {
+    //     console.error(err);
+    // }
 }
 
 

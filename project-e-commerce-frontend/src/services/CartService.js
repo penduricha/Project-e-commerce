@@ -1,13 +1,16 @@
 import axios from 'axios';
 
+
 const apiClient = axios.create({
     baseURL: 'http://localhost:8080/api',
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        // Thiết lập header Authorization
     }
 });
 
 export default class CartService {
+
     constructor() {
 
     }

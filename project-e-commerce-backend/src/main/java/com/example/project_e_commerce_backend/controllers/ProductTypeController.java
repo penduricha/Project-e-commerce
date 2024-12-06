@@ -19,16 +19,23 @@ public class ProductTypeController {
         this.productTypeService = productTypeService;
     }
 
+//    private boolean isValidUser(String username, String password, String role) {
+//        // Kiểm tra thông tin xác thực (có thể thay đổi theo cách bạn lưu thông tin người dùng)
+//        return "user".equals(username) && "user1234".equals(password) && "USER".equals(role);
+//    }
+
     @PostMapping("/list-productTypes")
-    public List<ProductType> saveListProductType(@RequestBody List<ProductType> productTypes) throws JpaSystemException {
-        return productTypeService.saveListProductType(productTypes);
+    public List<ProductType> saveListProductType(
+            @RequestBody List<ProductType> productTypes) throws JpaSystemException {
+
+            return productTypeService.saveListProductType(productTypes);
     }
 
-    @PostMapping("/productTypes")
-    public ProductType saveProductType(@RequestBody ProductType productType) throws JpaSystemException {
-        return productTypeService.saveProductType(productType);
-    }
-
+//    @PostMapping("/productTypes")
+//    public ProductType saveProductType(@RequestBody ProductType productType) throws JpaSystemException {
+//        return productTypeService.saveProductType(productType);
+//    }
+//
     @GetMapping("/productTypes")
     public List<ProductType> getAllProductTypes() throws JpaSystemException {
         return productTypeService.getAllProductTypes();
