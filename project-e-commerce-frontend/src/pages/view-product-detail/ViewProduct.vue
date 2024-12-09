@@ -394,7 +394,8 @@ export default {
 
     async addToCart(){
       const routerDao = new RouterDao();
-      if(routerDao.getEmailPhoneNumberFromLocalStorage() === null){
+      const emailPhoneNumber = routerDao.getEmailPhoneNumberFromLocalStorage();
+      if(!emailPhoneNumber){
         const cartDao = new CartDao();
 
         const newProductAddCart = {
@@ -430,7 +431,7 @@ export default {
 
         console.log('Item to add cart with account: ',newProductAddCart);
 
-        let cartItemFound = await this.getCartItems_By_ProductId_Size_Color( emailPhoneNumber.trim(),
+        let cartItemFound = await this.getCartItems_By_ProductId_Size_Color(emailPhoneNumber.trim(),
             newProductAddCart.productId,
             newProductAddCart.size,
             newProductAddCart.color);

@@ -49,3 +49,5 @@ where (e.name_event_purchasing = 'New' or e.name_event_purchasing = 'Explore Our
 select * from user order by id;
 
 
+
+

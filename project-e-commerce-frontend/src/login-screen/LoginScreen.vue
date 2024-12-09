@@ -7,6 +7,8 @@ import UserDao from "@/daos/UserDao.js";
 import User from "@/models/User.js";
 import Router from "@/routers/Router.js";
 import RouterDao from "@/daos/RouterDao.js";
+import CartAPIDao from "@/daos/CartAPIDao.js";
+import CartDao from "@/daos/CartDao.js";
 
 export default {
   name: 'LoginScreen',
@@ -101,14 +103,13 @@ export default {
             const routerDao = new RouterDao();
 
             //save to local storage
-            const router = new Router ();
+            const router = new Router();
 
             router.setEmailPhoneNumber(this.emailPhoneNumber.trim())
 
             routerDao.saveEmailPhoneNumberLocalStorage(router._emailPhoneNumber);
 
             routerDao.saveRouterPathToSessionStorage("/home-page-with-account");
-
             this.$router.replace({
               path: '/home-page-with-account',
               query: {
@@ -129,6 +130,16 @@ export default {
     preventPaste(event) {
       event.preventDefault();
     },
+
+    async addItemsCart_From_LocalStorage_To_Cart_With_User(){
+      const cartAPIDao = new CartAPIDao();
+      //this.emailPhoneNumber.trim()
+      const emailPhoneNumber = this.emailPhoneNumber.trim();
+      const cartDao = new CartDao();
+      let cart_LocalStorage = cartDao.getListCartLocalStorage();
+
+
+    }
   }
 }
 
