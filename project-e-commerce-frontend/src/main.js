@@ -38,6 +38,7 @@ const routerDao = new RouterDao();
 
 const app = createApp(App);
 app.use(vuetify);
+
 function initRouter(routers, routerPath)
 {
     const router = createRouter({
